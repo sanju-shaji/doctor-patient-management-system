@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.UUID;
 
 /**
- * Repository class for doctor entity
+ * Repository interface for doctor entity
  */
 public interface DoctorRepository extends MongoRepository<DoctorEntity, UUID> {
 }
