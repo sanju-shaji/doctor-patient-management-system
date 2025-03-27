@@ -20,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PatientModel {
     @Id
-    private UUID patientId;
+    private UUID id;
     private String patientFirstName;
     private String patientLastName;
     private Date dateOfAdmission;
