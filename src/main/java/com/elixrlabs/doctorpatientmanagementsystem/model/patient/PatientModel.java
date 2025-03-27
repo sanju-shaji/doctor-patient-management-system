@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.model.patient;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constant.patient.PatientConstant;
+import com.elixrlabs.doctorpatientmanagementsystem.constant.DataBaseConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import java.util.UUID;
  * PatientModel class represents patient entity in Doctorpatientmanagementsystem
  * Annotations used
  */
-@Document(collation = PatientConstant.PATIENT)
+@Document(collection = DataBaseConstants.PATIENT_COLLECTION_NAME)
 @Getter
 @Setter
 @AllArgsConstructor
