@@ -20,7 +20,6 @@ public class DoctorCreationService {
 
     /**
      * Method which contains the business logic to post doctor details to database
-     *
      * @param postDoctorDto
      * @return
      */

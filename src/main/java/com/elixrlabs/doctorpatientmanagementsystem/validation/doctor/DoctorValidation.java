@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.DPMSConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class DoctorValidation {
      * @return
      */
     public boolean containsOnlyAlbhabets(String string) {
-        String alphabetPattern = "^[a-zA-Z\\s]+$";
+        String alphabetPattern = DPMSConstants.REGEX_ALPHABET_PATTERN;
         return string.matches(alphabetPattern);
     }
 
@@ -37,7 +38,7 @@ public class DoctorValidation {
      * @return
      */
     public boolean isValidDepartmentName(String string) {
-        String departmentNamePattern = "^[a-zA-Z\\s\\-'.,]+$";
+        String departmentNamePattern = DPMSConstants.REGEX_DEPARTMENTNAME_PATTERN;
         return string.matches(departmentNamePattern);
     }
 
@@ -50,22 +51,22 @@ public class DoctorValidation {
     public List<String> validatePostDoctor(DoctorEntity doctor) {
         List<String> errorMessageList = new ArrayList<>();
         if (isEmptyString(doctor.getFirstName())) {
-            errorMessageList.add("First name should not be an empty string");
+            errorMessageList.add(DPMSConstants.EMPTY_FIRSTNAME);
         }
         if (!containsOnlyAlbhabets(doctor.getFirstName())) {
-            errorMessageList.add("First name should only contain alphabets");
+            errorMessageList.add(DPMSConstants.FIRSTNAME_PATTERN_ERROR);
         }
         if (isEmptyString(doctor.getLastName())) {
-            errorMessageList.add("Last name should not be an empty string");
+            errorMessageList.add(DPMSConstants.EMPTY_LASTNAME);
         }
         if (!containsOnlyAlbhabets(doctor.getLastName())) {
-            errorMessageList.add("Last name should only contain alphabets");
+            errorMessageList.add(DPMSConstants.LASTNAME_PATTERN_ERROR);
         }
         if (isEmptyString(doctor.getDepartment())) {
-            errorMessageList.add("Department should not be empty");
+            errorMessageList.add(DPMSConstants.EMPTY_DEPARTMENTNAME);
         }
         if (!isValidDepartmentName(doctor.getDepartment())) {
-            errorMessageList.add("Invalid Department Name");
+            errorMessageList.add(DPMSConstants.DEPARTMENTNAME_PATTERN_ERROR);
         }
         return errorMessageList;
     }
