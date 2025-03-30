@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.PostDoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
@@ -23,23 +23,23 @@ public class DoctorCreationService {
     /**
      * Method which contains the business logic to post doctor details to database
      */
-    public ResponseEntity<PostDoctorDto> createDoctor(PostDoctorDto postDoctorDto) {
+    public ResponseEntity<DoctorResponseDto> createDoctor(DoctorResponseDto doctorResponseDto) {
         DoctorEntity doctorEntity = new DoctorEntity();
         doctorEntity.setId(UUID.randomUUID());
-        doctorEntity.setFirstName(postDoctorDto.getFirstName().trim());
-        doctorEntity.setLastName(postDoctorDto.getLastName().trim());
-        doctorEntity.setDepartment(postDoctorDto.getDepartment());
+        doctorEntity.setFirstName(doctorResponseDto.getFirstName().trim());
+        doctorEntity.setLastName(doctorResponseDto.getLastName().trim());
+        doctorEntity.setDepartment(doctorResponseDto.getDepartment());
         DoctorEntity createDoctor;
         DoctorValidation doctorValidation = new DoctorValidation();
         List<String> errorMessageList = doctorValidation.validatePostDoctor(doctorEntity);
         if (!errorMessageList.isEmpty()) {
-            PostDoctorDto errorResponseDto = new PostDoctorDto();
+            DoctorResponseDto errorResponseDto = new DoctorResponseDto();
             errorResponseDto.setSuccess(false);
             errorResponseDto.setError(errorMessageList);
             return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(errorResponseDto);
         }
         createDoctor = doctorRepository.save(doctorEntity);
-        PostDoctorDto responseDto = new PostDoctorDto(createDoctor);
+        DoctorResponseDto responseDto = new DoctorResponseDto(createDoctor);
         responseDto.setSuccess(true);
         responseDto.setError(null);
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(responseDto);
