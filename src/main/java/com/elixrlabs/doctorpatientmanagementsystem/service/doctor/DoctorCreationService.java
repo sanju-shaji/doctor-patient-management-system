@@ -5,6 +5,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +22,8 @@ public class DoctorCreationService {
 
     /**
      * Method which contains the business logic to post doctor details to database
-     * @param postDoctorDto
-     * @return
      */
-    public PostDoctorDto createDoctor(PostDoctorDto postDoctorDto) {
+    public ResponseEntity<PostDoctorDto> createDoctor(PostDoctorDto postDoctorDto) {
         DoctorEntity doctorEntity = new DoctorEntity();
         doctorEntity.setId(UUID.randomUUID());
         doctorEntity.setFirstName(postDoctorDto.getFirstName().trim());
@@ -36,12 +36,12 @@ public class DoctorCreationService {
             PostDoctorDto errorResponseDto = new PostDoctorDto();
             errorResponseDto.setSuccess(false);
             errorResponseDto.setError(errorMessageList);
-            return errorResponseDto;
+            return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(errorResponseDto);
         }
         createDoctor = doctorRepository.save(doctorEntity);
         PostDoctorDto responseDto = new PostDoctorDto(createDoctor);
         responseDto.setSuccess(true);
         responseDto.setError(null);
-        return responseDto;
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(responseDto);
     }
 }

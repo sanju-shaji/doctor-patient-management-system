@@ -12,9 +12,6 @@ import java.util.List;
 public class DoctorValidation {
     /**
      * method to check if string is empty
-     *
-     * @param string
-     * @return
      */
     public boolean isEmptyString(String string) {
         return string.isEmpty();
@@ -22,9 +19,6 @@ public class DoctorValidation {
 
     /**
      * method to check if string contains only alphabets
-     *
-     * @param string
-     * @return
      */
     public boolean containsOnlyAlbhabets(String string) {
         String alphabetPattern = DPMSConstants.REGEX_ALPHABET_PATTERN;
@@ -33,9 +27,6 @@ public class DoctorValidation {
 
     /**
      * method to check if department name contains any restricted special symbols
-     *
-     * @param string
-     * @return
      */
     public boolean isValidDepartmentName(String string) {
         String departmentNamePattern = DPMSConstants.REGEX_DEPARTMENTNAME_PATTERN;
@@ -44,9 +35,6 @@ public class DoctorValidation {
 
     /**
      * method to validate the POST/doctor Api
-     *
-     * @param doctor
-     * @return
      */
     public List<String> validatePostDoctor(DoctorEntity doctor) {
         List<String> errorMessageList = new ArrayList<>();

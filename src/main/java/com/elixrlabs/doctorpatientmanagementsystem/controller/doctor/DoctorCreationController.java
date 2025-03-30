@@ -4,6 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.DPMSConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.PostDoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,11 +17,12 @@ public class DoctorCreationController {
 
     /**
      * Api mapping for posting doctor information
+     *
      * @param postDoctorDto
      * @return
      */
     @PostMapping(DPMSConstants.POST_DOCTOR_API)
-    public PostDoctorDto postDoctor(@RequestBody PostDoctorDto postDoctorDto) {
+    public ResponseEntity<PostDoctorDto> postDoctor(@RequestBody PostDoctorDto postDoctorDto) {
         return doctorCreationService.createDoctor(postDoctorDto);
     }
 }

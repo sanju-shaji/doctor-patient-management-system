@@ -23,8 +23,6 @@ public class PostDoctorDto extends ResponseDto {
 
     /**
      * constructor to set PostDoctorDto fields
-     *
-     * @param doctorEntity
      */
     public PostDoctorDto(DoctorEntity doctorEntity) {
         setId(doctorEntity.getId());
