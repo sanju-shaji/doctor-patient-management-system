@@ -5,6 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * class to validate doctor module variables
@@ -31,6 +32,14 @@ public class DoctorValidation {
     public boolean isValidDepartmentName(String string) {
         String departmentNamePattern = DPMSConstants.REGEX_DEPARTMENTNAME_PATTERN;
         return string.matches(departmentNamePattern);
+    }
+    public boolean isValidUUID(String id){
+        try {
+            UUID.fromString(id);
+            return true;
+        }catch (IllegalArgumentException illegalArgumentException){
+            return false;
+        }
     }
 
     /**

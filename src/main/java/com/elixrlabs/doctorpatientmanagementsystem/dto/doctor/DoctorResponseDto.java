@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
-public class PostDoctorDto extends ResponseDto {
+public class DoctorResponseDto extends ResponseDto {
     private UUID id;
     private String firstName;
     private String lastName;
@@ -24,7 +24,7 @@ public class PostDoctorDto extends ResponseDto {
     /**
      * constructor to set PostDoctorDto fields
      */
-    public PostDoctorDto(DoctorEntity doctorEntity) {
+    public DoctorResponseDto(DoctorEntity doctorEntity) {
         setId(doctorEntity.getId());
         setFirstName(doctorEntity.getFirstName());
         setLastName(doctorEntity.getLastName());
