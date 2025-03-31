@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.dto.patient;
 
+import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import lombok.Data;
 
 import java.util.UUID;
@@ -13,9 +14,10 @@ public class PatientDto {
     private String firstName;
     private String lastName;
 
-    public PatientDto(UUID id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public PatientDto(PatientModel patientModel)
+    {
+        this.id=patientModel.getId();
+        this.firstName=patientModel.getPatientFirstName();
+        this.lastName=patientModel.getPatientLastName();
     }
 }

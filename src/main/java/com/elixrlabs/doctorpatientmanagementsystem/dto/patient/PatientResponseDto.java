@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.List;
+
 /**
  * Base DTO for patient class for setting success and error
  */
