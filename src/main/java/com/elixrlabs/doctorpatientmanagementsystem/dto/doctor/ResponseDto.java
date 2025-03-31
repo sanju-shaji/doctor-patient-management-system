@@ -11,6 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ResponseDto {
-    public boolean success;
-    public List<String> error;
+    private boolean success;
+    private List<String> errors;
 }

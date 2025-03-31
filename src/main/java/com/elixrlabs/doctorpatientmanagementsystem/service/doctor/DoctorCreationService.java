@@ -4,8 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +16,19 @@ import java.util.UUID;
  */
 @Service
 public class DoctorCreationService {
-    @Autowired
-    DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
+    private final DoctorValidation doctorValidation;
+
+    public DoctorCreationService(DoctorRepository doctorRepository, DoctorValidation doctorValidation) {
+        this.doctorRepository = doctorRepository;
+        this.doctorValidation = doctorValidation;
+    }
 
     /**
-     * Method which contains the business logic to post doctor details to database
+     * Method which contains the business logic to validate the inputs and post doctor details to database
+     *
+     * @param doctorResponseDto-contains the data which is to be posted to the database
+     * @return ResponseEntity in which the desired data is set for response
      */
     public ResponseEntity<DoctorResponseDto> createDoctor(DoctorResponseDto doctorResponseDto) {
         DoctorEntity doctorEntity = new DoctorEntity();
@@ -30,18 +37,17 @@ public class DoctorCreationService {
         doctorEntity.setLastName(doctorResponseDto.getLastName().trim());
         doctorEntity.setDepartment(doctorResponseDto.getDepartment());
         DoctorEntity createDoctor;
-        DoctorValidation doctorValidation = new DoctorValidation();
         List<String> errorMessageList = doctorValidation.validatePostDoctor(doctorEntity);
         if (!errorMessageList.isEmpty()) {
             DoctorResponseDto errorResponseDto = new DoctorResponseDto();
             errorResponseDto.setSuccess(false);
-            errorResponseDto.setError(errorMessageList);
-            return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(errorResponseDto);
+            errorResponseDto.setErrors(errorMessageList);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
         }
         createDoctor = doctorRepository.save(doctorEntity);
         DoctorResponseDto responseDto = new DoctorResponseDto(createDoctor);
         responseDto.setSuccess(true);
-        responseDto.setError(null);
-        return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(responseDto);
+        responseDto.setErrors(null);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

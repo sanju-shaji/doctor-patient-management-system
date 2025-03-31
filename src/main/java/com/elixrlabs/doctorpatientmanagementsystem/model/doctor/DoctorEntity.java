@@ -11,7 +11,10 @@ import java.util.UUID;
 @Document(collection = DataBaseConstants.DOCTOR_COLLECTION_NAME)
 @Getter
 @Setter
-/** The entity class representing a doctor */
+
+/**
+ * Doctor Entity class used to interacting with repository
+ */
 public class DoctorEntity {
     @Id
     private UUID id;

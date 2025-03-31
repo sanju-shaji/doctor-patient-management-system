@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 /**
- * Data transfer object for POST/doctor API
+ * Data transfer object for transferring the doctor data
  */
 @Getter
 @Setter
