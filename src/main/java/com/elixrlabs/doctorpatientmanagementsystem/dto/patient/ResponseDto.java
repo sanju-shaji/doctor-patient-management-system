@@ -22,13 +22,9 @@ public class ResponseDto {
 
     /**
      * Constructor to initialize successful response with patient details
-     *
-     * @param id
-     * @param patientFirstName
-     * @param patientLastName
      */
-    public ResponseDto(String id, String patientFirstName, String patientLastName) {
-        this.success = true;
+    public ResponseDto(boolean success, String id, String patientFirstName, String patientLastName) {
+        this.success = success;
         this.id = id;
         this.patientFirstName = patientFirstName;
         this.patientLastName = patientLastName;
@@ -36,11 +32,9 @@ public class ResponseDto {
 
     /**
      * Constructor to initialize an error response with validation messages
-     *
-     * @param errors
      */
-    public ResponseDto(List<String> errors) {
-        this.success = false;
+    public ResponseDto(boolean success, List<String> errors) {
+        this.success = success;
         this.errors = errors;
     }
 }

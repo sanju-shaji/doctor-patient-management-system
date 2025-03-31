@@ -19,14 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping
+@RequestMapping()
 public class PatientCreationController {
     @Autowired
     private PatientCreationService patientCreationService;
-
     @PostMapping(DPMSConstants.POST_PATIENTS_API)
     public ResponseEntity<ResponseDto> createPatient(@RequestBody PostPatientDto postPatientDto) {
-        ResponseDto response = patientCreationService.createPatient(postPatientDto);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+       return patientCreationService.createPatient(postPatientDto);
+       //return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

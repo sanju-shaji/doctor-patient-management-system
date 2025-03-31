@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.dto.patient;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * DTO class for creating a new patient

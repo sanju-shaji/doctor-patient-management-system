@@ -6,6 +6,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,11 +29,13 @@ public class PatientCreationService {
      * @param postPatientDto
      * @return
      */
-    public ResponseDto createPatient(PostPatientDto postPatientDto) {
+    public ResponseEntity<ResponseDto> createPatient(PostPatientDto postPatientDto) {
         // Perform validation
         List<String> validationErrors = patientValidation.validatePatient(postPatientDto);
+
         if (!validationErrors.isEmpty()) {
-            return new ResponseDto(validationErrors);
+            ResponseDto errorResponse = new ResponseDto(false, validationErrors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         UUID patientId = UUID.randomUUID();
         PatientModel patient = new PatientModel(
@@ -40,6 +44,7 @@ public class PatientCreationService {
                 postPatientDto.getPatientLastName().trim()
         );
         patientRepository.save(patient);
-        return new ResponseDto(patientId.toString(), patient.getPatientFirstName().trim(), patient.getPatientLastName().trim());
+        ResponseDto successResponse = new ResponseDto(true, patientId.toString(),patient.getPatientFirstName(),patient.getPatientLastName());
+        return ResponseEntity.status(HttpStatus.OK).body(successResponse);
     }
 }
