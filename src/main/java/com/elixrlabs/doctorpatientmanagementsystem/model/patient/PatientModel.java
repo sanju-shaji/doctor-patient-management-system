@@ -11,8 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.UUID;
 
 /**
- * PatientModel class represents patient entity in Doctorpatientmanagementsystem
- * Annotations used
+ * PatientModel class represents patient entity in Doctor patient management system
  */
 @Document(collection = DataBaseConstants.PATIENT_COLLECTION_NAME)
 @Getter
