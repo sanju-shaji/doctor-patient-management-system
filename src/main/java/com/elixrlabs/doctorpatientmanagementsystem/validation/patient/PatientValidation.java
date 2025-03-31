@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DPMSConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PostPatientDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.RequestDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class PatientValidation {
      * @param patientDto
      * @return
      */
-    public List<String> validatePatient(PostPatientDto patientDto) {
+    public List<String> validatePatient(RequestDto patientDto) {
         List<String> errors = new ArrayList<>();
         String patientFirstName = patientDto.getPatientFirstName() != null ? patientDto.getPatientFirstName().trim() : "";
         String patientLastName = patientDto.getPatientLastName() != null ? patientDto.getPatientLastName().trim() : "";

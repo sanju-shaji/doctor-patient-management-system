@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PostPatientDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.RequestDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.ResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
@@ -18,21 +18,23 @@ import java.util.UUID;
  */
 @Service
 public class PatientCreationService {
-    @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private PatientValidation patientValidation;
+    private final PatientRepository patientRepository;
+    private final PatientValidation patientValidation;
+
+    PatientCreationService(PatientRepository patientRepository, PatientValidation patientValidation) {
+        this.patientRepository = patientRepository;
+        this.patientValidation = patientValidation;
+    }
 
     /**
      * creates a new patient after performing validations
      *
-     * @param postPatientDto
+     * @param patientDto
      * @return
      */
-    public ResponseEntity<ResponseDto> createPatient(PostPatientDto postPatientDto) {
+    public ResponseEntity<ResponseDto> createPatient(RequestDto patientDto) {
         // Perform validation
-        List<String> validationErrors = patientValidation.validatePatient(postPatientDto);
-
+        List<String> validationErrors = patientValidation.validatePatient(patientDto);
         if (!validationErrors.isEmpty()) {
             ResponseDto errorResponse = new ResponseDto(false, validationErrors);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -40,11 +42,11 @@ public class PatientCreationService {
         UUID patientId = UUID.randomUUID();
         PatientModel patient = new PatientModel(
                 patientId,
-                postPatientDto.getPatientFirstName().trim(),
-                postPatientDto.getPatientLastName().trim()
+                patientDto.getPatientFirstName().trim(),
+                patientDto.getPatientLastName().trim()
         );
         patientRepository.save(patient);
-        ResponseDto successResponse = new ResponseDto(true, patientId.toString(),patient.getPatientFirstName(),patient.getPatientLastName());
+        ResponseDto successResponse = new ResponseDto(true, patient);
         return ResponseEntity.status(HttpStatus.OK).body(successResponse);
     }
 }

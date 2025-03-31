@@ -15,19 +15,15 @@ import java.util.List;
  */
 public class ResponseDto {
     private boolean success;
-    private String id;
-    private String patientFirstName;
-    private String patientLastName;
+    private Object data;
     private List<String> errors;
 
     /**
      * Constructor to initialize successful response with patient details
      */
-    public ResponseDto(boolean success, String id, String patientFirstName, String patientLastName) {
+    public ResponseDto(boolean success, Object data) {
         this.success = success;
-        this.id = id;
-        this.patientFirstName = patientFirstName;
-        this.patientLastName = patientLastName;
+        this.data = data;
     }
 
     /**
