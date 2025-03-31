@@ -2,6 +2,8 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DPMSConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
+import io.micrometer.common.util.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.UUID;
 /**
  * class to validate doctor module variables
  */
+@Component
 public class DoctorValidation {
     /**
      * method to check if string is empty
@@ -40,6 +43,10 @@ public class DoctorValidation {
         }catch (IllegalArgumentException illegalArgumentException){
             return false;
         }
+    }
+
+    public boolean isUUIDNull(String id){
+        return StringUtils.isBlank(id);
     }
 
     /**

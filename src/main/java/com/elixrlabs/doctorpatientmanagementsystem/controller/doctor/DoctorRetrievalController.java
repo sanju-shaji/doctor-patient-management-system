@@ -26,14 +26,6 @@ public class DoctorRetrievalController {
      */
     @GetMapping(DPMSConstants.GET_DOCTOR_BY_ID_API)
     public ResponseEntity<DoctorResponseDto> getDoctorByID(@PathVariable String id) {
-        DoctorValidation doctorValidation = new DoctorValidation();
-        if (!doctorValidation.isValidUUID(id)) {
-            DoctorResponseDto responseDto = new DoctorResponseDto();
-            responseDto.setSuccess(false);
-            responseDto.setError(List.of(DPMSConstants.INVALID_UUID_ERROR));
-            return ResponseEntity.status(400).body(responseDto);
-        }
-        UUID uuid = UUID.fromString(id);
-        return service.getDoctorsById(uuid);
+        return service.getDoctorsById(id);
     }
 }
