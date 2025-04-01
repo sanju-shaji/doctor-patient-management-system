@@ -4,6 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -11,4 +12,7 @@ import java.util.UUID;
  */
 @Repository
 public interface PatientRepository extends MongoRepository<PatientModel, UUID> {
+    List<PatientModel> findByPatientFirstNameStartingWithIgnoreCaseOrPatientLastNameStartingWithIgnoreCase(String firstName, String lastName);
+
+    List<PatientModel> findByPatientFirstNameStartingWithIgnoreCaseAndPatientLastNameStartingWithIgnoreCase(String firstName, String lastName);
 }
