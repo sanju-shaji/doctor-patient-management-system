@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
  * Service class responsible for handling business logic related to patient creation
  */
 @Service
+
 public class PatientCreationService {
     private final PatientRepository patientRepository;
     private final PatientValidation patientValidation;
@@ -32,6 +34,7 @@ public class PatientCreationService {
      * returns 400 response with validation errors if the input is invalid
      * returns 200 response with patient details if the input is valid
      */
+    @Transactional
     public ResponseEntity<ResponseDto> createPatient(RequestDto patientDto) {
         // Perform validation
         List<String> validationErrors = patientValidation.validatePatient(patientDto);
