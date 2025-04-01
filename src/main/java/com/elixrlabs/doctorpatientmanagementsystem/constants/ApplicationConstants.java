@@ -13,4 +13,5 @@ public class ApplicationConstants {
     public static final String POST_DOCTOR_API = "/doctors";
     public static final String REGEX_ALPHABET_PATTERN = "^[a-zA-Z\\s]+$";
     public static final String REGEX_DEPARTMENTNAME_PATTERN = "^[a-zA-Z\\s\\-'.,]+$";
+    public static final String SERVER_ERROR = "Server error - ";
 }

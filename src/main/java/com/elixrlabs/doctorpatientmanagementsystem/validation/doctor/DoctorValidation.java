@@ -15,6 +15,7 @@ import java.util.List;
 public class DoctorValidation {
     /**
      * method to check if string is empty or null
+     *
      * @param string which is to be validated
      * @return true or false
      */
@@ -24,6 +25,7 @@ public class DoctorValidation {
 
     /**
      * method to check if string contains only alphabets
+     *
      * @param string for validating with regex patter
      * @return true or false
      */
@@ -34,6 +36,7 @@ public class DoctorValidation {
 
     /**
      * method to check if department name contains any restricted special symbols
+     *
      * @param string for validating with regex patter
      * @return true or false
      */
@@ -44,6 +47,7 @@ public class DoctorValidation {
 
     /**
      * method to validate the POST/doctor Api
+     *
      * @param doctor-model entity which contains the actual data
      * @return list which contains error messages if any
      */
@@ -52,14 +56,18 @@ public class DoctorValidation {
         if (isEmptyString(doctor.getFirstName())) {
             errorMessageList.add(ApplicationConstants.EMPTY_FIRSTNAME);
         }
-        if (!containsOnlyAlphabets(doctor.getFirstName())) {
-            errorMessageList.add(ApplicationConstants.FIRSTNAME_PATTERN_ERROR);
+        if (!isEmptyString(doctor.getFirstName())) {
+            if (!containsOnlyAlphabets(doctor.getFirstName())) {
+                errorMessageList.add(ApplicationConstants.FIRSTNAME_PATTERN_ERROR);
+            }
         }
         if (isEmptyString(doctor.getLastName())) {
             errorMessageList.add(ApplicationConstants.EMPTY_LASTNAME);
         }
-        if (!containsOnlyAlphabets(doctor.getLastName())) {
-            errorMessageList.add(ApplicationConstants.LASTNAME_PATTERN_ERROR);
+        if (!isEmptyString(doctor.getLastName())) {
+            if (!containsOnlyAlphabets(doctor.getLastName())) {
+                errorMessageList.add(ApplicationConstants.LASTNAME_PATTERN_ERROR);
+            }
         }
         if (isEmptyString(doctor.getDepartment())) {
             errorMessageList.add(ApplicationConstants.EMPTY_DEPARTMENTNAME);
