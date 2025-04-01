@@ -6,10 +6,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
+
 /**
  * Repository layer interface for patient entity
  */
 @Repository
 public interface PatientRepository extends MongoRepository<PatientModel, UUID> {
     List<PatientModel> findByPatientFirstNameStartingWithIgnoreCaseOrPatientLastNameStartingWithIgnoreCase(String firstName, String lastName);
+
+    List<PatientModel> findByPatientFirstNameStartingWithIgnoreCaseAndPatientLastNameStartingWithIgnoreCase(String firstName, String lastName);
 }

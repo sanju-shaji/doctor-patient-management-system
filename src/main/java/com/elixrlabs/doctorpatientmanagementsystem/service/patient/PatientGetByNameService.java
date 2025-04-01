@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.PatientGetByNameConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
@@ -29,14 +30,29 @@ public class PatientGetByNameService {
     public ResponseEntity<PatientResponseDto> getPatientsByNamePrefixWithValidation(String name) {
         List<String> errors = patientGetByNameValidations.validatePatientName(name);
         if (!errors.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new PatientResponseDto(errors, false));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new PatientResponseDto(errors, false));
         }
+        String[] names = separateFirstAndLastName(name);
         List<PatientDto> patients = getPatientsByNamePrefix(name);
+        if (!names[1].isEmpty()) {
+            patients = getPatientsByFirstAndLastName(names[0], names[1]);
+        } else {
+            patients = getPatientsByNamePrefix(names[0]);
+        }
+        if (patients.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new PatientResponseDto(List.of(PatientGetByNameConstants.NO_PATIENTS_FOUND), false));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(new PatientResponseDto(true, patients));
     }
 
-    public List<PatientDto> getPatientsByNamePrefix(String name) {
+    private List<PatientDto> getPatientsByNamePrefix(String name) {
         List<PatientModel> patients = repository.findByPatientFirstNameStartingWithIgnoreCaseOrPatientLastNameStartingWithIgnoreCase(name, name);
+        return patients.stream().map(patientModel -> new PatientDto(patientModel)
+        ).collect(Collectors.toList());
+    }
+
+    private List<PatientDto> getPatientsByFirstAndLastName(String firstName, String lastName) {
+        List<PatientModel> patients = repository.findByPatientFirstNameStartingWithIgnoreCaseAndPatientLastNameStartingWithIgnoreCase(firstName, lastName);
         return patients.stream().map(patientModel -> new PatientDto(patientModel)
         ).collect(Collectors.toList());
     }

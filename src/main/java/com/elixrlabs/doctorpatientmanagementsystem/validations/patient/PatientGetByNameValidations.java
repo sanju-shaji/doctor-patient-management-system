@@ -15,16 +15,7 @@ public class PatientGetByNameValidations {
     public List<String> validatePatientName(String name) {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(name)) {
-            errors.add(PatientGetByNameConstants.NAME_CANNOT_NULL);
-        }
-        if (!name.matches(PatientGetByNameConstants.REGEX_PATTERN)) {
-            errors.add(PatientGetByNameConstants.NAME_UNSUPPORTED_CHARACTERS);
-        }
-        if (name.length() < 2 || name.length() > 50) {
-            errors.add(PatientGetByNameConstants.NAME_LENGTH);
-        }
-        if (name.contains(PatientGetByNameConstants.APOSTROPHE) || name.contains(PatientGetByNameConstants.HYPHEN)) {
-            errors.add(PatientGetByNameConstants.NAME_INVALID_CHARACTERS);
+            errors.add(PatientGetByNameConstants.QUERY_PARAMS_CANNOT_NULL);
         }
         return errors;
     }
