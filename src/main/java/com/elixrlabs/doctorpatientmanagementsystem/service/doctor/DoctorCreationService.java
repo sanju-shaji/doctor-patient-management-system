@@ -42,10 +42,10 @@ public class DoctorCreationService {
                     firstName(doctorDto.getFirstName().trim())
                     .lastName(doctorDto.getLastName().trim()).
                     department(doctorDto.getDepartment()).build();
-            DoctorEntity saveDoctor = doctorRepository.save(doctorEntity);
-            DoctorDto responseDto = DoctorDto.builder().id(saveDoctor.getId()).firstName(saveDoctor.getFirstName()).
-                    lastName(saveDoctor.getLastName()).department(saveDoctor.getDepartment())
-                    .success(true).errors(null).build();
+            doctorEntity = doctorRepository.save(doctorEntity);
+            DoctorDto responseDto = DoctorDto.builder().id(doctorEntity.getId()).firstName(doctorEntity.getFirstName()).
+                    lastName(doctorEntity.getLastName()).department(doctorEntity.getDepartment())
+                    .success(true).build();
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
         } catch (Exception exception) {
             DoctorDto errorResponseDto = DoctorDto.builder().success(false)
