@@ -1,7 +1,7 @@
-package com.elixrlabs.doctorpatientmanagementsystem.controller.doctor;
+package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorResponseDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorCreationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +22,12 @@ public class DoctorCreationController {
     /**
      * Api mapping for posting doctor information
      *
-     * @param doctorResponseDto-Which contains the data passed in request body
+     * @param doctorDto-Which contains the data passed in request body
      * @return ResponseEntity of type DoctorResponseDto
      */
     @PostMapping(ApplicationConstants.POST_DOCTOR_API)
-    public ResponseEntity<DoctorResponseDto> postDoctor(@RequestBody DoctorResponseDto doctorResponseDto) {
-        return doctorCreationService.createDoctor(doctorResponseDto);
+    public ResponseEntity<DoctorDto> postDoctor(@RequestBody DoctorDto doctorDto) {
+        return doctorCreationService.createDoctor(doctorDto);
 
     }
 }

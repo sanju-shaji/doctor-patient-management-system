@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +42,7 @@ public class DoctorValidation {
      * @param doctor-model entity which contains the actual data
      * @return list which contains error messages if any
      */
-    public List<String> validatePostDoctor(DoctorEntity doctor) {
+    public List<String> validatePostDoctor(DoctorDto doctor) {
         List<String> errorMessageList = new ArrayList<>();
         errorMessageList.addAll(validateString(doctor.getFirstName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_FIRSTNAME,

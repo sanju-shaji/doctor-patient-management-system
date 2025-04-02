@@ -14,7 +14,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuperBuilder
 @NoArgsConstructor
-public class DoctorResponseDto extends ResponseDto {
+public class DoctorDto extends ResponseDto {
     private UUID id;
     private String firstName;
     private String lastName;
