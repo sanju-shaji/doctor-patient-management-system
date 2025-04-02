@@ -25,8 +25,8 @@ public class PatientValidation {
      */
     public List<String> validatePatient(RequestDto patientDto) {
         List<String> errors = new ArrayList<>();
-        String firstName = patientDto.getFirstName() != null ? patientDto.getFirstName().trim() : null;
-        String lastName = patientDto.getLastName() != null ? patientDto.getLastName().trim() : null;
+        String firstName = patientDto.getFirstName().trim();
+        String lastName = patientDto.getLastName().trim();
         if (StringUtils.isEmpty(firstName)) {
             errors.add(DoctorPatientManagementSystemConstants.PATIENT_FIRSTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {

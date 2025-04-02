@@ -35,7 +35,10 @@ public class PatientCreationService {
             // Perform validation
             List<String> validationErrors = patientValidation.validatePatient(patientDto);
             if (!validationErrors.isEmpty()) {
-                ResponseDto errorResponse = new ResponseDto(false, validationErrors);
+                ResponseDto errorResponse = ResponseDto.builder()
+                        .success(false)
+                        .errors(validationErrors)
+                        .build();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
             PatientModel patient = PatientModel.builder()
@@ -43,11 +46,22 @@ public class PatientCreationService {
                     .firstName(patientDto.getFirstName().trim())
                     .lastName(patientDto.getLastName().trim())
                     .build();
-            patientRepository.save(patient);
-            ResponseDto successResponse = new ResponseDto(true, patient);
+            patient = patientRepository.save(patient);
+            ResponseDto successResponse = ResponseDto.builder()
+                    .success(true)
+                    .data(RequestDto.builder()
+                            .id(patient.getId())
+                            .firstName(patient.getFirstName())
+                            .lastName(patient.getLastName())
+                            .build())
+                    .build();
             return ResponseEntity.status(HttpStatus.OK).body(successResponse);
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDto(false, List.of(exception.getMessage())));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto
+                    .builder()
+                    .success(false)
+                    .errors(List.of(exception.getMessage()))
+                    .build());
         }
     }
 }
