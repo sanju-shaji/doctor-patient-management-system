@@ -1,7 +1,9 @@
 package com.elixrlabs.doctorpatientmanagementsystem.dto.doctor;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
