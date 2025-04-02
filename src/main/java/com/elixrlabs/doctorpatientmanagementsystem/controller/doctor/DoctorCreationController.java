@@ -4,7 +4,9 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstant
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorCreationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * controller class for the doctor module
@@ -26,5 +28,6 @@ public class DoctorCreationController {
     @PostMapping(ApplicationConstants.POST_DOCTOR_API)
     public ResponseEntity<DoctorResponseDto> postDoctor(@RequestBody DoctorResponseDto doctorResponseDto) {
         return doctorCreationService.createDoctor(doctorResponseDto);
+
     }
 }
