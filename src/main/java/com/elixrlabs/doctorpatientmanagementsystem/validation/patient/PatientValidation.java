@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DoctorPatientManagementSystemConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.RequestDto;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +25,16 @@ public class PatientValidation {
      */
     public List<String> validatePatient(RequestDto patientDto) {
         List<String> errors = new ArrayList<>();
-        String patientFirstName = patientDto.getPatientFirstName() != null ? patientDto.getPatientFirstName().trim() : "";
-        String patientLastName = patientDto.getPatientLastName() != null ? patientDto.getPatientLastName().trim() : "";
-        if (patientDto.getPatientFirstName().isEmpty()) {
-            errors.add(DoctorPatientManagementSystemConstants.EMPTY_PATIENT_FIRSTNAME_ERROR);
-        } else if (!NAME_PATTERN.matcher(patientFirstName).matches()) {
+        String firstName = patientDto.getFirstName() != null ? patientDto.getFirstName().trim() : null;
+        String lastName = patientDto.getLastName() != null ? patientDto.getLastName().trim() : null;
+        if (StringUtils.isEmpty(firstName)) {
+            errors.add(DoctorPatientManagementSystemConstants.PATIENT_FIRSTNAME_ERROR);
+        } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
             errors.add(DoctorPatientManagementSystemConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
         }
-        if (patientDto.getPatientLastName().isEmpty()) {
-            errors.add(DoctorPatientManagementSystemConstants.EMPTY_PATIENT_LASTNAME_ERROR);
-        } else if (!NAME_PATTERN.matcher(patientLastName).matches()) {
+        if (StringUtils.isEmpty(lastName)) {
+            errors.add(DoctorPatientManagementSystemConstants.PATIENT_LASTNAME_ERROR);
+        } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
             errors.add(DoctorPatientManagementSystemConstants.PATIENT_LASTNAME_PATTERN_ERROR);
         }
         return errors;

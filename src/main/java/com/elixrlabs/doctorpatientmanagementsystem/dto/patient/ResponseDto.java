@@ -1,13 +1,11 @@
 package com.elixrlabs.doctorpatientmanagementsystem.dto.patient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 /**
  * DTO class for API responses

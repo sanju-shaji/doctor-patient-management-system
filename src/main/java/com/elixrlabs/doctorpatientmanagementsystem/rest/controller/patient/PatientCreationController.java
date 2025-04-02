@@ -22,7 +22,7 @@ public class PatientCreationController {
         this.patientCreationService = patientCreationService;
     }
 
-    @PostMapping(DoctorPatientManagementSystemConstants.POST_PATIENTS_API)
+    @PostMapping(DoctorPatientManagementSystemConstants.PATIENTS_API)
     public ResponseEntity<ResponseDto> createPatient(@RequestBody RequestDto patientDto) {
         return patientCreationService.createPatient(patientDto);
     }
