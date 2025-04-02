@@ -9,12 +9,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
 
+/**
+ * The entity class representing a doctor in the system.
+ * This class is mapped to a MongoDB collection and stores doctor-related information.
+ */
 @Document(collection = DataBaseConstants.DOCTOR_COLLECTION_NAME)
 @Getter
 @Setter
 @AllArgsConstructor
-/** The entity class representing a doctor */
 public class DoctorEntity {
+    /**
+     * The unique identifier for the doctor.
+     * This is the primary key in the database.
+     */
     @Id
     private UUID id;
     private String firstName;

@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+
 import java.util.UUID;
 
-/** DTO representing doctor details for data transfer. */
+/**
+ * DTO representing doctor details for data transfer.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
