@@ -56,6 +56,8 @@ public class DoctorValidation {
                 ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENTNAME,
                 ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR));
         return errorMessageList;
+
+}
     public Boolean validateDoctorName(String name) {
         return StringUtils.isBlank(name);
     }

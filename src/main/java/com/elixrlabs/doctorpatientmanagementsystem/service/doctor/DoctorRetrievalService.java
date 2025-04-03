@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorGetDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
@@ -41,14 +41,14 @@ public class DoctorRetrievalService {
         }
         List<DoctorEntity> doctorEntityList = doctorRepository.findByName(name);
         if (!doctorEntityList.isEmpty()) {
-            List<DoctorGetDto> doctorsData = new ArrayList<>();
+            List<DoctorDto> doctorsData = new ArrayList<>();
             for (DoctorEntity doctorEntity : doctorEntityList) {
-                DoctorGetDto doctorGetDto = DoctorGetDto.builder()
+                DoctorDto doctorDto = DoctorDto.builder()
                         .id(doctorEntity.getId())
                         .firstName(doctorEntity.getFirstName())
                         .lastName(doctorEntity.getLastName())
                         .department(doctorEntity.getDepartment()).build();
-                doctorsData.add(doctorGetDto);
+                doctorsData.add(doctorDto);
             }
             doctorListResponse.setSuccess(true);
             doctorListResponse.setDoctors(doctorsData);

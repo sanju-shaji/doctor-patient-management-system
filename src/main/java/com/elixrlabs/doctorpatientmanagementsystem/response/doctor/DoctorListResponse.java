@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.response.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorGetDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,5 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 public class DoctorListResponse extends BaseResponse {
-    public List<DoctorGetDto> doctors;
+    public List<DoctorDto> doctors;
 }

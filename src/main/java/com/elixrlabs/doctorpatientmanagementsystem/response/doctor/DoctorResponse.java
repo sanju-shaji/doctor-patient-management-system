@@ -6,17 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
+import java.util.UUID;
 
 /**
- * Base response class for doctor-related API responses. *
+ * Data transfer object for transferring the doctor data
  */
 @Getter
 @Setter
-@SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@SuperBuilder
 @NoArgsConstructor
-public class BaseResponse {
-    public boolean success;
-    public List<String> errors;
+public class DoctorResponse extends BaseResponse {
+    private UUID id;
+    private String firstName;
+    private String lastName;
+    private String department;
 }
