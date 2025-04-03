@@ -17,9 +17,9 @@ public class DoctorValidation {
     /**
      * method to check if the string is empty and if string follows the specified pattern
      *
-     * @param string-The string which is to be validated
-     * @param Pattern-The pattern which is to be matched with the string for validation
-     * @param emptyStringError-error message if the string is empty
+     * @param string-The                string which is to be validated
+     * @param Pattern-The               pattern which is to be matched with the string for validation
+     * @param emptyStringError-error    message if the string is empty
      * @param invalidPatternError-error message if the string does for match the specified pattern
      * @return List which contains the error messages if validation fails or an empty list if validation is success
      * Validates the doctor name to ensure it is not empty and contains only letters and spaces.
@@ -57,7 +57,8 @@ public class DoctorValidation {
                 ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR));
         return errorMessageList;
 
-}
+    }
+
     public Boolean validateDoctorName(String name) {
         return StringUtils.isBlank(name);
     }
