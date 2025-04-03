@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.model.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,13 +16,11 @@ import java.util.UUID;
  */
 @Document(collection = DataBaseConstants.DOCTOR_COLLECTION_NAME)
 @Getter
+@Builder
+
 @Setter
 @AllArgsConstructor
 public class DoctorEntity {
-    /**
-     * The unique identifier for the doctor.
-     * This is the primary key in the database.
-     */
     @Id
     private UUID id;
     private String firstName;
