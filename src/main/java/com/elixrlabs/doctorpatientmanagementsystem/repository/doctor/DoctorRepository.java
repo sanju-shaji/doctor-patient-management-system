@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.repository.doctor;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -13,6 +14,6 @@ import java.util.UUID;
  */
 @Repository
 public interface DoctorRepository extends MongoRepository<DoctorEntity, UUID> {
-    @Query("{ $or: [ { 'firstName': { $regex: ?0, $options: 'i' } }, { 'lastName': { $regex: ?0, $options: 'i' } } ] }")
+    @Query(DataBaseConstants.QUERY_STRING)
     List<DoctorEntity> findByName(String name);
 }

@@ -1,6 +1,6 @@
-package com.elixrlabs.doctorpatientmanagementsystem.controller.doctor;
+package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiEndPointConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorRetrievalService;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +23,10 @@ public class DoctorRetrievalController {
     }
 
     /**
-     * Retrieves doctor details by name from the system.
+     * Retrieves doctor details by doctorName from the system.
      */
-    @GetMapping(ApiEndPointConstants.GET_API_END_POINT)
-    public ResponseEntity<DoctorListResponse> getDoctorByName(@RequestParam(value = ApiEndPointConstants.PARAM_DOCTOR_NAME, required = true) String name) {
-        return doctorRetrievalService.retrieveDoctorByName(name);
+    @GetMapping(ApplicationConstants.DOCTORS_END_POINT)
+    public ResponseEntity<DoctorListResponse> getDoctorByName(@RequestParam(value = ApplicationConstants.PARAM_DOCTOR_NAME) String doctorName) {
+        return doctorRetrievalService.retrieveDoctorByName(doctorName);
     }
 }

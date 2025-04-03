@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * Base response class for doctor-related API responses. *
  */
@@ -12,5 +14,5 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseResponse {
     public boolean success;
-    public String error;
+    public List<String> errors;
 }
