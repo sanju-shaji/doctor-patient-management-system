@@ -1,19 +1,20 @@
 package com.elixrlabs.doctorpatientmanagementsystem.model.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
 
+/**
+ * Doctor Entity class used to interacting with repository
+ */
 @Document(collection = DataBaseConstants.DOCTOR_COLLECTION_NAME)
 @Getter
-@Setter
-@AllArgsConstructor
-/** The entity class representing a doctor */
+@Builder
+
 public class DoctorEntity {
     @Id
     private UUID id;
