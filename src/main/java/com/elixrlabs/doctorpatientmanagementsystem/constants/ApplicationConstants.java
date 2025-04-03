@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.constants;
 
-public class DoctorPatientManagementSystemConstants {
+public class ApplicationConstants {
     public static final String PATIENT_FIRSTNAME_ERROR = "Patient first name cannot be empty or null.";
     public static final String PATIENT_LASTNAME_ERROR = "Patient last name cannot be empty or null.";
     public static final String PATIENT_FIRSTNAME_PATTERN_ERROR = "Patient first name must contain only alphabet.";

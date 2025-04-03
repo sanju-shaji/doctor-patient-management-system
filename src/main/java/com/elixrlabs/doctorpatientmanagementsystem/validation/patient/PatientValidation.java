@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.DoctorPatientManagementSystemConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 @Component
 public class PatientValidation {
-    private final Pattern NAME_PATTERN = Pattern.compile(DoctorPatientManagementSystemConstants.REGEX_PATIENT_NAME_PATTERN);
+    private final Pattern NAME_PATTERN = Pattern.compile(ApplicationConstants.REGEX_PATIENT_NAME_PATTERN);
 
     /**
      * Validates the patient details based on pre-defined rules
@@ -26,14 +26,14 @@ public class PatientValidation {
     public List<String> validatePatient(PatientDto patientDto) {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(patientDto.getFirstName())) {
-            errors.add(DoctorPatientManagementSystemConstants.PATIENT_FIRSTNAME_ERROR);
+            errors.add(ApplicationConstants.PATIENT_FIRSTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
-            errors.add(DoctorPatientManagementSystemConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
+            errors.add(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
         }
         if (StringUtils.isEmpty(patientDto.getLastName())) {
-            errors.add(DoctorPatientManagementSystemConstants.PATIENT_LASTNAME_ERROR);
+            errors.add(ApplicationConstants.PATIENT_LASTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
-            errors.add(DoctorPatientManagementSystemConstants.PATIENT_LASTNAME_PATTERN_ERROR);
+            errors.add(ApplicationConstants.PATIENT_LASTNAME_PATTERN_ERROR);
         }
         return errors;
     }
