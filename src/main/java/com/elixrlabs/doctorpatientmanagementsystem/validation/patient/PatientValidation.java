@@ -1,9 +1,9 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DoctorPatientManagementSystemConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.RequestDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +23,14 @@ public class PatientValidation {
      * @param patientDto DTO object containing patient details for validation
      * @return a list of error messages if validation fails and an empty list if validation passes
      */
-    public List<String> validatePatient(RequestDto patientDto) {
+    public List<String> validatePatient(PatientDto patientDto) {
         List<String> errors = new ArrayList<>();
-        String firstName = patientDto.getFirstName().trim();
-        String lastName = patientDto.getLastName().trim();
-        if (StringUtils.isEmpty(firstName)) {
+        if (StringUtils.isBlank(patientDto.getFirstName())) {
             errors.add(DoctorPatientManagementSystemConstants.PATIENT_FIRSTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
             errors.add(DoctorPatientManagementSystemConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
         }
-        if (StringUtils.isEmpty(lastName)) {
+        if (StringUtils.isEmpty(patientDto.getLastName())) {
             errors.add(DoctorPatientManagementSystemConstants.PATIENT_LASTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
             errors.add(DoctorPatientManagementSystemConstants.PATIENT_LASTNAME_PATTERN_ERROR);

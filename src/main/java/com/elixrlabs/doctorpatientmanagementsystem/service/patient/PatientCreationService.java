@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.RequestDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.ResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
@@ -30,7 +30,7 @@ public class PatientCreationService {
      * returns 400 response with validation errors if the input is invalid
      * returns 200 response with patient details if the input is valid
      */
-    public ResponseEntity<ResponseDto> createPatient(RequestDto patientDto) {
+    public ResponseEntity<ResponseDto> createPatient(PatientDto patientDto) {
         try {
             // Perform validation
             List<String> validationErrors = patientValidation.validatePatient(patientDto);
@@ -41,15 +41,16 @@ public class PatientCreationService {
                         .build();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
+            UUID patientId = UUID.randomUUID();
             PatientModel patient = PatientModel.builder()
-                    .id(UUID.randomUUID())
+                    .id(patientId)
                     .firstName(patientDto.getFirstName().trim())
                     .lastName(patientDto.getLastName().trim())
                     .build();
             patient = patientRepository.save(patient);
             ResponseDto successResponse = ResponseDto.builder()
                     .success(true)
-                    .data(RequestDto.builder()
+                    .data(PatientDto.builder()
                             .id(patient.getId())
                             .firstName(patient.getFirstName())
                             .lastName(patient.getLastName())

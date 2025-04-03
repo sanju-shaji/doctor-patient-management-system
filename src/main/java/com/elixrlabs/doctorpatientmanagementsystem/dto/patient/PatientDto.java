@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RequestDto {
+public class PatientDto {
     private UUID id;
     private String firstName;
     private String lastName;

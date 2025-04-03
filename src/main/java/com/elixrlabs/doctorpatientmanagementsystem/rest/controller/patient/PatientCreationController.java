@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DoctorPatientManagementSystemConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.RequestDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.ResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientCreationService;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class PatientCreationController {
     }
 
     @PostMapping(DoctorPatientManagementSystemConstants.PATIENTS_API)
-    public ResponseEntity<ResponseDto> createPatient(@RequestBody RequestDto patientDto) {
+    public ResponseEntity<ResponseDto> createPatient(@RequestBody PatientDto patientDto) {
         return patientCreationService.createPatient(patientDto);
     }
 }
