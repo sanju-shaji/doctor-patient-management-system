@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validations.patient;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.PatientGetByNameConstants;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class PatientGetByNameValidations {
     public List<String> validatePatientName(String name) {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(name)) {
-            errors.add(PatientGetByNameConstants.QUERY_PARAMS_CANNOT_NULL);
+            errors.add(ApplicationConstants.QUERY_PARAMS_CANNOT_NULL);
         }
         return errors;
     }

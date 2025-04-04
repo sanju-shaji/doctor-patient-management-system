@@ -4,6 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import lombok.Data;
 
 import java.util.UUID;
+
 /**
  * Data transfer object for GetByName/Patient API
  */
@@ -14,10 +15,9 @@ public class PatientDto {
     private String firstName;
     private String lastName;
 
-    public PatientDto(PatientModel patientModel)
-    {
-        this.id=patientModel.getId();
-        this.firstName=patientModel.getPatientFirstName();
-        this.lastName=patientModel.getPatientLastName();
+    public PatientDto(PatientModel patientModel) {
+        this.id = patientModel.getId();
+        this.firstName = patientModel.getPatientFirstName();
+        this.lastName = patientModel.getPatientLastName();
     }
 }

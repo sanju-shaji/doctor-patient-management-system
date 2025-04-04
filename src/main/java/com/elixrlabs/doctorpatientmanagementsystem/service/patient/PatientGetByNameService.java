@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.PatientGetByNameConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
@@ -40,7 +41,7 @@ public class PatientGetByNameService {
             patients = getPatientsByNamePrefix(names[0]);
         }
         if (patients.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new PatientResponseDto(List.of(PatientGetByNameConstants.NO_PATIENTS_FOUND), false));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new PatientResponseDto(List.of(ApplicationConstants.NO_PATIENTS_FOUND), false));
         }
         return ResponseEntity.status(HttpStatus.OK).body(new PatientResponseDto(true, patients));
     }
