@@ -1,22 +1,16 @@
 package com.elixrlabs.doctorpatientmanagementsystem.dto.doctor;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.UUID;
 
 /**
- * Data transfer object for transferring the doctor data
+ * DTO representing doctor details for data transfer.
  */
-@Getter
-@Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@SuperBuilder
-@NoArgsConstructor
-public class DoctorDto extends ResponseDto {
+@Data
+@Builder
+public class DoctorDto {
     private UUID id;
     private String firstName;
     private String lastName;

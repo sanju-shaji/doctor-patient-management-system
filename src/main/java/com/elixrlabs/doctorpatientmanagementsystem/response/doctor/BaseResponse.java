@@ -1,20 +1,22 @@
-package com.elixrlabs.doctorpatientmanagementsystem.dto.doctor;
+package com.elixrlabs.doctorpatientmanagementsystem.response.doctor;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 /**
- * Base DTO for doctor class for setting success and error
+ * Base response class for doctor-related API responses. *
  */
 @Getter
+@Setter
 @SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
-public class ResponseDto {
+public class BaseResponse {
     private boolean success;
     private List<String> errors;
 }
