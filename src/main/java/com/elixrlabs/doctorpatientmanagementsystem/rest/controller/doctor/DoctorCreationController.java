@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
@@ -26,7 +27,7 @@ public class DoctorCreationController {
      * @param doctorResponse-Which contains the data passed in request body
      * @return ResponseEntity of type DoctorResponseDto
      */
-    @PostMapping(ApplicationConstants.POST_DOCTOR_API)
+    @PostMapping(ApiConstants.DOCTORS_END_POINT)
     public ResponseEntity<DoctorResponse> postDoctor(@RequestBody DoctorDto doctorResponse) {
         return doctorCreationService.createDoctor(doctorResponse);
 
