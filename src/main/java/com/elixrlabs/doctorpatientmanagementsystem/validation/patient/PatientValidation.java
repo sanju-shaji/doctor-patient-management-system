@@ -37,4 +37,12 @@ public class PatientValidation {
         }
         return errors;
     }
+
+    public List<String> validatePatientName(String name) {
+        List<String> errors = new ArrayList<>();
+        if (StringUtils.isBlank(name)) {
+            errors.add(ApplicationConstants.QUERY_PARAMS_CANNOT_NULL);
+        }
+        return errors;
+    }
 }

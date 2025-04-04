@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.ResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
@@ -61,7 +62,7 @@ public class PatientCreationService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto
                     .builder()
                     .success(false)
-                    .errors(List.of(exception.getMessage()))
+                    .errors(List.of(ApplicationConstants.SERVER_ERROR + exception.getMessage()))
                     .build());
         }
     }

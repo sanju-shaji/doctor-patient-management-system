@@ -20,10 +20,9 @@ public class PatientDto {
     private String firstName;
     private String lastName;
 
-    public PatientDto(PatientModel patientModel)
-    {
-        this.id=patientModel.getId();
-        this.firstName=patientModel.getFirstName();
-        this.lastName=patientModel.getLastName();
+    public PatientDto(PatientModel patientModel) {
+        this.id = patientModel.getId();
+        this.firstName = patientModel.getFirstName();
+        this.lastName = patientModel.getLastName();
     }
 }
