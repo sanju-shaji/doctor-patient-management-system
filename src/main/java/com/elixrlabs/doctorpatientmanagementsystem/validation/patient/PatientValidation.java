@@ -1,7 +1,6 @@
-package com.elixrlabs.doctorpatientmanagementsystem.validations.patient;
+package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.constants.PatientGetByNameConstants;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,7 @@ import java.util.List;
  * class to validate GetByName/Patient module variables
  */
 @Component
-public class PatientGetByNameValidations {
+public class PatientValidation {
     public List<String> validatePatientName(String name) {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(name)) {

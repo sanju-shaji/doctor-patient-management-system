@@ -1,12 +1,11 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.constants.PatientGetByNameConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
-import com.elixrlabs.doctorpatientmanagementsystem.validations.patient.PatientGetByNameValidations;
+import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +21,14 @@ import java.util.stream.Collectors;
 public class PatientGetByNameService {
     private final PatientRepository repository;
     @Autowired
-    PatientGetByNameValidations patientGetByNameValidations;
+    PatientValidation patientValidation;
 
     public PatientGetByNameService(PatientRepository repository) {
         this.repository = repository;
     }
 
     public ResponseEntity<PatientResponseDto> getPatientsByNamePrefixWithValidation(String name) {
-        List<String> errors = patientGetByNameValidations.validatePatientName(name);
+        List<String> errors = patientValidation.validatePatientName(name);
         if (!errors.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new PatientResponseDto(errors, false));
         }
