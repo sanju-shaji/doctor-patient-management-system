@@ -18,5 +18,5 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 public class DoctorListResponse extends BaseResponse {
-    public List<DoctorDto> doctors;
+    private List<DoctorDto> doctors;
 }

@@ -29,17 +29,17 @@ public class DoctorRetrievalService {
     }
 
     /**
-     * Retrieves doctors by first name, last name, or both, with validation.
+     * Retrieves doctors by first doctorName, last doctorName, or both, with validation.
      */
-    public ResponseEntity<DoctorListResponse> retrieveDoctorByName(String name) {
+    public ResponseEntity<DoctorListResponse> retrieveDoctorByName(String doctorName) {
         DoctorListResponse doctorListResponse = new DoctorListResponse();
-        boolean doctorValidatorResponse = doctorValidation.validateDoctorName(name);
+        boolean doctorValidatorResponse = doctorValidation.validateDoctorName(doctorName);
         if (doctorValidatorResponse) {
             doctorListResponse.setSuccess(false);
             doctorListResponse.setErrors(Collections.singletonList((ApplicationConstants.EMPTY_NAME_QUERY_PARAM)));
             return new ResponseEntity<>(doctorListResponse, HttpStatus.BAD_REQUEST);
         }
-        List<DoctorEntity> doctorEntityList = doctorRepository.findByName(name);
+        List<DoctorEntity> doctorEntityList = doctorRepository.findByName(doctorName);
         if (!doctorEntityList.isEmpty()) {
             List<DoctorDto> doctorsData = new ArrayList<>();
             for (DoctorEntity doctorEntity : doctorEntityList) {
@@ -55,7 +55,7 @@ public class DoctorRetrievalService {
             return new ResponseEntity<>(doctorListResponse, HttpStatus.OK);
         } else {
             doctorListResponse.setSuccess(false);
-            doctorListResponse.setErrors(Collections.singletonList(ApplicationConstants.DOCTORS_NOT_FOUND + ApplicationConstants.COLON + ApplicationConstants.SINGLE_QUOTE + name + ApplicationConstants.SINGLE_QUOTE));
+            doctorListResponse.setErrors(Collections.singletonList(ApplicationConstants.DOCTORS_NOT_FOUND + ApplicationConstants.COLON + ApplicationConstants.SINGLE_QUOTE + doctorName + ApplicationConstants.SINGLE_QUOTE));
             return new ResponseEntity<>(doctorListResponse, HttpStatus.NOT_FOUND);
         }
     }

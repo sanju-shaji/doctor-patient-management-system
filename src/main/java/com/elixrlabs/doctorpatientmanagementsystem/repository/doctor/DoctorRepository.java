@@ -14,6 +14,6 @@ import java.util.UUID;
  */
 @Repository
 public interface DoctorRepository extends MongoRepository<DoctorEntity, UUID> {
-    @Query(DataBaseConstants.QUERY_STRING)
+    @Query(DataBaseConstants.FETCH_DOCTOR_BY_FIRSTNAME_OR_LASTNAME_QUERY)
     List<DoctorEntity> findByName(String name);
 }
