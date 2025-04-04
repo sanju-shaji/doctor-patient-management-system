@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 @Repository
 public interface PatientRepository extends MongoRepository<PatientModel, UUID> {
-    List<PatientModel> findByPatientFirstNameStartingWithIgnoreCaseOrPatientLastNameStartingWithIgnoreCase(String firstName, String lastName);
+    List<PatientModel> findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(String firstName, String lastName);
 
-    List<PatientModel> findByPatientFirstNameStartingWithIgnoreCaseAndPatientLastNameStartingWithIgnoreCase(String firstName, String lastName);
+    List<PatientModel> findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(String firstName, String lastName);
 }

@@ -46,13 +46,13 @@ public class PatientGetByNameService {
     }
 
     private List<PatientDto> getPatientsByNamePrefix(String name) {
-        List<PatientModel> patients = repository.findByPatientFirstNameStartingWithIgnoreCaseOrPatientLastNameStartingWithIgnoreCase(name, name);
+        List<PatientModel> patients = repository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(name, name);
         return patients.stream().map(patientModel -> new PatientDto(patientModel)
         ).collect(Collectors.toList());
     }
 
     private List<PatientDto> getPatientsByFirstAndLastName(String firstName, String lastName) {
-        List<PatientModel> patients = repository.findByPatientFirstNameStartingWithIgnoreCaseAndPatientLastNameStartingWithIgnoreCase(firstName, lastName);
+        List<PatientModel> patients = repository.findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(firstName, lastName);
         return patients.stream().map(patientModel -> new PatientDto(patientModel)
         ).collect(Collectors.toList());
     }
