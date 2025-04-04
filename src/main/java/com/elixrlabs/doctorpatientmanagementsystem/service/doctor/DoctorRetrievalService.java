@@ -1,10 +1,11 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.DPMSConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorResponseDto;
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,32 +28,32 @@ public class DoctorRetrievalService {
     /**
      * Method which handles the logic to retrieve doctor data by using ID
      */
-    public ResponseEntity<DoctorResponseDto> getDoctorsById(String id) {
-        if (doctorValidation.isUUIDNull(id)) {
-            DoctorResponseDto responseDto = new DoctorResponseDto();
-            responseDto.setSuccess(false);
-            responseDto.setError(List.of(DPMSConstants.EMPTY_UUID));
+    public ResponseEntity<DoctorDto> getDoctorsById(String id) {
+        if (StringUtils.isBlank(id)) {
+            DoctorDto responseDto = DoctorDto.builder().success(false).errors(List.of(ApplicationConstants.EMPTY_UUID))
+                    .build();
             return ResponseEntity.status(400).body(responseDto);
         }
         if (!doctorValidation.isValidUUID(id)) {
-            DoctorResponseDto responseDto = new DoctorResponseDto();
-            responseDto.setSuccess(false);
-            responseDto.setError(List.of(DPMSConstants.INVALID_UUID_ERROR));
+            DoctorDto responseDto = DoctorDto.builder().success(false)
+                    .errors(List.of(ApplicationConstants.INVALID_UUID_ERROR)).build();
             return ResponseEntity.status(400).body(responseDto);
         }
         UUID Uuid = UUID.fromString(id);
         Optional<DoctorEntity> doctorEntity = docRepo.findById(Uuid);
         if (doctorEntity.isPresent()) {
-            DoctorResponseDto responseDto = new DoctorResponseDto(doctorEntity.get());
-            responseDto.setSuccess(true);
-            responseDto.setError(null);
+            DoctorDto responseDto = DoctorDto.builder()
+                            .id(doctorEntity.get().getId())
+                    .firstName(doctorEntity.get().getFirstName())
+                            .lastName(doctorEntity.get().getLastName())
+                                    .department(doctorEntity.get().getDepartment())
+                                            .success(true).build();
             return ResponseEntity.ok().body(responseDto);
         }
         List<String> invalidUUID = new ArrayList<>();
-        invalidUUID.add(DPMSConstants.USER_NOT_FOUND_ERROR);
-        DoctorResponseDto responseDto = new DoctorResponseDto();
-        responseDto.setSuccess(false);
-        responseDto.setError(invalidUUID);
+        invalidUUID.add(ApplicationConstants.USER_NOT_FOUND_ERROR);
+        DoctorDto responseDto = DoctorDto.builder().success(false).errors(invalidUUID).build();
+
         return ResponseEntity.status(404).body(responseDto);
     }
 }

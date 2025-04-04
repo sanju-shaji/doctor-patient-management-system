@@ -1,7 +1,7 @@
-package com.elixrlabs.doctorpatientmanagementsystem.controller.doctor;
+package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.DPMSConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorResponseDto;
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorRetrievalService;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class DoctorRetrievalController {
     /**
      * Method to retrieve doctor data from database using ID
      */
-    @GetMapping(DPMSConstants.GET_DOCTOR_BY_ID_API)
-    public ResponseEntity<DoctorResponseDto> getDoctorByID(@PathVariable String id) {
+    @GetMapping(ApplicationConstants.GET_DOCTOR_BY_ID_API)
+    public ResponseEntity<DoctorDto> getDoctorByID(@PathVariable String id) {
         return service.getDoctorsById(id);
     }
 }

@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.DPMSConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -15,26 +15,26 @@ import java.util.UUID;
 @Component
 public class DoctorValidation {
     /**
-     * method to check if string is empty
+     * method to check if the string is empty and if string follows the specified pattern
+     *
+     * @param string-The string which is to be validated
+     * @param Pattern-The pattern which is to be matched with the string for validation
+     * @param emptyStringError-error message if the string is empty
+     * @param invalidPatternError-error message if the string does for match the specified pattern
+     * @return List which contains the error messages if validation fails or an empty list if validation is success
      */
-    public boolean isEmptyString(String string) {
-        return string.isEmpty();
-    }
-
-    /**
-     * method to check if string contains only alphabets
-     */
-    public boolean containsOnlyAlbhabets(String string) {
-        String alphabetPattern = DPMSConstants.REGEX_ALPHABET_PATTERN;
-        return string.matches(alphabetPattern);
-    }
-
-    /**
-     * method to check if department name contains any restricted special symbols
-     */
-    public boolean isValidDepartmentName(String string) {
-        String departmentNamePattern = DPMSConstants.REGEX_DEPARTMENTNAME_PATTERN;
-        return string.matches(departmentNamePattern);
+    public List<String> validateString(String string, String Pattern,
+                                       String emptyStringError, String invalidPatternError) {
+        List<String> errorMessageList = new ArrayList<>();
+        if (StringUtils.isBlank(string)) {
+            errorMessageList.add(emptyStringError);
+            return errorMessageList;
+        }
+        if (!string.matches(Pattern)) {
+            errorMessageList.add(invalidPatternError);
+            return errorMessageList;
+        }
+        return errorMessageList;
     }
     public boolean isValidUUID(String id){
         try {
@@ -51,27 +51,21 @@ public class DoctorValidation {
 
     /**
      * method to validate the POST/doctor Api
+     *
+     * @param doctor-model entity which contains the actual data
+     * @return list which contains error messages if any
      */
-    public List<String> validatePostDoctor(DoctorEntity doctor) {
+    public List<String> validatePostDoctor(DoctorDto doctor) {
         List<String> errorMessageList = new ArrayList<>();
-        if (isEmptyString(doctor.getFirstName())) {
-            errorMessageList.add(DPMSConstants.EMPTY_FIRSTNAME);
-        }
-        if (!containsOnlyAlbhabets(doctor.getFirstName())) {
-            errorMessageList.add(DPMSConstants.FIRSTNAME_PATTERN_ERROR);
-        }
-        if (isEmptyString(doctor.getLastName())) {
-            errorMessageList.add(DPMSConstants.EMPTY_LASTNAME);
-        }
-        if (!containsOnlyAlbhabets(doctor.getLastName())) {
-            errorMessageList.add(DPMSConstants.LASTNAME_PATTERN_ERROR);
-        }
-        if (isEmptyString(doctor.getDepartment())) {
-            errorMessageList.add(DPMSConstants.EMPTY_DEPARTMENTNAME);
-        }
-        if (!isValidDepartmentName(doctor.getDepartment())) {
-            errorMessageList.add(DPMSConstants.DEPARTMENTNAME_PATTERN_ERROR);
-        }
+        errorMessageList.addAll(validateString(doctor.getFirstName(),
+                ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_FIRSTNAME,
+                ApplicationConstants.FIRSTNAME_PATTERN_ERROR));
+        errorMessageList.addAll(validateString(doctor.getLastName(),
+                ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_LASTNAME,
+                ApplicationConstants.LASTNAME_PATTERN_ERROR));
+        errorMessageList.addAll(validateString(doctor.getDepartment(),
+                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENTNAME,
+                ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR));
         return errorMessageList;
     }
 }
