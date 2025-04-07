@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -42,6 +43,20 @@ public class PatientValidation {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(name)) {
             errors.add(ApplicationConstants.QUERY_PARAMS_CANNOT_NULL);
+        }
+        return errors;
+    }
+
+    public List<String> validatePatientId(String id) {
+        List<String> errors = new ArrayList<>();
+        if (StringUtils.isBlank(id)) {
+            errors.add(ApplicationConstants.BLANK_UUID);
+            return errors;
+        }
+        try {
+            UUID.fromString(id);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            errors.add(ApplicationConstants.INVALID_UUID_FORMAT);
         }
         return errors;
     }
