@@ -16,6 +16,7 @@ public class ApplicationConstants {
     public static final String EMPTY_UUID = "Please provide a UUID. ID is missing";
     public static final String FIRSTNAME_PATTERN_ERROR = "First name should only contain alphabets";
     public static final String INVALID_UUID_ERROR = "Invalid Id. Please provide a valid UUID";
+    public static final String INVALID_REQUESTBODY_ERROR = "Invalid field in request body";
     public static final String LASTNAME_PATTERN_ERROR = "Last name should only contain alphabets";
     public static final String NO_PATIENTS_FOUND = "No patients found";
     public static final String PARAM_DOCTOR_NAME = "name";

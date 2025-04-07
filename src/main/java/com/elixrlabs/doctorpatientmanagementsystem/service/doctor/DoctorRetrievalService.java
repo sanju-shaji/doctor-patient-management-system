@@ -2,6 +2,9 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DoctorNotFoundException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
@@ -12,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,36 +69,23 @@ public class DoctorRetrievalService {
      * @param id-uuid
      * @return Doctor response object with a single doctor data
      */
-    public ResponseEntity<DoctorResponse> getDoctorsById(String id) {
-        try {
-            if (StringUtils.isBlank(id)) {
-                DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(ApplicationConstants.EMPTY_UUID))
-                        .build();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
-            }
-            if (!doctorValidation.isValidUUID(id)) {
-                DoctorResponse responseDto = DoctorResponse.builder().success(false)
-                        .errors(List.of(ApplicationConstants.INVALID_UUID_ERROR)).build();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
-            }
-            UUID uuid = UUID.fromString(id);
-            Optional<DoctorEntity> doctorEntity = doctorRepository.findById(uuid);
-            if (doctorEntity.isPresent()) {
-                DoctorResponse responseDto = DoctorResponse.builder().id(doctorEntity.get().getId())
-                        .firstName(doctorEntity.get().getFirstName())
-                        .lastName(doctorEntity.get().getLastName())
-                        .department(doctorEntity.get().getDepartment())
-                        .success(true).build();
-                return ResponseEntity.ok().body(responseDto);
-            }
-            List<String> invalidUUID = new ArrayList<>();
-            invalidUUID.add(ApplicationConstants.USER_NOT_FOUND_ERROR + uuid);
-            DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(invalidUUID).build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
-        } catch (Exception exception) {
-            DoctorResponse responseDto = DoctorResponse.builder().success(false)
-                    .errors(List.of(ApplicationConstants.SERVER_ERROR + exception.getMessage())).build();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
+    public ResponseEntity<DoctorResponse> getDoctorsById(String id) throws Exception {
+        if (StringUtils.isBlank(id)) {
+            throw new EmptyUuidException(ApplicationConstants.EMPTY_UUID);
         }
+        if (!doctorValidation.isValidUUID(id)) {
+            throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID_ERROR);
+        }
+        UUID uuid = UUID.fromString(id);
+        Optional<DoctorEntity> doctorEntity = doctorRepository.findById(uuid);
+        if (doctorEntity.isPresent()) {
+            DoctorResponse responseDto = DoctorResponse.builder().id(doctorEntity.get().getId())
+                    .firstName(doctorEntity.get().getFirstName())
+                    .lastName(doctorEntity.get().getLastName())
+                    .department(doctorEntity.get().getDepartment())
+                    .success(true).build();
+            return ResponseEntity.ok().body(responseDto);
+        }
+        throw new DoctorNotFoundException(ApplicationConstants.USER_NOT_FOUND_ERROR, uuid);
     }
 }

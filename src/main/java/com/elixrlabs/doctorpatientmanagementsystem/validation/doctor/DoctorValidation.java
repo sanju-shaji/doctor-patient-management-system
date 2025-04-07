@@ -2,6 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -24,18 +25,14 @@ public class DoctorValidation {
      * @return List which contains the error messages if validation fails or an empty list if validation is success
      * Validates the doctor name to ensure it is not empty and contains only letters and spaces.
      */
-    public List<String> validateString(String string, String Pattern,
-                                       String emptyStringError, String invalidPatternError) {
-        List<String> errorMessageList = new ArrayList<>();
+    public void validateString(String string, String Pattern,
+                                       String emptyStringError, String invalidPatternError) throws InvalidUserInputException {
         if (StringUtils.isBlank(string)) {
-            errorMessageList.add(emptyStringError);
-            return errorMessageList;
+            throw new InvalidUserInputException(emptyStringError);
         }
         if (!string.matches(Pattern)) {
-            errorMessageList.add(invalidPatternError);
-            return errorMessageList;
+            throw new InvalidUserInputException(invalidPatternError);
         }
-        return errorMessageList;
     }
 
     /**
@@ -44,19 +41,16 @@ public class DoctorValidation {
      * @param doctor-model entity which contains the actual data
      * @return list which contains error messages if any
      */
-    public List<String> validatePostDoctor(DoctorDto doctor) {
-        List<String> errorMessageList = new ArrayList<>();
-        errorMessageList.addAll(validateString(doctor.getFirstName(),
+    public void validatePostDoctor(DoctorDto doctor) throws InvalidUserInputException {
+        validateString(doctor.getFirstName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_FIRSTNAME,
-                ApplicationConstants.FIRSTNAME_PATTERN_ERROR));
-        errorMessageList.addAll(validateString(doctor.getLastName(),
+                ApplicationConstants.FIRSTNAME_PATTERN_ERROR);
+       validateString(doctor.getLastName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_LASTNAME,
-                ApplicationConstants.LASTNAME_PATTERN_ERROR));
-        errorMessageList.addAll(validateString(doctor.getDepartment(),
+                ApplicationConstants.LASTNAME_PATTERN_ERROR);
+        validateString(doctor.getDepartment(),
                 ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENTNAME,
-                ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR));
-        return errorMessageList;
-
+                ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR);
     }
 
     /**

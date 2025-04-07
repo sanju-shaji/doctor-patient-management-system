@@ -1,7 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorCreationService;
@@ -28,8 +27,7 @@ public class DoctorCreationController {
      * @return ResponseEntity of type DoctorResponseDto
      */
     @PostMapping(ApiConstants.DOCTORS_END_POINT)
-    public ResponseEntity<DoctorResponse> postDoctor(@RequestBody DoctorDto doctorResponse) {
+    public ResponseEntity<DoctorResponse> postDoctor(@RequestBody DoctorDto doctorResponse) throws Exception {
         return doctorCreationService.createDoctor(doctorResponse);
-
     }
 }

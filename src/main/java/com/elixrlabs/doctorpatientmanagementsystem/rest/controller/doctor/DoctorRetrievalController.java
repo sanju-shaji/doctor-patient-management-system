@@ -38,7 +38,7 @@ public class DoctorRetrievalController {
      * @return ResponseEntity of type DoctorResponseDto
      */
     @GetMapping(ApiConstants.GET_DOCTOR_BY_ID)
-    public ResponseEntity<DoctorResponse> getDoctorByID(@PathVariable String id) {
+    public ResponseEntity<DoctorResponse> getDoctorByID(@PathVariable String id) throws Exception {
         return doctorRetrievalService.getDoctorsById(id);
     }
 }
