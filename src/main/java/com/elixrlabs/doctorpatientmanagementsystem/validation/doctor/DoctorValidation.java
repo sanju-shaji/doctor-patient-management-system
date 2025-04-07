@@ -3,17 +3,25 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Validator class for validating doctor name input.
  */
 @Component
 public class DoctorValidation {
+    private final DoctorRepository doctorRepository;
+
+    public DoctorValidation(DoctorRepository doctorRepository) {
+        this.doctorRepository = doctorRepository;
+    }
+
     /**
      * method to check if the string is empty and if string follows the specified pattern
      *
@@ -59,7 +67,38 @@ public class DoctorValidation {
 
     }
 
-    public Boolean validateDoctorName(String name) {
+    /**
+     * This method represents the if user entered the doctorname in the url or not
+     *
+     * @param name
+     * @return
+     */
+    public boolean validateDoctorName(String name) {
         return StringUtils.isBlank(name);
+    }
+
+    /**
+     * This method represents the if user entered the UUID in the url or not
+     *
+     * @param id
+     * @return
+     */
+    public boolean isDoctorIdMissing(String id) {
+        return StringUtils.isBlank(id);
+    }
+
+    /**
+     * this method validates user entered the correct UUID or not
+     *
+     * @param id
+     * @return
+     */
+    public boolean validateUuid(String id) {
+        try {
+            UUID.fromString(id);
+            return true;
+        } catch (IllegalArgumentException | NullPointerException e) {
+            return false;
+        }
     }
 }

@@ -14,7 +14,9 @@ public class ApplicationConstants {
     public static final String EMPTY_LASTNAME = "Last name should not be an empty string or null";
     public static final String EMPTY_NAME_QUERY_PARAM = "Query parameter 'name' cannot be empty. Please provide either a first name or a last name to filter";
     public static final String FIRSTNAME_PATTERN_ERROR = "First name should only contain alphabets";
+    public static final String INVALID_UUID = "Invalid id parameter,Enter only UUID";
     public static final String LASTNAME_PATTERN_ERROR = "Last name should only contain alphabets";
+    public static final String MISSING_ID = "Missing required ID parameter,Enter only UUUID";
     public static final String NO_PATIENTS_FOUND = "No patients found";
     public static final String PARAM_DOCTOR_NAME = "name";
     public static final String PATIENT_FIRSTNAME_ERROR = "Patient first name cannot be empty or null.";
