@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -30,10 +31,30 @@ public class PatientValidation {
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
             errors.add(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
         }
-        if (StringUtils.isEmpty(patientDto.getLastName())) {
+        if (StringUtils.isBlank(patientDto.getLastName())) {
             errors.add(ApplicationConstants.PATIENT_LASTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
             errors.add(ApplicationConstants.PATIENT_LASTNAME_PATTERN_ERROR);
+        }
+        return errors;
+    }
+
+    /**
+     * Validates the format and presence of patient UUID.
+     *
+     * @param id the patient id as String.
+     * @return a list of validation error messages. Empty if valid.
+     */
+    public List<String> validatePatientId(String id) {
+        List<String> errors = new ArrayList<>();
+        if (StringUtils.isBlank(id)) {
+            errors.add(ApplicationConstants.BLANK_UUID);
+            return errors;
+        }
+        try {
+            UUID.fromString(id);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            errors.add(ApplicationConstants.INVALID_UUID_FORMAT);
         }
         return errors;
     }
