@@ -67,7 +67,6 @@ public class DoctorRetrievalService {
      * @param id-uuid
      * @return Doctor response object with a single doctor data
      */
-    @Transactional
     public ResponseEntity<DoctorResponse> getDoctorsById(String id) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -80,8 +79,8 @@ public class DoctorRetrievalService {
                         .errors(List.of(ApplicationConstants.INVALID_UUID_ERROR)).build();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
             }
-            UUID Uuid = UUID.fromString(id);
-            Optional<DoctorEntity> doctorEntity = doctorRepository.findById(Uuid);
+            UUID uuid = UUID.fromString(id);
+            Optional<DoctorEntity> doctorEntity = doctorRepository.findById(uuid);
             if (doctorEntity.isPresent()) {
                 DoctorResponse responseDto = DoctorResponse.builder().id(doctorEntity.get().getId())
                         .firstName(doctorEntity.get().getFirstName())
@@ -91,7 +90,7 @@ public class DoctorRetrievalService {
                 return ResponseEntity.ok().body(responseDto);
             }
             List<String> invalidUUID = new ArrayList<>();
-            invalidUUID.add(ApplicationConstants.USER_NOT_FOUND_ERROR);
+            invalidUUID.add(ApplicationConstants.USER_NOT_FOUND_ERROR + uuid);
             DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(invalidUUID).build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
         } catch (Exception exception) {

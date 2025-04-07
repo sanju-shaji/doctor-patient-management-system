@@ -37,7 +37,7 @@ public class DoctorRetrievalController {
      * @param id-Which contains the UUID of specific doctor data to be fetched
      * @return ResponseEntity of type DoctorResponseDto
      */
-    @GetMapping(ApiConstants.GET_DOCTOR_BY_ID_API)
+    @GetMapping(ApiConstants.GET_DOCTOR_BY_ID)
     public ResponseEntity<DoctorResponse> getDoctorByID(@PathVariable String id) {
         return doctorRetrievalService.getDoctorsById(id);
     }
