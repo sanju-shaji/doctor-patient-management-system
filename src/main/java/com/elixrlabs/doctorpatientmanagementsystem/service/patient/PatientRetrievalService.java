@@ -3,11 +3,11 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.ResponseDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
-import io.micrometer.common.util.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -54,39 +54,20 @@ public class PatientRetrievalService {
      * @param id the UUID of the patient to retrieve.
      * @return ResponseEntity on containing the patient data on success and an error on failure.
      */
-    public ResponseEntity<ResponseDto> getPatientById(String id) {
-        try {
-            List<String> validationErrors = patientValidation.validatePatientId(id);
-            if (!validationErrors.isEmpty()) {
-                ResponseDto errorResponse = ResponseDto.builder()
-                        .success(false)
-                        .errors(validationErrors)
-                        .build();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(errorResponse);
-            }
-            UUID patientId = UUID.fromString(id);
-            Optional<PatientModel> patientOptional = repository.findById(patientId);
-            if (patientOptional.isPresent()) {
-                PatientModel patient = patientOptional.get();
-                ResponseDto responseDto = ResponseDto.builder()
-                        .success(true)
-                        .data(patient)
-                        .build();
-                return ResponseEntity.ok(responseDto);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseDto.builder()
-                        .success(false)
-                        .errors(List.of(ApplicationConstants.PATIENT_NOT_FOUND + id))
-                        .build());
-            }
-        } catch (Exception exception) {
-            ResponseDto responseDto = ResponseDto.builder()
-                    .success(false)
-                    .errors(List.of(ApplicationConstants.SERVER_ERROR + exception.getMessage()))
+    public ResponseEntity<PatientResponse> getPatientById(String id) throws Exception {
+
+        patientValidation.validatePatientId(id);
+        UUID patientId = UUID.fromString(id);
+        Optional<PatientModel> patientOptional = repository.findById(patientId);
+        if (patientOptional.isPresent()) {
+            PatientModel patient = patientOptional.get();
+            PatientResponse responseDto = PatientResponse.builder()
+                    .success(true)
+                    .data(patient)
                     .build();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
+            return ResponseEntity.ok(responseDto);
         }
+        throw new DataNotFoundException(ApplicationConstants.PATIENT_NOT_FOUND, patientId);
     }
 
     private List<PatientDto> getPatientsByNamePrefix(String name) {

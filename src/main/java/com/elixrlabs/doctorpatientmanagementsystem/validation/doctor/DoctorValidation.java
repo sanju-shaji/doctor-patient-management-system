@@ -53,8 +53,8 @@ public class DoctorValidation {
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_LASTNAME,
                 ApplicationConstants.LASTNAME_PATTERN_ERROR));
         errorMessageList.addAll(validateString(doctor.getDepartment(),
-                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENTNAME,
-                ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR));
+                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENT_NAME,
+                ApplicationConstants.DEPARTMENT_NAME_PATTERN_ERROR));
         return errorMessageList;
 
     }
