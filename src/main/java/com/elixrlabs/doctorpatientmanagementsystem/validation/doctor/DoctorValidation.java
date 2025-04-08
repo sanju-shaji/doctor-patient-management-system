@@ -6,8 +6,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserI
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,7 +39,7 @@ public class DoctorValidation {
      * @param doctor-model entity which contains the actual data
      * @return list which contains error messages if any
      */
-    public void validatePostDoctor(DoctorDto doctor) throws InvalidUserInputException {
+    public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
         validateString(doctor.getFirstName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_FIRSTNAME,
                 ApplicationConstants.FIRSTNAME_PATTERN_ERROR);

@@ -27,7 +27,7 @@ public class DoctorCreationController {
      * @return ResponseEntity of type DoctorResponseDto
      */
     @PostMapping(ApiConstants.DOCTORS_END_POINT)
-    public ResponseEntity<DoctorResponse> postDoctor(@RequestBody DoctorDto doctorResponse) throws Exception {
+    public ResponseEntity<DoctorResponse> createDoctor(@RequestBody DoctorDto doctorResponse) throws Exception {
         return doctorCreationService.createDoctor(doctorResponse);
     }
 }

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -29,9 +28,8 @@ public class DoctorCreationService {
      * @param doctorResponse-contains the data which is to be posted to the database
      * @return ResponseEntity in which the desired data is set for response
      */
-    @Transactional
     public ResponseEntity<DoctorResponse> createDoctor(DoctorDto doctorResponse) throws InvalidUserInputException {
-            doctorValidation.validatePostDoctor(doctorResponse);
+            doctorValidation.validateDoctorDetails(doctorResponse);
             DoctorEntity doctorEntity = DoctorEntity.builder().id(UUID.randomUUID()).
                     firstName(doctorResponse.getFirstName().trim())
                     .lastName(doctorResponse.getLastName().trim()).

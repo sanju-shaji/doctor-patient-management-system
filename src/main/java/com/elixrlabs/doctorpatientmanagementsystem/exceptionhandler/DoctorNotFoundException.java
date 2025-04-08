@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Getter
 public class DoctorNotFoundException extends Exception {
-    public UUID id;
+    private final UUID id;
 
     public DoctorNotFoundException(String message, UUID id) {
         super(message);
