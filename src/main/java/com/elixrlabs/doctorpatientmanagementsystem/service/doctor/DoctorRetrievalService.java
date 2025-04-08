@@ -2,7 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DoctorNotFoundException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
@@ -86,6 +86,6 @@ public class DoctorRetrievalService {
                     .success(true).build();
             return ResponseEntity.ok().body(responseDto);
         }
-        throw new DoctorNotFoundException(ApplicationConstants.USER_NOT_FOUND_ERROR, uuid);
+        throw new DataNotFoundException(ApplicationConstants.USER_NOT_FOUND_ERROR, uuid);
     }
 }

@@ -83,12 +83,12 @@ public class GlobalExceptionHandler {
     /**
      * method to handle Doctornotfound exception
      *
-     * @param doctorNotFoundException-exception class
+     * @param dataNotFoundException-exception class
      * @return appropriate response
      */
-    @ExceptionHandler(DoctorNotFoundException.class)
-    public ResponseEntity<DoctorResponse> handleDoctorNotFound(DoctorNotFoundException doctorNotFoundException) {
-        DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(doctorNotFoundException.getMessage() + doctorNotFoundException.getId())).build();
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<DoctorResponse> handleDoctorNotFound(DataNotFoundException dataNotFoundException) {
+        DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(dataNotFoundException.getMessage() + dataNotFoundException.getId())).build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 }
