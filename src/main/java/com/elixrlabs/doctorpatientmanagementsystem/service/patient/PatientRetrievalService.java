@@ -55,7 +55,6 @@ public class PatientRetrievalService {
      * @return ResponseEntity on containing the patient data on success and an error on failure.
      */
     public ResponseEntity<PatientResponse> getPatientById(String id) throws Exception {
-
         patientValidation.validatePatientId(id);
         UUID patientId = UUID.fromString(id);
         Optional<PatientModel> patientOptional = repository.findById(patientId);

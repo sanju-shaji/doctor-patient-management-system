@@ -28,19 +28,14 @@ public class PatientValidation {
      * @return a list of error messages if validation fails and an empty list if validation passes
      */
     public void validatePatient(PatientDto patientDto) throws InvalidUserInputException {
-        //List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(patientDto.getFirstName())) {
-            //errors.add(ApplicationConstants.PATIENT_FIRSTNAME_ERROR);
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_FIRSTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
-            //errors.add(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
         }
         if (StringUtils.isBlank(patientDto.getLastName())) {
-            //errors.add(ApplicationConstants.PATIENT_LASTNAME_ERROR);
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_LASTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
-            //errors.add(ApplicationConstants.PATIENT_LASTNAME_PATTERN_ERROR);
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_LASTNAME_PATTERN_ERROR);
         }
     }
@@ -52,16 +47,12 @@ public class PatientValidation {
      * @return a list of validation error messages. Empty if valid.
      */
     public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidExcetion {
-        // List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(id)) {
-//            errors.add(ApplicationConstants.BLANK_UUID);
-
             throw new EmptyUuidException(ApplicationConstants.BLANK_UUID);
         }
         try {
             UUID.fromString(id);
         } catch (IllegalArgumentException illegalArgumentException) {
-//            errors.add(ApplicationConstants.INVALID_UUID_FORMAT);
             throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID_FORMAT);
         }
     }
