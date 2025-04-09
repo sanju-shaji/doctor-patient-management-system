@@ -14,7 +14,9 @@ public class ApplicationConstants {
     public static final String EMPTY_FIRSTNAME = "First name should not be an empty string or null";
     public static final String EMPTY_LASTNAME = "Last name should not be an empty string or null";
     public static final String EMPTY_NAME_QUERY_PARAM = "Query parameter 'name' cannot be empty. Please provide either a first name or a last name to filter";
+    public static final String EMPTY_UUID = "Please provide a UUID. ID is missing";
     public static final String FIRSTNAME_PATTERN_ERROR = "First name should only contain alphabets";
+    public static final String INVALID_UUID_ERROR = "Invalid Id. Please provide a valid UUID";
     public static final String INVALID_UUID_FORMAT = "Invalid UUID format. Please provide valid UUID";
     public static final String INVALID_REQUESTBODY_ERROR = "Invalid field in request body";
     public static final String LASTNAME_PATTERN_ERROR = "Last name should only contain alphabets";
@@ -31,4 +33,5 @@ public class ApplicationConstants {
     public static final String REGEX_PATIENT_NAME_PATTERN = "^[a-zA-Z\\s]{1,50}$";
     public static final String SERVER_ERROR = "Server error - ";
     public static final String SINGLE_QUOTE = "'";
+    public static final String USER_NOT_FOUND_ERROR = "User is not found in database for the given ID : ";
 }
