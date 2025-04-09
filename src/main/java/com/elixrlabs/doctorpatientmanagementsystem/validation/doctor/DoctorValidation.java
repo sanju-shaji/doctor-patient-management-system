@@ -1,13 +1,12 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
-
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Validator class for validating doctor name input.
@@ -17,25 +16,21 @@ public class DoctorValidation {
     /**
      * method to check if the string is empty and if string follows the specified pattern
      *
-     * @param string-The                string which is to be validated
-     * @param Pattern-The               pattern which is to be matched with the string for validation
-     * @param emptyStringError-error    message if the string is empty
-     * @param invalidPatternError-error message if the string does for match the specified pattern
+     * @param string The string which is to be validated
+     * @param Pattern The pattern which is to be matched with the string for validation
+     * @param emptyStringError error message if the string is empty
+     * @param invalidPatternError error message if the string does for match the specified pattern
      * @return List which contains the error messages if validation fails or an empty list if validation is success
      * Validates the doctor name to ensure it is not empty and contains only letters and spaces.
      */
-    public List<String> validateString(String string, String Pattern,
-                                       String emptyStringError, String invalidPatternError) {
-        List<String> errorMessageList = new ArrayList<>();
+    public void validateString(String string, String Pattern,
+                                       String emptyStringError, String invalidPatternError) throws InvalidUserInputException {
         if (StringUtils.isBlank(string)) {
-            errorMessageList.add(emptyStringError);
-            return errorMessageList;
+            throw new InvalidUserInputException(emptyStringError);
         }
         if (!string.matches(Pattern)) {
-            errorMessageList.add(invalidPatternError);
-            return errorMessageList;
+            throw new InvalidUserInputException(invalidPatternError);
         }
-        return errorMessageList;
     }
 
     /**
@@ -44,19 +39,30 @@ public class DoctorValidation {
      * @param doctor-model entity which contains the actual data
      * @return list which contains error messages if any
      */
-    public List<String> validatePostDoctor(DoctorDto doctor) {
-        List<String> errorMessageList = new ArrayList<>();
-        errorMessageList.addAll(validateString(doctor.getFirstName(),
+    public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
+        validateString(doctor.getFirstName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_FIRSTNAME,
-                ApplicationConstants.FIRSTNAME_PATTERN_ERROR));
-        errorMessageList.addAll(validateString(doctor.getLastName(),
+                ApplicationConstants.FIRSTNAME_PATTERN_ERROR);
+       validateString(doctor.getLastName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_LASTNAME,
-                ApplicationConstants.LASTNAME_PATTERN_ERROR));
-        errorMessageList.addAll(validateString(doctor.getDepartment(),
-                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENT_NAME,
-                ApplicationConstants.DEPARTMENT_NAME_PATTERN_ERROR));
-        return errorMessageList;
+                ApplicationConstants.LASTNAME_PATTERN_ERROR);
+        validateString(doctor.getDepartment(),
+                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENTNAME,
+                ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR);
+    }
 
+    /**
+     * method to check if user is not providing a valid UUID
+     * @param id-UUID
+     * @return True if id is valid else false
+     */
+    public boolean isValidUUID(String id){
+        try {
+            UUID.fromString(id);
+            return true;
+        }catch (IllegalArgumentException illegalArgumentException){
+            return false;
+        }
     }
 
     public Boolean validateDoctorName(String name) {
