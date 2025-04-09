@@ -9,12 +9,15 @@ public class ApplicationConstants {
     public static final String ADD_REMOVE_OPERATION_NOT_ALLOWED = "No permission to use 'add' or 'remove' operations.";
     public static final String COLON = " :";
     public static final String DEPARTMENTNAME_PATTERN_ERROR = "Department Name should not contain any special symbols or numbers";
-    public static final String DOCTORS_NOT_FOUND = "No Doctors found";
+    public static final String DOCTORS_NOT_FOUND_ERROR = "Doctor is not found in database for the given ID : ";
     public static final String EMPTY_DEPARTMENTNAME = "Department name should not be an empty or null";
     public static final String EMPTY_FIRSTNAME = "First name should not be an empty string or null";
     public static final String EMPTY_LASTNAME = "Last name should not be an empty string or null";
     public static final String EMPTY_NAME_QUERY_PARAM = "Query parameter 'name' cannot be empty. Please provide either a first name or a last name to filter";
+    public static final String EMPTY_UUID = "Please provide a UUID. ID is missing";
     public static final String FIRSTNAME_PATTERN_ERROR = "First name should only contain alphabets";
+    public static final String INVALID_REQUESTBODY_ERROR = "Invalid request body";
+    public static final String INVALID_UUID_ERROR = "Invalid Id. Please provide a valid UUID";
     public static final String ID_REPLACEMENT_NOT_ALLOWED = "Modifying 'id' is not allowed.";
     public static final String INVALID_UUID = "Invalid ID parameter.Please provide a valid UUID";
     public static final String LASTNAME_PATTERN_ERROR = "Last name should only contain alphabets";
@@ -31,4 +34,5 @@ public class ApplicationConstants {
     public static final String REGEX_PATIENT_NAME_PATTERN = "^[a-zA-Z\\s]{1,50}$";
     public static final String SERVER_ERROR = "Server error - ";
     public static final String SINGLE_QUOTE = "'";
+
 }

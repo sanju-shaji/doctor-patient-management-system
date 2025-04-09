@@ -17,7 +17,6 @@ import java.util.UUID;
 @Document(collection = DataBaseConstants.DOCTOR_COLLECTION_NAME)
 @Getter
 @Builder
-
 @Setter
 @AllArgsConstructor
 public class DoctorEntity {

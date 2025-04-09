@@ -1,10 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.MissingUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
-
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorModificationService;
 import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +32,7 @@ public class DoctorModificationController {
      * @return ResponseEntity with the result ater updating the doctor
      */
     @PatchMapping(ApiConstants.PATCH_END_POINT)
-    public ResponseEntity<DoctorPatchResponse> patchDoctor(@PathVariable String doctorId, @RequestBody JsonPatch patch) throws Exception, MissingUuidException, InvalidUuidException {
+    public ResponseEntity<DoctorPatchResponse> patchDoctor(@PathVariable String doctorId, @RequestBody JsonPatch patch) throws Exception {
         return doctorModificationService.applyPatchToDoctor(doctorId, patch);
     }
 }

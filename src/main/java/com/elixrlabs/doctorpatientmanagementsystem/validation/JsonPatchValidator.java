@@ -19,6 +19,7 @@ public class JsonPatchValidator {
 
     /**
      * This method validates the json patch and restrict the add ,remove operation and replacing the id
+     *
      * @param patch the JSON Patch request containing a list of operations (e.g., replace, add)
      * @return it will return responseEntity with success message and realted message
      */
@@ -34,9 +35,9 @@ public class JsonPatchValidator {
             if (opType.equalsIgnoreCase("add") || opType.equalsIgnoreCase("remove")) {
                 throw new InvalidJsonOperationException(ApplicationConstants.ADD_REMOVE_OPERATION_NOT_ALLOWED);
             }
-           if (opType.equalsIgnoreCase("replace") && path.equalsIgnoreCase("/id")) {
-            throw new IdReplacementException(ApplicationConstants.ID_REPLACEMENT_NOT_ALLOWED);
-           }
+            if (opType.equalsIgnoreCase("replace") && path.equalsIgnoreCase("/id")) {
+                throw new IdReplacementException(ApplicationConstants.ID_REPLACEMENT_NOT_ALLOWED);
+            }
         }
     }
 }

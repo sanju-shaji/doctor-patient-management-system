@@ -2,9 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.MissingUuidException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DoctorNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
@@ -22,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,39 +32,33 @@ public class DoctorModificationService {
 
     private final DoctorRepository doctorRepository;
     private final ObjectMapper objectMapper;
-//    private final DoctorValidation doctorValidation;
 
-    public DoctorModificationService(DoctorRepository doctorRepository, ObjectMapper objectMapper, DoctorValidation doctorValidation, DoctorPatchResponse doctorPatchResponse) {
+    public DoctorModificationService(DoctorRepository doctorRepository, ObjectMapper objectMapper) {
         this.doctorRepository = doctorRepository;
         this.objectMapper = objectMapper;
-      //  this.doctorValidation = doctorValidation;
     }
 
     /**
      * This method validate the doctorId and return the updated doctorDetails
+     *
      * @param doctorId it will helps to validate doctorId.The id of the doctor to update
      * @param patch    the details need to be changed
      * @return it will return  the ResponseEntity<DoctorPatchResponse>  to the DoctorModificationController
      */
-    public ResponseEntity<DoctorPatchResponse> applyPatchToDoctor(String doctorId, JsonPatch patch) throws Exception, MissingUuidException, InvalidUuidException {
+    public ResponseEntity<DoctorPatchResponse> applyPatchToDoctor(String doctorId, JsonPatch patch) throws Exception {
 
         DoctorPatchResponse doctorPatchResponse = new DoctorPatchResponse();
-       DoctorValidation doctorValidation=new DoctorValidation();
-       doctorValidation.validatePatchDoctor(doctorId);
-        JsonPatchValidator jsonPatchValidator=new JsonPatchValidator();
+        DoctorValidation doctorValidation = new DoctorValidation();
+        doctorValidation.validatePatchDoctor(doctorId);
+        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator();
         jsonPatchValidator.validatejsonOperations(patch);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
-            throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND);
+            throw new DoctorNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND_ERROR);
         }
         try {
             DoctorDto patchedDto = applyPatchAndConvertToDto(doctorEntityOptional.get(), patch);
-            List<String> errorMessageList = doctorValidation.validatePostDoctor(patchedDto);
-            if (!errorMessageList.isEmpty()) {
-                doctorPatchResponse.setSuccess(false);
-                doctorPatchResponse.setErrors(errorMessageList);
-                return new ResponseEntity<>(doctorPatchResponse, HttpStatus.BAD_REQUEST);
-            }
+            doctorValidation.validateDoctorDetails(patchedDto);
             DoctorEntity patchedEntity = objectMapper.convertValue(patchedDto, DoctorEntity.class);
             DoctorEntity savedDoctor = doctorRepository.save(patchedEntity);
             DoctorDto doctorDto = DoctorDto.builder()
