@@ -1,4 +1,4 @@
-package com.elixrlabs.doctorpatientmanagementsystem.response.patient;
+package com.elixrlabs.doctorpatientmanagementsystem.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
