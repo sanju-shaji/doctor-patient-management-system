@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.response.doctor;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuperBuilder
 @NoArgsConstructor
-public class DoctorResponse extends BaseResponse {
+public class DoctorResponse extends BaseResponse{
     private UUID id;
     private String firstName;
     private String lastName;

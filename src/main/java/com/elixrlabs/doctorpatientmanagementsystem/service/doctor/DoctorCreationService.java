@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
@@ -10,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,15 +28,8 @@ public class DoctorCreationService {
      * @param doctorResponse-contains the data which is to be posted to the database
      * @return ResponseEntity in which the desired data is set for response
      */
-    @Transactional
-    public ResponseEntity<DoctorResponse> createDoctor(DoctorDto doctorResponse) {
-        try {
-            List<String> errorMessageList = doctorValidation.validatePostDoctor(doctorResponse);
-            if (!errorMessageList.isEmpty()) {
-                DoctorResponse errorResponseDto = DoctorResponse.builder()
-                        .success(false).errors(errorMessageList).build();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-            }
+    public ResponseEntity<DoctorResponse> createDoctor(DoctorDto doctorResponse) throws InvalidUserInputException {
+            doctorValidation.validateDoctorDetails(doctorResponse);
             DoctorEntity doctorEntity = DoctorEntity.builder().id(UUID.randomUUID()).
                     firstName(doctorResponse.getFirstName().trim())
                     .lastName(doctorResponse.getLastName().trim()).
@@ -48,10 +39,5 @@ public class DoctorCreationService {
                     lastName(doctorEntity.getLastName()).department(doctorEntity.getDepartment())
                     .success(true).build();
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-        } catch (Exception exception) {
-            DoctorResponse errorResponseDto = DoctorResponse.builder().success(false)
-                    .errors(List.of(ApplicationConstants.SERVER_ERROR + exception.getMessage())).build();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
-        }
     }
 }
