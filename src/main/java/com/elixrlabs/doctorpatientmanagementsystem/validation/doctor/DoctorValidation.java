@@ -3,7 +3,8 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.MissingUuidException;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,7 @@ import java.util.UUID;
  */
 @Component
 public class DoctorValidation {
-    private final DoctorRepository doctorRepository;
 
-    public DoctorValidation(DoctorRepository doctorRepository) {
-        this.doctorRepository = doctorRepository;
-    }
 
     /**
      * method to check if the string is empty and if string follows the specified pattern
@@ -68,37 +65,34 @@ public class DoctorValidation {
     }
 
     /**
-     * This method represents the if user entered the doctorname in the url or not
+     * This method represents if user entered the doctorName in the url or not
      *
-     * @param name
-     * @return
+     * @param doctorName to validate the user enter the doctorName in the url or not
+     * @return it will return true if user doesn't enter any name in the url or false if user entered the doctorName
      */
-    public boolean validateDoctorName(String name) {
-        return StringUtils.isBlank(name);
+    public boolean validateDoctorName(String doctorName) {
+        return StringUtils.isBlank(doctorName);
     }
 
     /**
-     * This method represents the if user entered the UUID in the url or not
+     * this method checks if the given doctor ID is valid or not
+     * if the ID is missing or not a valid UUID ,it adds errors messages.
      *
-     * @param id
-     * @return
+     * @param doctorId to validate the  doctorId
+     * @return responseEntity containing error messages if validation fails or null if ID is valid
      */
-    public boolean isDoctorIdMissing(String id) {
-        return StringUtils.isBlank(id);
-    }
+    public void validatePatchDoctor(String doctorId) throws InvalidUuidException, MissingUuidException {
+        if (StringUtils.isBlank(doctorId)) {
+            throw new MissingUuidException(ApplicationConstants.MISSING_ID);
+        }
+        if (!StringUtils.isBlank(doctorId)) {
+            try {
+                UUID.fromString(doctorId);
+            } catch (NullPointerException | IllegalArgumentException e) {
+                throw new InvalidUuidException(ApplicationConstants.INVALID_UUID);
 
-    /**
-     * this method validates user entered the correct UUID or not
-     *
-     * @param id
-     * @return
-     */
-    public boolean validateUuid(String id) {
-        try {
-            UUID.fromString(id);
-            return true;
-        } catch (IllegalArgumentException | NullPointerException e) {
-            return false;
+            }
         }
     }
+
 }

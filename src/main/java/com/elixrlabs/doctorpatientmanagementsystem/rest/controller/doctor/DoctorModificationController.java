@@ -1,5 +1,8 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.MissingUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorModificationService;
@@ -10,13 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
 
 /**
  * This Controller for handling HTTP PATCH requests related to doctor modifications.
  */
 @RestController
 public class DoctorModificationController {
+
     private final DoctorModificationService doctorModificationService;
 
     public DoctorModificationController(DoctorModificationService doctorModificationService) {
@@ -27,12 +30,12 @@ public class DoctorModificationController {
      * This method receives a doctor ID and a JSON Patch request body, and
      * delegates the patching operation to the DoctorModificationService.
      *
-     * @param id
-     * @param patch
-     * @return
+     * @param doctorId the id of the doctor to update
+     * @param patch    the details need to be changed
+     * @return ResponseEntity with the result ater updating the doctor
      */
-    @PatchMapping("/doctor/{id}")
-    public ResponseEntity<DoctorPatchResponse> patchDoctor(@PathVariable String id, @RequestBody JsonPatch patch) {
-        return doctorModificationService.applyPatchToDoctor(id, patch);
+    @PatchMapping(ApiConstants.PATCH_END_POINT)
+    public ResponseEntity<DoctorPatchResponse> patchDoctor(@PathVariable String doctorId, @RequestBody JsonPatch patch) throws Exception, MissingUuidException, InvalidUuidException {
+        return doctorModificationService.applyPatchToDoctor(doctorId, patch);
     }
 }
