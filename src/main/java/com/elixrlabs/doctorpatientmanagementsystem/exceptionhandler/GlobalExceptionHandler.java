@@ -103,7 +103,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PatientAlreadyAssignedException.class)
     public ResponseEntity<BaseResponse> handlePatientAlreadyAssigned(PatientAlreadyAssignedException patientAlreadyAssignedException) {
         BaseResponse baseResponse = BaseResponse.builder().success(false).errors(List.of(patientAlreadyAssignedException.getMessage())).build();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(baseResponse);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
     }
 }
-
