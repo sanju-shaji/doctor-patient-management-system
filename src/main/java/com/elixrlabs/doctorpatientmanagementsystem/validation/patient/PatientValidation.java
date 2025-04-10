@@ -2,6 +2,10 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
+import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +20,10 @@ import java.util.regex.Pattern;
 @Component
 public class PatientValidation {
     private final Pattern NAME_PATTERN = Pattern.compile(ApplicationConstants.REGEX_PATIENT_NAME_PATTERN);
+    private final MessageUtil messageUtil;
+    public PatientValidation(MessageUtil messageUtil) {
+        this.messageUtil = messageUtil;
+    }
 
     /**
      * Validates the patient details based on pre-defined rules
@@ -47,17 +55,16 @@ public class PatientValidation {
         return errors;
     }
 
-    public List<String> validatePatientId(String id) {
-        List<String> errors = new ArrayList<>();
+    public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidExcetion {
         if (StringUtils.isBlank(id)) {
-            errors.add(ApplicationConstants.BLANK_UUID);
-            return errors;
+            String message= messageUtil.getMessage(MessageKeyEnum.BLANK_UUID,null);
+           throw new EmptyUuidException(message);
         }
         try {
             UUID.fromString(id);
         } catch (IllegalArgumentException illegalArgumentException) {
-            errors.add(ApplicationConstants.INVALID_UUID_FORMAT);
+            String message=messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT,null);
+            throw new InvalidUuidExcetion(message);
         }
-        return errors;
     }
 }
