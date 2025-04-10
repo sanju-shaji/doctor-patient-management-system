@@ -2,16 +2,14 @@ package com.elixrlabs.doctorpatientmanagementsystem.response.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Data transfer object for transferring the doctor data
+ * Data transfer object for transferring the patient data
  */
-@Getter
-@Setter
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuperBuilder
 @NoArgsConstructor

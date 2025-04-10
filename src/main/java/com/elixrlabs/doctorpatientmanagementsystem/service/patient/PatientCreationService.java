@@ -41,12 +41,15 @@ public class PatientCreationService {
         patient = patientRepository.save(patient);
         PatientResponse successResponse = PatientResponse.builder()
                 .success(true)
-                .data(PatientDto.builder()
-                        .id(patient.getId())
-                        .firstName(patient.getFirstName())
-                        .lastName(patient.getLastName())
-                        .build())
+                .data(buildPatientDto(patient))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(successResponse);
+    }
+    private PatientDto buildPatientDto(PatientModel patient){
+        return PatientDto.builder()
+                .id(patient.getId())
+                .firstName(patient.getFirstName())
+                .lastName(patient.getLastName())
+                .build();
     }
 }
