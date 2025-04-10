@@ -25,8 +25,8 @@ public class PatientRetrievalService {
     private final PatientRepository patientRepository;
     private final PatientValidation patientValidation;
 
-    public PatientRetrievalService(PatientRepository repository, PatientValidation patientValidation) {
-        this.patientRepository = repository;
+    public PatientRetrievalService(PatientRepository patientRepository, PatientValidation patientValidation) {
+        this.patientRepository = patientRepository;
         this.patientValidation = patientValidation;
     }
 
@@ -60,11 +60,11 @@ public class PatientRetrievalService {
         Optional<PatientModel> patientOptional = patientRepository.findById(patientId);
         if (patientOptional.isPresent()) {
             PatientModel patientModel = patientOptional.get();
-            PatientResponse responseDto = PatientResponse.builder()
+            PatientResponse patientResponse = PatientResponse.builder()
                     .success(true)
                     .data(patientModel)
                     .build();
-            return ResponseEntity.ok(responseDto);
+            return ResponseEntity.ok(patientResponse);
         }
         throw new DataNotFoundException(ApplicationConstants.PATIENT_NOT_FOUND, patientId);
     }
