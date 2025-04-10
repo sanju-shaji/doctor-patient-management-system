@@ -12,5 +12,4 @@ public class DataNotFoundException extends Exception {
         super(message);
         this.id = id;
     }
-
 }
