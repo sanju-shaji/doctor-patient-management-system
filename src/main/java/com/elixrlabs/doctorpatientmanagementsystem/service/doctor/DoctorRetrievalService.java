@@ -58,7 +58,7 @@ public class DoctorRetrievalService {
             return new ResponseEntity<>(doctorListResponse, HttpStatus.OK);
         } else {
             doctorListResponse.setSuccess(false);
-            doctorListResponse.setErrors(Collections.singletonList(ApplicationConstants.DOCTORS_NOT_FOUND + ApplicationConstants.COLON + ApplicationConstants.SINGLE_QUOTE + doctorName + ApplicationConstants.SINGLE_QUOTE));
+            doctorListResponse.setErrors(Collections.singletonList(ApplicationConstants.DOCTORS_NOT_FOUND_ERROR + ApplicationConstants.COLON + ApplicationConstants.SINGLE_QUOTE + doctorName + ApplicationConstants.SINGLE_QUOTE));
             return new ResponseEntity<>(doctorListResponse, HttpStatus.NOT_FOUND);
         }
     }
@@ -86,6 +86,6 @@ public class DoctorRetrievalService {
                     .success(true).build();
             return ResponseEntity.ok().body(responseDto);
         }
-        throw new DataNotFoundException(ApplicationConstants.USER_NOT_FOUND_ERROR, uuid);
+        throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND_ERROR, uuid);
     }
 }

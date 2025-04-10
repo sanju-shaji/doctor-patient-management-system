@@ -5,7 +5,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchRe
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,7 +18,7 @@ import java.util.List;
  * with error messages in a standard format using DoctorPatchResponse.
  * Global exception handler class
  */
-@ControllerAdvice
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
@@ -44,7 +43,7 @@ public class GlobalExceptionHandler {
      * @return appropriate response
      */
     @ExceptionHandler(InvalidUuidExcetion.class)
-    public ResponseEntity<DoctorPatchResponse> invalidUuid(InvalidUuidExcetion invalidUuidException) {
+    public ResponseEntity<DoctorPatchResponse> handleInvalidUuid(InvalidUuidExcetion invalidUuidException) {
         DoctorPatchResponse doctorPatchResponse =
                 DoctorPatchResponse.builder()
                         .success(false)
@@ -69,7 +68,7 @@ public class GlobalExceptionHandler {
      * @return appropriate response
      */
     @ExceptionHandler(DoctorNotFoundException.class)
-    public ResponseEntity<DoctorPatchResponse> doctotNotFound(DoctorNotFoundException dataNotFoundException) {
+    public ResponseEntity<DoctorPatchResponse> handleDoctorNotFound(DoctorNotFoundException dataNotFoundException) {
         DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
                 .success(false)
                 .errors(Collections.singletonList(dataNotFoundException.getMessage()))
@@ -107,7 +106,7 @@ public class GlobalExceptionHandler {
      */
 
     @ExceptionHandler(InvalidJsonOperationException.class)
-    public ResponseEntity<DoctorPatchResponse> invalidJsonOperation(InvalidJsonOperationException invalidJsonOperation) {
+    public ResponseEntity<DoctorPatchResponse> handleInvalidJsonOperation(InvalidJsonOperationException invalidJsonOperation) {
         DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
                 .success(false)
                 .errors(Collections.singletonList(ApplicationConstants.ADD_REMOVE_OPERATION_NOT_ALLOWED))
@@ -125,7 +124,7 @@ public class GlobalExceptionHandler {
      */
 
     @ExceptionHandler(IdReplacementException.class)
-    public ResponseEntity<DoctorPatchResponse> invalidIdReplacementOperation(IdReplacementException idReplacementException) {
+    public ResponseEntity<DoctorPatchResponse> handleInvalidIdReplacementOperation(IdReplacementException idReplacementException) {
         DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
                 .success(false)
                 .errors(Collections.singletonList(ApplicationConstants.ID_REPLACEMENT_NOT_ALLOWED))
@@ -137,6 +136,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<DoctorResponse> handleDoctorNotFound(DataNotFoundException dataNotFoundException) {
         DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(dataNotFoundException.getMessage() + dataNotFoundException.getId())).build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    @ExceptionHandler(JsonPatchProcessingException.class)
+    public ResponseEntity<Object> handleJsonPatchError(JsonPatchProcessingException jsonPatchProcessingException) {
+        DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
+                .success(false)
+                .errors(Collections.singletonList(jsonPatchProcessingException.getMessage()))
+                .build();
+        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
     }
 
 }

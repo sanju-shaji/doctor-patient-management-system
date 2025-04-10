@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DoctorNotFoundException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.JsonPatchProcessingException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
@@ -19,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -71,9 +71,7 @@ public class DoctorModificationService {
             doctorPatchResponse.setDoctor(doctorDto);
             return new ResponseEntity<>(doctorPatchResponse, HttpStatus.OK);
         } catch (JsonPatchException | JsonProcessingException e) {
-            doctorPatchResponse.setSuccess(false);
-            doctorPatchResponse.setErrors(Collections.singletonList(e.getMessage()));
-            return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
+            throw new JsonPatchProcessingException(e.getMessage());
         }
     }
 
