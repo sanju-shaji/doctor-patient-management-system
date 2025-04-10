@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 @Component
 public class PatientValidation {
     private final Pattern NAME_PATTERN = Pattern.compile(ApplicationConstants.REGEX_PATIENT_NAME_PATTERN);
+    private final Pattern UUID_PATTERN = Pattern.compile(ApplicationConstants.REGEX_UUID_PATTERN);
 
     /**
      * Validates the patient details based on pre-defined rules
@@ -50,9 +51,7 @@ public class PatientValidation {
         if (StringUtils.isBlank(id)) {
             throw new EmptyUuidException(ApplicationConstants.BLANK_UUID);
         }
-        try {
-            UUID.fromString(id);
-        } catch (IllegalArgumentException illegalArgumentException) {
+        if(!UUID_PATTERN.matcher(id).matches()){
             throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID_FORMAT);
         }
     }

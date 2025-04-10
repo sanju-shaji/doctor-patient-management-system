@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
  */
 @Service
 public class PatientRetrievalService {
-    private final PatientRepository repository;
+    private final PatientRepository patientRepository;
     private final PatientValidation patientValidation;
 
     public PatientRetrievalService(PatientRepository repository, PatientValidation patientValidation) {
-        this.repository = repository;
+        this.patientRepository = repository;
         this.patientValidation = patientValidation;
     }
 
@@ -57,12 +57,12 @@ public class PatientRetrievalService {
     public ResponseEntity<PatientResponse> getPatientById(String id) throws Exception {
         patientValidation.validatePatientId(id);
         UUID patientId = UUID.fromString(id);
-        Optional<PatientModel> patientOptional = repository.findById(patientId);
+        Optional<PatientModel> patientOptional = patientRepository.findById(patientId);
         if (patientOptional.isPresent()) {
-            PatientModel patient = patientOptional.get();
+            PatientModel patientModel = patientOptional.get();
             PatientResponse responseDto = PatientResponse.builder()
                     .success(true)
-                    .data(patient)
+                    .data(patientModel)
                     .build();
             return ResponseEntity.ok(responseDto);
         }
@@ -70,13 +70,13 @@ public class PatientRetrievalService {
     }
 
     private List<PatientDto> getPatientsByNamePrefix(String name) {
-        List<PatientModel> patients = repository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(name, name);
+        List<PatientModel> patients = patientRepository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(name, name);
         return patients.stream().map(patientModel -> new PatientDto(patientModel)
         ).collect(Collectors.toList());
     }
 
     private List<PatientDto> getPatientsByFirstAndLastName(String firstName, String lastName) {
-        List<PatientModel> patients = repository.findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(firstName, lastName);
+        List<PatientModel> patients = patientRepository.findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(firstName, lastName);
         return patients.stream().map(patientModel -> new PatientDto(patientModel)
         ).collect(Collectors.toList());
     }

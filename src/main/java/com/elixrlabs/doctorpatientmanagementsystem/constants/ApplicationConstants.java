@@ -29,9 +29,10 @@ public class ApplicationConstants {
     public static final String PATIENT_NOT_FOUND = "Patient not found with Id : ";
     public static final String QUERY_PARAMS_CANNOT_NULL = "Query params cannot be null.";
     public static final String REGEX_ALPHABET_PATTERN = "^[a-zA-Z\\s]+$";
-    public static final String REGEX_DEPARTMENTNAME_PATTERN = "^[a-zA-Z\\s\\-'.,]+$";
+    public static final String REGEX_DEPARTMENT_NAME_PATTERN = "^[a-zA-Z\\s\\-'.,]+$";
     public static final String REGEX_PATIENT_NAME_PATTERN = "^[a-zA-Z\\s]{1,50}$";
     public static final String SERVER_ERROR = "Server error - ";
     public static final String SINGLE_QUOTE = "'";
     public static final String USER_NOT_FOUND_ERROR = "User is not found in database for the given ID : ";
+    public static final String REGEX_UUID_PATTERN = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$";
 }
