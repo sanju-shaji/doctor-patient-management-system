@@ -1,6 +1,5 @@
 package com.elixrlabs.doctorpatientmanagementsystem.util;
 
-import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +15,6 @@ public class MessageUtil {
     }
 
     public String getMessage(String Key, Object... args) {
-        return messageSource.getMessage(Key, (Object[]) args, null);
+        return messageSource.getMessage(Key, args, null);
     }
 }
