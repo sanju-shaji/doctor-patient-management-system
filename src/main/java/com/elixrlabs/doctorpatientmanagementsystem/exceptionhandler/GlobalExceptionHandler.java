@@ -6,8 +6,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorRespons
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  * Global exception handler class
  */
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
     /**
      * method to handle invalid userinput
@@ -63,15 +63,14 @@ public class GlobalExceptionHandler {
      * Handles DataNotFoundException when a doctor is not found in the database.
      * method to handle server side exceptions
      *
-     * @param dataNotFoundException the exception thrown
      * @return ResponseEntity with error message and HTTP 404 (Not Found)
      * @return appropriate response
      */
     @ExceptionHandler(DoctorNotFoundException.class)
-    public ResponseEntity<DoctorPatchResponse> handleDoctorNotFound(DoctorNotFoundException dataNotFoundException) {
+    public ResponseEntity<DoctorPatchResponse> handleDoctorNotFound(DoctorNotFoundException doctorNotFoundException) {
         DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
                 .success(false)
-                .errors(Collections.singletonList(dataNotFoundException.getMessage()))
+                .errors(Collections.singletonList(doctorNotFoundException.getMessage()))
                 .build();
         return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
     }
@@ -109,7 +108,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<DoctorPatchResponse> handleInvalidJsonOperation(InvalidJsonOperationException invalidJsonOperation) {
         DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
                 .success(false)
-                .errors(Collections.singletonList(ApplicationConstants.ADD_REMOVE_OPERATION_NOT_ALLOWED))
+                .errors(invalidJsonOperation.getErrors())
                 .build();
         return new ResponseEntity<>(doctorPatchResponse, HttpStatus.BAD_REQUEST);
     }
@@ -146,5 +145,4 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
     }
-
 }

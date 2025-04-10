@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class is responsible for validating JSON Patch operations
  * before they are applied to the Doctor entity.
@@ -24,20 +27,23 @@ public class JsonPatchValidator {
      * @return it will return responseEntity with success message and realted message
      */
     public void validatejsonOperations(JsonPatch patch) throws InvalidJsonOperationException, IdReplacementException {
-
+        List<String> errors = new ArrayList<>();
         DoctorPatchResponse doctorPatchResponse = new DoctorPatchResponse();
         JsonNode patchNode = null;
         ObjectMapper mapper = new ObjectMapper();
         patchNode = mapper.valueToTree(patch);
         for (JsonNode patchOperation : patchNode) {
-            String opType = patchOperation.get("op").asText();
-            String path = patchOperation.get("path").asText();
-            if (opType.equalsIgnoreCase("add") || opType.equalsIgnoreCase("remove")) {
-                throw new InvalidJsonOperationException(ApplicationConstants.ADD_REMOVE_OPERATION_NOT_ALLOWED);
+            String operationType = patchOperation.get(ApplicationConstants.PATCH_OPERATION_KEY).asText();
+            String path = patchOperation.get(ApplicationConstants.PATCH_PATH_KEY).asText();
+            if (operationType.equalsIgnoreCase(ApplicationConstants.PATCH_ADD_OPERATION) || operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REMOVE_OPERATION)) {
+                errors.add(ApplicationConstants.ADD_REMOVE_OPERATION_NOT_ALLOWED + ApplicationConstants.COLON + operationType);
             }
-            if (opType.equalsIgnoreCase("replace") && path.equalsIgnoreCase("/id")) {
-                throw new IdReplacementException(ApplicationConstants.ID_REPLACEMENT_NOT_ALLOWED);
+            if (operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REPLACE_OPERATION) && path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_ID)) {
+                errors.add(ApplicationConstants.ID_REPLACEMENT_NOT_ALLOWED);
             }
+        }
+        if (!errors.isEmpty()) {
+            throw new InvalidJsonOperationException(errors);
         }
     }
 }

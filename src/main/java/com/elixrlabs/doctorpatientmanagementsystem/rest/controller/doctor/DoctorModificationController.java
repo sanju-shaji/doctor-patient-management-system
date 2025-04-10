@@ -31,7 +31,7 @@ public class DoctorModificationController {
      * @param patch    the details need to be changed
      * @return ResponseEntity with the result ater updating the doctor
      */
-    @PatchMapping(ApiConstants.PATCH_END_POINT)
+    @PatchMapping(ApiConstants.PATCH_DOCTOR_BY_ID)
     public ResponseEntity<DoctorPatchResponse> patchDoctor(@PathVariable String doctorId, @RequestBody JsonPatch patch) throws Exception {
         return doctorModificationService.applyPatchToDoctor(doctorId, patch);
     }

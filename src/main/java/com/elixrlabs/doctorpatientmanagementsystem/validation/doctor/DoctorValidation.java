@@ -89,15 +89,10 @@ public class DoctorValidation {
      */
     public void validatePatchDoctor(String doctorId) throws InvalidUuidExcetion, EmptyUuidException {
         if (StringUtils.isBlank(doctorId)) {
-            throw new EmptyUuidException(ApplicationConstants.MISSING_ID);
+            throw new InvalidUuidExcetion(ApplicationConstants.MISSING_ID);
         }
-        if (!StringUtils.isBlank(doctorId)) {
-            try {
-                UUID.fromString(doctorId);
-            } catch (NullPointerException | IllegalArgumentException e) {
-                throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID);
-
-            }
+        if (!isValidUUID(doctorId)) {
+            throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID);
         }
     }
 

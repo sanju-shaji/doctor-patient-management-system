@@ -2,7 +2,9 @@ package com.elixrlabs.doctorpatientmanagementsystem.response.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Component;
 
@@ -16,5 +18,5 @@ import org.springframework.stereotype.Component;
 @SuperBuilder
 @NoArgsConstructor
 public class DoctorPatchResponse extends BaseResponse {
-    private DoctorDto doctor;
+    private DoctorDto doctorDto;
 }

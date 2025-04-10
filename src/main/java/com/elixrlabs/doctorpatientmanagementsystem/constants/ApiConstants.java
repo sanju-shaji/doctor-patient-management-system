@@ -5,8 +5,8 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
  */
 public class ApiConstants {
     public static final String DOCTORS_END_POINT = "/doctors";
-    public static final String GET_DOCTOR_BY_ID ="/doctor/{id}";
-    public static final String PATCH_END_POINT = "/doctor/{doctorId}";
+    public static final String GET_DOCTOR_BY_ID = "/doctor/{id}";
+    public static final String PATCH_DOCTOR_BY_ID = "/doctor/{doctorId}";
     public static final String PATIENTS_API = "/patients";
 
 
