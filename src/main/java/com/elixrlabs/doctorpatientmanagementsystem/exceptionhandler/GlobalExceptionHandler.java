@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
@@ -110,5 +111,17 @@ public class GlobalExceptionHandler {
     ResponseEntity<DoctorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException missingServletRequestParameterException) {
         DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(ApplicationConstants.INVALID_URL)).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    /**
+     * method to handle PatientAlreadyAssignedDoctor exception
+     *
+     * @param patientAlreadyAssignedException-exception class
+     * @return appropriate response
+     */
+    @ExceptionHandler(PatientAlreadyAssignedException.class)
+    public ResponseEntity<BaseResponse> handlePatientAlreadyAssigned(PatientAlreadyAssignedException patientAlreadyAssignedException) {
+        BaseResponse baseResponse = BaseResponse.builder().success(false).errors(List.of(patientAlreadyAssignedException.getMessage())).build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
     }
 }

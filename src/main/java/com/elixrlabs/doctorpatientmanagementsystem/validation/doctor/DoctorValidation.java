@@ -4,12 +4,13 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstant
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Validator class for validating doctor name input.
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Component
 public class DoctorValidation {
     private final MessageUtil messageUtil;
+    private final Pattern UUID_PATTERN = Pattern.compile(ApplicationConstants.REGEX_UUID_PATTERN);
 
     /**
      * method to check if the string is empty and if string follows the specified pattern
@@ -64,13 +66,8 @@ public class DoctorValidation {
      * @param id-UUID
      * @return True if id is valid else false
      */
-    public boolean isValidUUID(String id) {
-        try {
-            UUID.fromString(id);
-            return true;
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return false;
-        }
+    public boolean isValidUUID(String id) throws InvalidUuidExcetion {
+        return UUID_PATTERN.matcher(id).matches();
     }
 
     public Boolean validateDoctorName(String name) {

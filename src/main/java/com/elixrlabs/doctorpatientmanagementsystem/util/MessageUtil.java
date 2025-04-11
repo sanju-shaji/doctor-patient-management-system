@@ -10,8 +10,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MessageUtil {
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
+
+    public MessageUtil(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     public String getMessage(String Key, Object... args) {
         return messageSource.getMessage(Key, args, null);
