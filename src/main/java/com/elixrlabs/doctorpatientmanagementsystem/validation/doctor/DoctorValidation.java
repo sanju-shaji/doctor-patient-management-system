@@ -2,9 +2,8 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -83,9 +82,8 @@ public class DoctorValidation {
      * if the ID is missing or not a valid UUID ,it adds errors messages.
      *
      * @param doctorId to validate the  doctorId
-     * @return responseEntity containing error messages if validation fails or null if ID is valid
      */
-    public void validatePatchDoctor(String doctorId) throws InvalidUuidExcetion, EmptyUuidException {
+    public void validatePatchDoctor(String doctorId) throws InvalidUuidExcetion{
         if (StringUtils.isBlank(doctorId)) {
             throw new InvalidUuidExcetion(ApplicationConstants.MISSING_ID);
         }

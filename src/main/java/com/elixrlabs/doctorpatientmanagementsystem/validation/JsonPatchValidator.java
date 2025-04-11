@@ -1,9 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.IdReplacementException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidJsonOperationException;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -24,14 +22,11 @@ public class JsonPatchValidator {
      * This method validates the json patch and restrict the add ,remove operation and replacing the id
      *
      * @param patch the JSON Patch request containing a list of operations (e.g., replace, add)
-     * @return it will return responseEntity with success message and realted message
      */
-    public void validatejsonOperations(JsonPatch patch) throws InvalidJsonOperationException, IdReplacementException {
+    public void validateJsonOperations(JsonPatch patch) throws InvalidJsonOperationException{
         List<String> errors = new ArrayList<>();
-        DoctorPatchResponse doctorPatchResponse = new DoctorPatchResponse();
-        JsonNode patchNode = null;
         ObjectMapper mapper = new ObjectMapper();
-        patchNode = mapper.valueToTree(patch);
+        JsonNode patchNode = mapper.valueToTree(patch);
         for (JsonNode patchOperation : patchNode) {
             String operationType = patchOperation.get(ApplicationConstants.PATCH_OPERATION_KEY).asText();
             String path = patchOperation.get(ApplicationConstants.PATCH_PATH_KEY).asText();

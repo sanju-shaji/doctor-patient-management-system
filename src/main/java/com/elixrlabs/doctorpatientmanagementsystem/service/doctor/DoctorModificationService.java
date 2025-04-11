@@ -66,13 +66,13 @@ public class DoctorModificationService {
      * This method validates the empty/null/blank UUID
      * and it validates the jsonOperations like add/remove
      */
-    private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidExcetion, EmptyUuidException, DataNotFoundException {
+    private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidExcetion, DataNotFoundException {
         doctorValidation.validatePatchDoctor(doctorId);
         JsonPatchValidator jsonPatchValidator = new JsonPatchValidator();
-        jsonPatchValidator.validatejsonOperations(patch);
+        jsonPatchValidator.validateJsonOperations(patch);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
-            throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND_ERROR, UUID.fromString(doctorId));
+            throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND, UUID.fromString(doctorId));
         }
         return doctorEntityOptional.get();
     }

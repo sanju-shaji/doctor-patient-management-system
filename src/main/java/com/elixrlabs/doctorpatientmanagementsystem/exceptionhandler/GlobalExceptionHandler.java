@@ -23,7 +23,7 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     /**
-     * method to handle invalid userinput
+     * method to handle invalid userInput
      *
      * @param invalidUserInputException-exception class
      * @return appropriate response
@@ -42,7 +42,6 @@ public class GlobalExceptionHandler {
      *
      * @param invalidUuidException the exception thrown
      * @return ResponseEntity with error message and HTTP 400 (Bad Request)
-     * @return appropriate response
      */
     @ExceptionHandler(InvalidUuidExcetion.class)
     public ResponseEntity<DoctorPatchResponse> handleInvalidUuid(InvalidUuidExcetion invalidUuidException) {
@@ -88,7 +87,6 @@ public class GlobalExceptionHandler {
      *
      * @param invalidJsonOperation the exception thrown
      * @return ResponseEntity with error message and HTTP 400 (Bad Request)
-     * @return appropriate response
      */
 
     @ExceptionHandler(InvalidJsonOperationException.class)
@@ -103,19 +101,8 @@ public class GlobalExceptionHandler {
     /**
      * method to handle Doctornotfound exception
      *
-     * @param idReplacementException the exception thrown
      * @return ResponseEntity with error message and HTTP 400 (Bad Request)
-     * @return appropriate response
      */
-
-    @ExceptionHandler(IdReplacementException.class)
-    public ResponseEntity<DoctorPatchResponse> handleInvalidIdReplacementOperation(IdReplacementException idReplacementException) {
-        DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
-                .success(false)
-                .errors(Collections.singletonList(ApplicationConstants.ID_REPLACEMENT_NOT_ALLOWED))
-                .build();
-        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.BAD_REQUEST);
-    }
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<DoctorResponse> handleDoctorNotFound(DataNotFoundException dataNotFoundException) {
