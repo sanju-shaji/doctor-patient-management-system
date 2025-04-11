@@ -10,7 +10,6 @@ public class ApplicationConstants {
     public static final String COLON = " :";
     public static final String DEPARTMENTNAME_PATTERN_ERROR = "Department Name should not contain any special symbols or numbers";
     public static final String DOCTORS_NOT_FOUND_ERROR = "No doctor found in the database for the given ID : ";
-    ;
     public static final String EMPTY_DEPARTMENTNAME = "Department name should not be an empty or null";
     public static final String EMPTY_FIRSTNAME = "First name should not be an empty string or null";
     public static final String EMPTY_LASTNAME = "Last name should not be an empty string or null";
@@ -20,9 +19,9 @@ public class ApplicationConstants {
     public static final String INVALID_REQUESTBODY_ERROR = "Invalid request body";
     public static final String INVALID_UUID_ERROR = "Invalid Id.Please provide a valid UUID";
     public static final String ID_REPLACEMENT_NOT_ALLOWED = "Modifying 'id' is not allowed.";
-    public static final String INVALID_UUID = "Invalid ID parameter.Please provide a valid UUID";
+    public static final String INVALID_UUID = "Invalid ID parameter. Please provide a valid UUID";
     public static final String LASTNAME_PATTERN_ERROR = "Last name should only contain alphabets";
-    public static final String MISSING_ID = "Missing required ID parameter.Please provide a valid UUUID";
+    public static final String MISSING_ID = "Missing required ID parameter. Please provide a valid UUUID";
     public static final String NO_PATIENTS_FOUND = "No patients found";
     public static final String PARAM_DOCTOR_NAME = "name";
     public static final String PATCH_ADD_OPERATION = "add";

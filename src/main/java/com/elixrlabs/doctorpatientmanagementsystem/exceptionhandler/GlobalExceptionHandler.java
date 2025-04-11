@@ -59,21 +59,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 
-    /**
-     * Handles DataNotFoundException when a doctor is not found in the database.
-     * method to handle server side exceptions
-     *
-     * @return ResponseEntity with error message and HTTP 404 (Not Found)
-     * @return appropriate response
-     */
-    @ExceptionHandler(DoctorNotFoundException.class)
-    public ResponseEntity<DoctorPatchResponse> handleDoctorNotFound(DoctorNotFoundException doctorNotFoundException) {
-        DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
-                .success(false)
-                .errors(Collections.singletonList(doctorNotFoundException.getMessage()))
-                .build();
-        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
-    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<DoctorResponse> handleInternalServerError(Exception exception) {

@@ -1,8 +1,13 @@
 package com.elixrlabs.doctorpatientmanagementsystem.model.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import lombok.*;
+
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

@@ -24,7 +24,6 @@ public class DoctorValidation {
      * @param Pattern             The pattern which is to be matched with the string for validation
      * @param emptyStringError    error message if the string is empty
      * @param invalidPatternError error message if the string does for match the specified pattern
-     * @return List which contains the error messages if validation fails or an empty list if validation is success
      * Validates the doctor name to ensure it is not empty and contains only letters and spaces.
      */
     public void validateString(String string, String Pattern,
@@ -41,7 +40,6 @@ public class DoctorValidation {
      * method to validate the POST/doctor Api
      *
      * @param doctor-model entity which contains the actual data
-     * @return list which contains error messages if any
      */
     public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
         validateString(doctor.getFirstName(),

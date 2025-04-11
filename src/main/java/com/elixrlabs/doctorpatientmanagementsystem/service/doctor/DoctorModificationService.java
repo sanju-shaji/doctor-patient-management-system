@@ -2,10 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DoctorNotFoundException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.JsonPatchProcessingException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.*;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
@@ -53,30 +50,29 @@ public class DoctorModificationService {
      */
     public ResponseEntity<DoctorPatchResponse> applyPatchToDoctor(String doctorId, JsonPatch patch) throws Exception {
         DoctorEntity doctorToUpdate = validateAndFetchDoctor(doctorId, patch);
-        try {
-            DoctorDto patchedDto = applyPatchAndConvertToDto(doctorToUpdate, patch);
-            doctorValidation.validateDoctorDetails(patchedDto);
-            DoctorEntity patchedEntity = objectMapper.convertValue(patchedDto, DoctorEntity.class);
-            DoctorEntity savedDoctor = doctorRepository.save(patchedEntity);
-            DoctorDto doctorDto = new DoctorDto(savedDoctor);
-            doctorPatchResponse.setSuccess(true);
-            doctorPatchResponse.setDoctorDto(doctorDto);
-            return new ResponseEntity<>(doctorPatchResponse, HttpStatus.OK);
-        } catch (JsonPatchException | JsonProcessingException e) {
-            throw new JsonPatchProcessingException(e.getMessage());
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
+
+        DoctorDto patchedDto = applyPatchAndConvertToDto(doctorToUpdate, patch);
+        doctorValidation.validateDoctorDetails(patchedDto);
+        DoctorEntity patchedEntity = objectMapper.convertValue(patchedDto, DoctorEntity.class);
+        DoctorEntity savedDoctor = doctorRepository.save(patchedEntity);
+        DoctorDto doctorDto = new DoctorDto(savedDoctor);
+        doctorPatchResponse.setSuccess(true);
+        doctorPatchResponse.setDoctorDto(doctorDto);
+        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.OK);
+
     }
 
-
-    private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidExcetion, EmptyUuidException {
+    /**
+     * This method validates the empty/null/blank UUID
+     * and it validates the jsonOperations like add/remove
+     */
+    private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidExcetion, EmptyUuidException, DataNotFoundException {
         doctorValidation.validatePatchDoctor(doctorId);
         JsonPatchValidator jsonPatchValidator = new JsonPatchValidator();
         jsonPatchValidator.validatejsonOperations(patch);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
-            throw new DoctorNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND_ERROR + doctorId);
+            throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND_ERROR, UUID.fromString(doctorId));
         }
         return doctorEntityOptional.get();
     }
