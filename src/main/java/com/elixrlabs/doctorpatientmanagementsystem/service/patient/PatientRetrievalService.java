@@ -66,7 +66,7 @@ public class PatientRetrievalService {
                     .build();
             return ResponseEntity.ok(patientResponse);
         }
-        throw new DataNotFoundException(ApplicationConstants.PATIENT_NOT_FOUND, patientId);
+        throw new DataNotFoundException(ApplicationConstants.PATIENT_ID_NOT_FOUND, patientId);
     }
 
     private List<PatientDto> getPatientsByNamePrefix(String name) {

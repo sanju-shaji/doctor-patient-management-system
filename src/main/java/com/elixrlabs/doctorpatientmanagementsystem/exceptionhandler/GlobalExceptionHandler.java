@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class GlobalExceptionHandler {
      * @param invalidUserInputException-exception class
      * @return appropriate response
      */
+
     @ExceptionHandler(InvalidUserInputException.class)
     public ResponseEntity<DoctorResponse> handleInvalidUserInputExcetion(InvalidUserInputException invalidUserInputException) {
         DoctorResponse errorResponseDto = DoctorResponse.builder()
@@ -90,5 +92,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<DoctorResponse> handleDoctorNotFound(DataNotFoundException dataNotFoundException) {
         DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(dataNotFoundException.getMessage() + dataNotFoundException.getId())).build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    /**
+     * method to handle PatientAlreadyAssignedDoctor exception
+     *
+     * @param patientAlreadyAssignedException-exception class
+     * @return appropriate response
+     */
+    @ExceptionHandler(PatientAlreadyAssignedException.class)
+    public ResponseEntity<BaseResponse> handlePatientAlreadyAssigned(PatientAlreadyAssignedException patientAlreadyAssignedException) {
+        BaseResponse baseResponse = BaseResponse.builder().success(false).errors(List.of(patientAlreadyAssignedException.getMessage())).build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
     }
 }
