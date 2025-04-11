@@ -29,27 +29,28 @@ public class PatientCreationService {
      * returns 400 response with validation errors if the input is invalid
      * returns 200 response with patient details if the input is valid
      */
-    public ResponseEntity<PatientResponse> createPatient(PatientDto patientDto) throws Exception {
+    public ResponseEntity<PatientResponse> createPatient(PatientDto patient) throws Exception {
         // Perform validation
-        patientValidation.validatePatient(patientDto);
+        patientValidation.validatePatient(patient);
         UUID patientId = UUID.randomUUID();
-        PatientModel patient = PatientModel.builder()
+        PatientModel patientModel = PatientModel.builder()
                 .id(patientId)
-                .firstName(patientDto.getFirstName().trim())
-                .lastName(patientDto.getLastName().trim())
+                .firstName(patient.getFirstName().trim())
+                .lastName(patient.getLastName().trim())
                 .build();
-        patient = patientRepository.save(patient);
+        patientModel = patientRepository.save(patientModel);
         PatientResponse successResponse = PatientResponse.builder()
                 .success(true)
-                .data(buildPatientDto(patient))
+                .data(buildPatientDto(patientModel))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(successResponse);
     }
-    private PatientDto buildPatientDto(PatientModel patient){
+
+    private PatientDto buildPatientDto(PatientModel patientModel) {
         return PatientDto.builder()
-                .id(patient.getId())
-                .firstName(patient.getFirstName())
-                .lastName(patient.getLastName())
+                .id(patientModel.getId())
+                .firstName(patientModel.getFirstName())
+                .lastName(patientModel.getLastName())
                 .build();
     }
 }
