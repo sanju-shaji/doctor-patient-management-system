@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -104,6 +105,32 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseResponse> handlePatientAlreadyAssigned(PatientAlreadyAssignedException patientAlreadyAssignedException) {
         BaseResponse baseResponse = BaseResponse.builder().success(false).errors(List.of(patientAlreadyAssignedException.getMessage())).build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(baseResponse);
+    }
+    /**
+     * method to handle JsonPatchProcessing exception
+     *
+     * @param jsonPatchProcessingException-exception class
+     * @return appropriate response
+     */
+    @ExceptionHandler(JsonPatchProcessingException.class)
+    public ResponseEntity<PatchPatientResponse> handleJsonPatchProcessing(JsonPatchProcessingException jsonPatchProcessingException) {
+        PatchPatientResponse patchPatientResponse=new PatchPatientResponse();
+        patchPatientResponse.setSuccess(false);
+        patchPatientResponse.setErrors(jsonPatchProcessingException.getErrors());
+        return new ResponseEntity<>(patchPatientResponse,HttpStatus.BAD_REQUEST);
+    }
+    /**
+     * method to handle PatientValidation exception
+     *
+     * @param patientValidationException-exception class
+     * @return appropriate response
+     */
+    @ExceptionHandler(PatientValidationException.class)
+    public ResponseEntity<PatchPatientResponse> handlePatientValidation(PatientValidationException patientValidationException) {
+        PatchPatientResponse patchPatientResponse=new PatchPatientResponse();
+        patchPatientResponse.setSuccess(false);
+        patchPatientResponse.setErrors(List.of(patientValidationException.getMessage()));
+        return new ResponseEntity<>(patchPatientResponse,HttpStatus.BAD_REQUEST);
     }
 }
 

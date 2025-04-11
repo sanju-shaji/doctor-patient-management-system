@@ -57,13 +57,13 @@ public class PatientValidation {
 
     public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidExcetion {
         if (StringUtils.isBlank(id)) {
-            String message= messageUtil.getMessage(MessageKeyEnum.BLANK_UUID,null);
-           throw new EmptyUuidException(message);
+            String message= messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey());
+            throw new EmptyUuidException(message);
         }
         try {
             UUID.fromString(id);
         } catch (IllegalArgumentException illegalArgumentException) {
-            String message=messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT,null);
+            String message=messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
             throw new InvalidUuidExcetion(message);
         }
     }
