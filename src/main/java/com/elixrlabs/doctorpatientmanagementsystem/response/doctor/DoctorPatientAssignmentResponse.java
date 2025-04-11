@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DPAResponse extends BaseResponse {
+public class DoctorPatientAssignmentResponse extends BaseResponse {
     private String id;
     private String firstName;
     private String lastName;

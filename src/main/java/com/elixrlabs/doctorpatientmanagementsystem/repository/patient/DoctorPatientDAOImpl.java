@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.repository.patient;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DPADto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorPatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,7 +20,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.grou
 public class DoctorPatientDAOImpl implements DoctorPatientDAO {
 private final MongoTemplate mongoTemplate;
     @Override
-    public DPADto getAssignedDoctorsByPatientId(UUID id) {
+    public DoctorPatientAssignmentDto getAssignedDoctorsByPatientId(UUID id) {
         Aggregation aggregation = newAggregation(
                 Aggregation.match(Criteria.where(ApplicationConstants.ID).is(id)),
                 Aggregation.lookup(ApplicationConstants.ASSIGNMENT_COLLECTION, ApplicationConstants.ID, ApplicationConstants.PATIENT_ID, ApplicationConstants.ASSIGNMENTS),
@@ -31,7 +31,7 @@ private final MongoTemplate mongoTemplate;
                         .first(ApplicationConstants.LAST_NAME).as(ApplicationConstants.LAST_NAME)
                         .push(ApplicationConstants.ASSIGNMENTS_DOCTOR).as(ApplicationConstants.DOCTORS)
         );
-        AggregationResults<DPADto> results = mongoTemplate.aggregate(aggregation, ApplicationConstants.PATIENT_COLLECTION, DPADto.class);
+        AggregationResults<DoctorPatientAssignmentDto> results = mongoTemplate.aggregate(aggregation, ApplicationConstants.PATIENT_COLLECTION, DoctorPatientAssignmentDto.class);
         return results.getUniqueMappedResult();
     }
 }

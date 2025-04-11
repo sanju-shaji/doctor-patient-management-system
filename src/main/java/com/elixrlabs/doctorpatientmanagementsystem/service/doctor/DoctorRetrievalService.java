@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DPADto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorPatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
@@ -10,7 +10,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidE
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DPAResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
@@ -102,7 +102,7 @@ public class DoctorRetrievalService {
      * @param patientId-id of patient
      * @return - DPAResponse with patient details and list of assigned doctors
      */
-    public ResponseEntity<DPAResponse> getDoctorsWithPatient(String patientId) throws Exception {
+    public ResponseEntity<DoctorPatientAssignmentResponse> getDoctorsWithPatient(String patientId) throws Exception {
         if (StringUtils.isEmpty(patientId)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
@@ -113,17 +113,17 @@ public class DoctorRetrievalService {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_FOUND_ERROR.getKey()), UUID.fromString(patientId));
         }
         UUID id = UUID.fromString(patientId);
-        DPADto resultData = patientRepository.getAssignedDoctorsByPatientId(id);
-        if(resultData.getDoctors().isEmpty()){
+        DoctorPatientAssignmentDto assignedDoctorsToPatientData = patientRepository.getAssignedDoctorsByPatientId(id);
+        if(assignedDoctorsToPatientData.getDoctors().isEmpty()){
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey()), UUID.fromString(patientId));
         }
-        DPAResponse dpaResponse = DPAResponse.builder()
-                .id(resultData.getId())
-                .firstName(resultData.getFirstName())
-                .lastName(resultData.getLastName())
-                .doctors(resultData.getDoctors())
+        DoctorPatientAssignmentResponse doctorPatientAssignmentResponse = DoctorPatientAssignmentResponse.builder()
+                .id(assignedDoctorsToPatientData.getId())
+                .firstName(assignedDoctorsToPatientData.getFirstName())
+                .lastName(assignedDoctorsToPatientData.getLastName())
+                .doctors(assignedDoctorsToPatientData.getDoctors())
                 .success(true)
                 .build();
-        return ResponseEntity.status(HttpStatus.OK).body(dpaResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(doctorPatientAssignmentResponse);
     }
 }
