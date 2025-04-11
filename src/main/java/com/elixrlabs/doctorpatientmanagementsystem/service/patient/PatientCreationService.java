@@ -2,9 +2,9 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.ResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +31,12 @@ public class PatientCreationService {
      * returns 400 response with validation errors if the input is invalid
      * returns 200 response with patient details if the input is valid
      */
-    public ResponseEntity<ResponseDto> createPatient(PatientDto patientDto) {
+    public ResponseEntity<PatientResponse> createPatient(PatientDto patientDto) {
         try {
             // Perform validation
             List<String> validationErrors = patientValidation.validatePatient(patientDto);
             if (!validationErrors.isEmpty()) {
-                ResponseDto errorResponse = ResponseDto.builder()
+                PatientResponse errorResponse = PatientResponse.builder()
                         .success(false)
                         .errors(validationErrors)
                         .build();
@@ -49,7 +49,7 @@ public class PatientCreationService {
                     .lastName(patientDto.getLastName().trim())
                     .build();
             patient = patientRepository.save(patient);
-            ResponseDto successResponse = ResponseDto.builder()
+            PatientResponse successResponse = PatientResponse.builder()
                     .success(true)
                     .data(PatientDto.builder()
                             .id(patient.getId())
@@ -59,7 +59,7 @@ public class PatientCreationService {
                     .build();
             return ResponseEntity.status(HttpStatus.OK).body(successResponse);
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(PatientResponse
                     .builder()
                     .success(false)
                     .errors(List.of(ApplicationConstants.SERVER_ERROR + exception.getMessage()))
