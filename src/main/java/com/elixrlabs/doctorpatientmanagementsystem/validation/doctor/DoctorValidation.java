@@ -3,15 +3,10 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
-import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -22,8 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class DoctorValidation {
-    private final MongoTemplate mongoTemplate;
-    private final PatientRepository patientRepository;
     private final MessageUtil messageUtil;
 
     /**
@@ -55,14 +48,14 @@ public class DoctorValidation {
      */
     public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
         validateString(doctor.getFirstName(),
-                ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_FIRSTNAME, null),
-                messageUtil.getMessage(MessageKeyEnum.FIRSTNAME_PATTERN_ERROR, null));
+                ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_FIRSTNAME.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.FIRSTNAME_PATTERN_ERROR.getKey()));
         validateString(doctor.getLastName(),
-                ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_LASTNAME, null),
-                messageUtil.getMessage(MessageKeyEnum.LASTNAME_PATTERN_ERROR, null));
+                ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_LASTNAME.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.LASTNAME_PATTERN_ERROR.getKey()));
         validateString(doctor.getDepartment(),
-                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENTNAME, null),
-                messageUtil.getMessage(MessageKeyEnum.DEPARTMENTNAME_PATTERN_ERROR, null));
+                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENTNAME.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.DEPARTMENTNAME_PATTERN_ERROR.getKey()));
     }
 
     /**
@@ -82,21 +75,5 @@ public class DoctorValidation {
 
     public Boolean validateDoctorName(String name) {
         return StringUtils.isBlank(name);
-    }
-
-    /**
-     * method to validate if patient exists and if patient is assigned to any doctors
-     *
-     * @param id-patientId
-     * @return true or false
-     */
-    public boolean isPatientAssignedToDoctor(String id) throws DataNotFoundException {
-        if (!patientRepository.existsById(UUID.fromString(id))) {
-            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_FOUND_ERROR, null), UUID.fromString(id));
-        }
-        UUID patientID = UUID.fromString(id);
-        Query query = new Query();
-        query.addCriteria(Criteria.where(ApplicationConstants.PATIENT_ID).is(patientID));
-        return mongoTemplate.exists(query, ApplicationConstants.ASSIGNMENT_COLLECTION);
     }
 }

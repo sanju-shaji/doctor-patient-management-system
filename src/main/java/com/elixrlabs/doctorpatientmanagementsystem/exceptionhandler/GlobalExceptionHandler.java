@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<DoctorResponse> handleInvalidRequestBody(HttpMessageNotReadableException invalidUserInputException) {
         DoctorResponse errorResponseDto = DoctorResponse.builder()
-                .success(false).errors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_REQUESTBODY_ERROR, null))).build();
+                .success(false).errors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_REQUESTBODY_ERROR.getKey()))).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<DoctorResponse> handleInternalServerError(Exception exception) {
         DoctorResponse errorResponseDto = DoctorResponse.builder().success(false)
-                .errors(List.of(messageUtil.getMessage(MessageKeyEnum.SERVER_ERROR, null) + exception.getMessage())).build();
+                .errors(List.of(messageUtil.getMessage(MessageKeyEnum.SERVER_ERROR.getKey()) + exception.getMessage())).build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
     }
 

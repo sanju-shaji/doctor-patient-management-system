@@ -13,7 +13,7 @@ public class MessageUtil {
     @Autowired
     private MessageSource messageSource;
 
-    public String getMessage(MessageKeyEnum Key, Object args) {
-        return messageSource.getMessage(Key.toString(), (Object[]) args, null);
+    public String getMessage(String Key, Object... args) {
+        return messageSource.getMessage(Key, args, null);
     }
 }

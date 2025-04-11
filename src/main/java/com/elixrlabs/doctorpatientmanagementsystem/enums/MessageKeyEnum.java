@@ -1,8 +1,12 @@
 package com.elixrlabs.doctorpatientmanagementsystem.enums;
 
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * enum representing  keys to retrieve messages from the messages.properties file.
  */
+@Getter
 public enum MessageKeyEnum {
     BLANK_UUID("BLANK.UUID"),
     INVALID_UUID_FORMAT("INVALID.UUID.FORMAT"),
@@ -22,14 +26,9 @@ public enum MessageKeyEnum {
     PATIENT_NOT_FOUND_ERROR("patient.not.found.error"),
     SERVER_ERROR("server.error"),
     INVALID_REQUESTBODY_ERROR("invalid.request.body.error");
-    private final String Key;
+    private final String key;
 
     MessageKeyEnum(String Key) {
-        this.Key = Key;
-    }
-
-    @Override
-    public String toString() {
-        return Key;
+        this.key = Key;
     }
 }
