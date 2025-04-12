@@ -2,8 +2,10 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,11 @@ import java.util.UUID;
  */
 @Component
 public class DoctorValidation {
+    private final MessageUtil messageUtil;
+
+    public DoctorValidation(MessageUtil messageUtil) {
+        this.messageUtil = messageUtil;
+    }
 
     /**
      * method to check if the string is empty and if string follows the specified pattern
@@ -42,14 +49,14 @@ public class DoctorValidation {
      */
     public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
         validateString(doctor.getFirstName(),
-                ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_FIRSTNAME,
-                ApplicationConstants.FIRSTNAME_PATTERN_ERROR);
+                ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_FIRSTNAME.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.FIRSTNAME_PATTERN_ERROR.getKey()));
         validateString(doctor.getLastName(),
-                ApplicationConstants.REGEX_ALPHABET_PATTERN, ApplicationConstants.EMPTY_LASTNAME,
-                ApplicationConstants.LASTNAME_PATTERN_ERROR);
+                ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_LASTNAME.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.LASTNAME_PATTERN_ERROR.getKey()));
         validateString(doctor.getDepartment(),
-                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, ApplicationConstants.EMPTY_DEPARTMENTNAME,
-                ApplicationConstants.DEPARTMENTNAME_PATTERN_ERROR);
+                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENT.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.DEPARTMENT_PATTERN_ERROR.getKey()));
     }
 
     /**
@@ -83,12 +90,14 @@ public class DoctorValidation {
      *
      * @param doctorId to validate the  doctorId
      */
-    public void validatePatchDoctor(String doctorId) throws InvalidUuidExcetion{
+    public void validatePatchDoctor(String doctorId) throws InvalidUuidException {
         if (StringUtils.isBlank(doctorId)) {
-            throw new InvalidUuidExcetion(ApplicationConstants.MISSING_ID);
+            String message =messageUtil.getMessage(MessageKeyEnum.MISSING_ID.getKey());
+            throw new InvalidUuidException(message);
         }
         if (!isValidUUID(doctorId)) {
-            throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID);
+            String message =messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
+            throw new InvalidUuidException(message);
         }
     }
 

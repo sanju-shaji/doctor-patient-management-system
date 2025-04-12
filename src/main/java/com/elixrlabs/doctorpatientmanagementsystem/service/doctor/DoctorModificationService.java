@@ -7,6 +7,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.util.ResponseBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.JsonPatchValidator;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 
 import com.github.fge.jsonpatch.JsonPatchException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +33,18 @@ public class DoctorModificationService {
     private final DoctorRepository doctorRepository;
     private final ObjectMapper objectMapper;
     private final DoctorValidation doctorValidation;
-    private final DoctorPatchResponse doctorPatchResponse;
+    private final ResponseBuilder responseBuilder;
+    private final MessageUtil messageUtil;
 
-    public DoctorModificationService(DoctorRepository doctorRepository, ObjectMapper objectMapper, DoctorValidation doctorValidation, DoctorPatchResponse doctorPatchResponse) {
+    public DoctorModificationService(DoctorRepository doctorRepository,
+                                     ObjectMapper objectMapper,
+                                     DoctorValidation doctorValidation,
+                                     ResponseBuilder responseBuilder, MessageUtil messageUtil) {
         this.doctorRepository = doctorRepository;
         this.objectMapper = objectMapper;
         this.doctorValidation = doctorValidation;
-        this.doctorPatchResponse = doctorPatchResponse;
+        this.responseBuilder = responseBuilder;
+        this.messageUtil = messageUtil;
     }
 
     /**
@@ -50,25 +56,21 @@ public class DoctorModificationService {
      */
     public ResponseEntity<DoctorPatchResponse> applyPatchToDoctor(String doctorId, JsonPatch patch) throws Exception {
         DoctorEntity doctorToUpdate = validateAndFetchDoctor(doctorId, patch);
-
         DoctorDto patchedDto = applyPatchAndConvertToDto(doctorToUpdate, patch);
         doctorValidation.validateDoctorDetails(patchedDto);
         DoctorEntity patchedEntity = objectMapper.convertValue(patchedDto, DoctorEntity.class);
         DoctorEntity savedDoctor = doctorRepository.save(patchedEntity);
         DoctorDto doctorDto = new DoctorDto(savedDoctor);
-        doctorPatchResponse.setSuccess(true);
-        doctorPatchResponse.setDoctorDto(doctorDto);
-        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.OK);
-
+        return responseBuilder.buildSuccessPatchResponse(doctorDto);
     }
 
     /**
      * This method validates the empty/null/blank UUID
      * and it validates the jsonOperations like add/remove
      */
-    private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidExcetion, DataNotFoundException {
+    private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidException, DataNotFoundException {
         doctorValidation.validatePatchDoctor(doctorId);
-        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator();
+       JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
         jsonPatchValidator.validateJsonOperations(patch);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {

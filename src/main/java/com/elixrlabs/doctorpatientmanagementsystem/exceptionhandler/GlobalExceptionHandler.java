@@ -1,9 +1,11 @@
 package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -22,6 +24,12 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private final MessageUtil messageUtil;
+
+    public GlobalExceptionHandler(MessageUtil messageUtil) {
+        this.messageUtil = messageUtil;
+    }
+
     /**
      * method to handle invalid userInput
      *
@@ -43,8 +51,8 @@ public class GlobalExceptionHandler {
      * @param invalidUuidException the exception thrown
      * @return ResponseEntity with error message and HTTP 400 (Bad Request)
      */
-    @ExceptionHandler(InvalidUuidExcetion.class)
-    public ResponseEntity<DoctorPatchResponse> handleInvalidUuid(InvalidUuidExcetion invalidUuidException) {
+    @ExceptionHandler(InvalidUuidException.class)
+    public ResponseEntity<DoctorPatchResponse> handleInvalidUuid(InvalidUuidException invalidUuidException) {
         DoctorPatchResponse doctorPatchResponse =
                 DoctorPatchResponse.builder()
                         .success(false)
@@ -60,11 +68,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<DoctorResponse> handleInternalServerError(Exception exception) {
         DoctorResponse errorResponseDto = DoctorResponse.builder().success(false)
-                .errors(List.of(ApplicationConstants.SERVER_ERROR + exception.getMessage())).build();
+                .errors(List.of(messageUtil.getMessage(MessageKeyEnum.SERVER_ERROR.getKey()) + exception.getMessage())).build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
     }
 

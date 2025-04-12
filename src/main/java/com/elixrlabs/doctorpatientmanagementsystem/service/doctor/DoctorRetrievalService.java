@@ -4,7 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstant
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
@@ -74,7 +74,7 @@ public class DoctorRetrievalService {
             throw new EmptyUuidException(ApplicationConstants.EMPTY_UUID);
         }
         if (!doctorValidation.isValidUUID(id)) {
-            throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID_ERROR);
+            throw new InvalidUuidException(ApplicationConstants.INVALID_UUID_ERROR);
         }
         UUID uuid = UUID.fromString(id);
         Optional<DoctorEntity> doctorEntity = doctorRepository.findById(uuid);
