@@ -24,16 +24,14 @@ import java.util.UUID;
 /**
  * Service Class for GetByName/Patient Module
  */
-
 @Service
-
 public class PatientRetrievalService {
-    private final PatientRepository repository;
+    private final PatientRepository patientRepository;
     private final PatientValidation patientValidation;
     private final MessageUtil messageUtil;
 
-    public PatientRetrievalService(PatientRepository repository, PatientValidation patientValidation, MessageUtil messageUtil) {
-        this.repository = repository;
+    public PatientRetrievalService(PatientRepository patientRepository, PatientValidation patientValidation, MessageUtil messageUtil) {
+        this.patientRepository = patientRepository;
         this.patientValidation = patientValidation;
         this.messageUtil = messageUtil;
     }
@@ -68,24 +66,23 @@ public class PatientRetrievalService {
      * @param id the UUID of the patient to retrieve.
      * @return ResponseEntity on containing the patient data on success and an error on failure.
      */
-
     public ResponseEntity<PatientResponse> getPatientById(String id) throws Exception {
         patientValidation.validatePatientId(id);
         UUID patientId = UUID.fromString(id);
-        Optional<PatientModel> patientOptional = repository.findById(patientId);
+        Optional<PatientModel> patientOptional = patientRepository.findById(patientId);
         if (patientOptional.isPresent()) {
-            PatientModel patient = patientOptional.get();
-            PatientResponse responseDto = PatientResponse.builder()
+            PatientModel patientModel = patientOptional.get();
+            PatientResponse patientResponse = PatientResponse.builder()
                     .success(true)
-                    .data(patient)
+                    .data(patientModel)
                     .build();
-            return ResponseEntity.ok(responseDto);
+            return ResponseEntity.ok(patientResponse);
         }
-        throw new DataNotFoundException(ApplicationConstants.PATIENT_NOT_FOUND, patientId);
+        throw new DataNotFoundException(ApplicationConstants.PATIENT_ID_NOT_FOUND, patientId);
     }
 
     private List<PatientDto> getPatientsByNamePrefix(String name) {
-        List<PatientModel> patients = repository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(name, name);
+        List<PatientModel> patients = patientRepository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(name, name);
         List<PatientDto> patientDtoList = new ArrayList<>();
         for (PatientModel patientModel : patients) {
             PatientDto patientDto = new PatientDto(patientModel);
@@ -96,7 +93,7 @@ public class PatientRetrievalService {
 
     private List<PatientDto> getPatientsByFirstAndLastName(String firstName, String lastName) {
 
-        List<PatientModel> patients = repository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(firstName, lastName);
+        List<PatientModel> patients = patientRepository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(firstName, lastName);
         List<PatientDto> patientDtoList = new ArrayList<>();
         for (PatientModel patientModel : patients) {
             PatientDto patientDto = new PatientDto(patientModel);

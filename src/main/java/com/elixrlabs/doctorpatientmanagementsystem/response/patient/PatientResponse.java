@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Data transfer object for transferring the patient data
+ */
 import java.util.List;
 
 @Data
@@ -18,3 +21,4 @@ public class PatientResponse extends BaseResponse {
     private Object data;
     private List<String> patients;
 }
+

@@ -2,9 +2,11 @@ package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientRetrievalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,14 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class PatientRetrievalController {
-    private final PatientRetrievalService patientGetByNameService;
+    private final PatientRetrievalService patientRetrievalService;
 
-    public PatientRetrievalController(PatientRetrievalService patientGetByNameService) {
-        this.patientGetByNameService = patientGetByNameService;
+    public PatientRetrievalController(PatientRetrievalService patientRetrievalService) {
+        this.patientRetrievalService = patientRetrievalService;
     }
 
-    @GetMapping(ApiConstants.PATIENT_API)
+    @GetMapping(ApiConstants.GET_PATIENT_BY_NAME_API)
     public ResponseEntity<PatientResponseDto> searchPatientsByNamePrefix(@RequestParam String name) throws Exception {
-        return patientGetByNameService.getPatientsByNamePrefixWithValidation(name);
+        return patientRetrievalService.getPatientsByNamePrefixWithValidation(name);
+    }
+
+    @GetMapping(ApiConstants.GET_PATIENT_BY_ID_API)
+    public ResponseEntity<PatientResponse> getPatientById(@PathVariable String id) throws Exception {
+        return patientRetrievalService.getPatientById(id);
     }
 }
