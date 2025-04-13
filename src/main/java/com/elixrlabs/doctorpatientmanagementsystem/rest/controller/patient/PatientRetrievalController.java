@@ -20,7 +20,7 @@ public class PatientRetrievalController {
     }
 
     @GetMapping(ApiConstants.PATIENT_API)
-    public ResponseEntity<PatientResponseDto> searchPatientsByNamePrefix(@RequestParam String name) {
+    public ResponseEntity<PatientResponseDto> searchPatientsByNamePrefix(@RequestParam String name) throws Exception {
         return patientGetByNameService.getPatientsByNamePrefixWithValidation(name);
     }
 }

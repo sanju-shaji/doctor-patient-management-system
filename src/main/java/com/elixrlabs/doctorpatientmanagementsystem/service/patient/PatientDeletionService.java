@@ -43,16 +43,16 @@ public class PatientDeletionService {
         patientValidation.validatePatientId(patientId);
         Optional<PatientModel> patientModelOptional = patientRepository.findById(UUID.fromString(patientId));
         if (!patientModelOptional.isPresent()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND, null);
+            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey());
             throw new DataNotFoundException(message, UUID.fromString(patientId));
         }
         boolean isAssigned = !doctorPatientAssignmentRepository.findByPatientId(UUID.fromString(patientId)).isEmpty();
         if (isAssigned) {
-            String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_ASSIGNED_TO_DOCTOR, null);
+            String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_ASSIGNED_TO_DOCTOR.getKey());
             throw new PatientAlreadyAssignedException(message);
         }
         patientRepository.deleteById(UUID.fromString(patientId));
-        String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_DELETED_SUCCESSFULLY, null);
+        String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_DELETED_SUCCESSFULLY.getKey());
         return buildSuccess(HttpStatus.OK, List.of(message));
     }
 

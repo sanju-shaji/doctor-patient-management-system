@@ -18,11 +18,12 @@ public enum MessageKeyEnum {
     ONLY_REPLACE_OPERATION_ARE_PERMITTED("cannot.allowed.only.'replace'.operation.are.permitted"),
     PATCH_REQUEST_FAILED("patch.request.failed"),
     PATIENT_ASSIGNED_TO_DOCTOR("patient.assigned.to.doctor"),
-    PATIENT_DELETED_SUCCESSFULLY("patient.deleted.successfully");
+    PATIENT_DELETED_SUCCESSFULLY("patient.deleted.successfully"),
+    PATIENT_NOT_FOUND("patient.not.found"),
+    QUERY_PARAMS_CANNOT_BE_NULL("query.params.cannot.be.null");
     private final String key;
 
     MessageKeyEnum(String Key) {
         this.key = Key;
     }
-
 }

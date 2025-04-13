@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
@@ -106,6 +107,7 @@ public class GlobalExceptionHandler {
         BaseResponse baseResponse = BaseResponse.builder().success(false).errors(List.of(patientAlreadyAssignedException.getMessage())).build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(baseResponse);
     }
+
     /**
      * method to handle JsonPatchProcessing exception
      *
@@ -114,11 +116,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(JsonPatchProcessingException.class)
     public ResponseEntity<PatchPatientResponse> handleJsonPatchProcessing(JsonPatchProcessingException jsonPatchProcessingException) {
-        PatchPatientResponse patchPatientResponse=new PatchPatientResponse();
+        PatchPatientResponse patchPatientResponse = new PatchPatientResponse();
         patchPatientResponse.setSuccess(false);
         patchPatientResponse.setErrors(jsonPatchProcessingException.getErrors());
-        return new ResponseEntity<>(patchPatientResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(patchPatientResponse, HttpStatus.BAD_REQUEST);
     }
+
     /**
      * method to handle PatientValidation exception
      *
@@ -127,10 +130,24 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(PatientValidationException.class)
     public ResponseEntity<PatchPatientResponse> handlePatientValidation(PatientValidationException patientValidationException) {
-        PatchPatientResponse patchPatientResponse=new PatchPatientResponse();
+        PatchPatientResponse patchPatientResponse = new PatchPatientResponse();
         patchPatientResponse.setSuccess(false);
         patchPatientResponse.setErrors(List.of(patientValidationException.getMessage()));
-        return new ResponseEntity<>(patchPatientResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(patchPatientResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * method to handle PatientNotFoundException exception
+     *
+     * @param patientNotFoundException-exception class
+     * @return appropriate response
+     */
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<PatientResponseDto> handlePatientNotFound(PatientNotFoundException patientNotFoundException) {
+        PatientResponseDto patientResponseDto = PatientResponseDto.builder()
+                .success(false)
+                .errors(List.of(ApplicationConstants.NO_PATIENTS_FOUND))
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(patientResponseDto);
     }
 }
-
