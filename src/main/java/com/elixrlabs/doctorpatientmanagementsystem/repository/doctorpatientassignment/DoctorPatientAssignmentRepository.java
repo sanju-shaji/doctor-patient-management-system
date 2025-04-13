@@ -1,6 +1,6 @@
-package com.elixrlabs.doctorpatientmanagementsystem.repository.patient;
+package com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.model.patient.DoctorPatientAssignmentModel;
+import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +13,6 @@ import java.util.UUID;
 @Repository
 public interface DoctorPatientAssignmentRepository extends MongoRepository<DoctorPatientAssignmentModel, UUID> {
     List<DoctorPatientAssignmentModel> findByPatientId(UUID patientId);
+    List<DoctorPatientAssignmentModel> findByDoctorId(UUID doctorId);
+
 }

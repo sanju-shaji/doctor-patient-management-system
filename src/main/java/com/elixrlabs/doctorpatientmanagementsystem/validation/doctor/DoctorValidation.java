@@ -30,7 +30,7 @@ public class DoctorValidation {
      * @param Pattern             The pattern which is to be matched with the string for validation
      * @param emptyStringError    error message if the string is empty
      * @param invalidPatternError error message if the string does for match the specified pattern
-     * Validates the doctor name to ensure it is not empty and contains only letters and spaces.
+     *                            Validates the doctor name to ensure it is not empty and contains only letters and spaces.
      */
     public void validateString(String string, String Pattern,
                                String emptyStringError, String invalidPatternError) throws InvalidUserInputException {
@@ -92,11 +92,11 @@ public class DoctorValidation {
      */
     public void validatePatchDoctor(String doctorId) throws InvalidUuidException {
         if (StringUtils.isBlank(doctorId)) {
-            String message =messageUtil.getMessage(MessageKeyEnum.MISSING_ID.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.MISSING_ID.getKey());
             throw new InvalidUuidException(message);
         }
         if (!isValidUUID(doctorId)) {
-            String message =messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
             throw new InvalidUuidException(message);
         }
     }
