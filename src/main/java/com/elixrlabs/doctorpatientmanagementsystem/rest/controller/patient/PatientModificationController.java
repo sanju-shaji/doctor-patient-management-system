@@ -18,7 +18,7 @@ public class PatientModificationController {
         this.patientModificationService = patchPatientService;
     }
 
-    @PatchMapping(ApiConstants.PATCH_BY_ID)
+    @PatchMapping(ApiConstants.PATIENT_BY_ID)
     public ResponseEntity<PatchPatientResponse> patchPatientById(@PathVariable String id, @RequestBody JsonPatch patch) throws Exception {
         return patientModificationService.applyPatch(id, patch);
     }
