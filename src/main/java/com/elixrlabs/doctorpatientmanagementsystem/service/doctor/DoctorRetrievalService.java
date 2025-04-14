@@ -38,6 +38,7 @@ public class DoctorRetrievalService {
     private final DoctorRepository doctorRepository;
     private final MessageUtil messageUtil;
     private final PatientRepository patientRepository;
+
     /**
      * Retrieves doctors by first doctorName, last doctorName, or both, with validation.
      */
@@ -107,14 +108,14 @@ public class DoctorRetrievalService {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
         if (!doctorValidation.isValidUUID(patientId)) {
-            throw new InvalidUuidExcetion(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
         }
         if (!patientRepository.existsById(UUID.fromString(patientId))) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_FOUND_ERROR.getKey()), UUID.fromString(patientId));
         }
         UUID id = UUID.fromString(patientId);
         DoctorPatientAssignmentDto assignedDoctorsToPatientData = patientRepository.getAssignedDoctorsByPatientId(id);
-        if(assignedDoctorsToPatientData.getDoctors().isEmpty()){
+        if (assignedDoctorsToPatientData.getDoctors().isEmpty()) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey()), UUID.fromString(patientId));
         }
         DoctorPatientAssignmentResponse doctorPatientAssignmentResponse = DoctorPatientAssignmentResponse.builder()

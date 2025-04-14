@@ -4,8 +4,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstant
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
-import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
@@ -47,8 +45,7 @@ public class DoctorValidation {
      * method to validate the POST/doctor Api
      *
      * @param doctor-model entity which contains the actual data
-     * @return list which contains error messages if any
-     */
+     * */
     public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
         validateString(doctor.getFirstName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_FIRSTNAME.getKey()),
@@ -67,7 +64,7 @@ public class DoctorValidation {
      * @param id-UUID
      * @return True if id is valid else false
      */
-    public boolean isValidUUID(String id) throws InvalidUuidException{
+    public boolean isValidUUID(String id){
         return UUID_PATTERN.matcher(id).matches();
     }
 

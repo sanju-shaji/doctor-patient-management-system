@@ -33,13 +33,6 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private final MessageUtil messageUtil;
-
-    private final MessageUtil messageUtil;
-
-    public GlobalExceptionHandler(MessageUtil messageUtil) {
-        this.messageUtil = messageUtil;
-    }
-
     /**
      * method to handle invalid userInput
      *
