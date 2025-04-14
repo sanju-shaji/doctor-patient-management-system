@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorRetrievalService;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,16 @@ public class DoctorRetrievalController {
     @GetMapping(ApiConstants.GET_DOCTOR_BY_ID)
     public ResponseEntity<DoctorResponse> getDoctorByID(@PathVariable String id) throws Exception {
         return doctorRetrievalService.getDoctorsById(id);
+    }
+
+    /**
+     * Api mapping for retrieving list of doctors assigned to patients using patient id
+     *
+     * @param patientId-patients id
+     * @return Response Entity of type DPAResponse
+     */
+    @GetMapping(ApiConstants.GET_DOCTOR_BY_PATIENT_ID)
+    public ResponseEntity<DoctorPatientAssignmentResponse> getDoctorList(@RequestParam String patientId) throws Exception {
+        return doctorRetrievalService.getDoctorsWithPatient(patientId);
     }
 }

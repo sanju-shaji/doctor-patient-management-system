@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
  * REST controller for handling patient creation requests
  * provides an API endpoint to add new patients
  */
-
 @RestController
 public class PatientCreationController {
     private final PatientCreationService patientCreationService;
+
     /**
      * Constructor for injecting PatientCreationService
      */
-
     PatientCreationController(PatientCreationService patientCreationService) {
         this.patientCreationService = patientCreationService;
     }

@@ -1,5 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.util;
 
+import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 

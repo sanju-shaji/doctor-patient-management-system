@@ -11,7 +11,7 @@ import java.util.UUID;
  * Repository layer interface for patient entity
  */
 @Repository
-public interface PatientRepository extends MongoRepository<PatientModel, UUID> {
+public interface PatientRepository extends MongoRepository<PatientModel, UUID>, DoctorPatientDAO {
     List<PatientModel> findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(String firstName, String lastName);
 
     List<PatientModel> findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(String firstName, String lastName);

@@ -9,11 +9,10 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFound
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorWithPatientsResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,10 @@ public class PatientRetrievalService {
     private final PatientValidation patientValidation;
     private final MessageUtil messageUtil;
     private final DoctorRepository doctorRepository;
-    public PatientRetrievalService(PatientRepository patientRepository, PatientValidation patientValidation,MessageUtil messageUtil,DoctorRepository doctorRepository  ){
+    public PatientRetrievalService(PatientRepository patientRepository,
+                                   PatientValidation patientValidation,
+                                   MessageUtil messageUtil,
+                                   DoctorRepository doctorRepository  ){
         this.patientRepository=patientRepository;
         this.patientValidation=patientValidation;
         this.messageUtil=messageUtil;
@@ -84,7 +86,8 @@ public class PatientRetrievalService {
     /**
      * Retrieves the doctor along with their assigned patients using doctorId
      */
-    public ResponseEntity<DoctorPatientAssignmentResponse> getPatientsWithDoctor(String doctorId) throws Exception {
+    public ResponseEntity<DoctorWithPatientsResponse> getPatientsWithDoctor(String doctorId) throws Exception {
+        patientValidation.validatePatientId(doctorId);
         UUID doctorUuid = UUID.fromString(doctorId);
         if (!doctorRepository.existsById(doctorUuid)) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_FOUND_ERROR.getKey()), doctorUuid);
@@ -93,7 +96,7 @@ public class PatientRetrievalService {
         if(assignedPatientsToDoctorData.getPatients().isEmpty()){
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED.getKey()), doctorUuid);
         }
-        DoctorPatientAssignmentResponse doctorPatientAssignmentResponse = DoctorPatientAssignmentResponse.builder()
+        DoctorWithPatientsResponse doctorWithPatientsResponse = DoctorWithPatientsResponse.builder()
                 .id(assignedPatientsToDoctorData.getId())
                 .firstName(assignedPatientsToDoctorData.getFirstName())
                 .lastName(assignedPatientsToDoctorData.getLastName())
@@ -101,7 +104,7 @@ public class PatientRetrievalService {
                 .patients(assignedPatientsToDoctorData.getPatients())
                 .success(true)
                 .build();
-        return ResponseEntity.status(HttpStatus.OK).body(doctorPatientAssignmentResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(doctorWithPatientsResponse);
     }
 
     private List<PatientDto> getPatientsByNamePrefix(String name) {
