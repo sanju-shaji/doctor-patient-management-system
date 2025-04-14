@@ -17,11 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PatientCreationController {
     private final PatientCreationService patientCreationService;
+    /**
+     * Constructor for injecting PatientCreationService
+     */
 
     PatientCreationController(PatientCreationService patientCreationService) {
         this.patientCreationService = patientCreationService;
     }
 
+    /**
+     * Api end point to create a new patient
+     */
     @PostMapping(ApiConstants.PATIENTS_API)
     public ResponseEntity<PatientResponse> createPatient(@RequestBody PatientDto patientDto) throws Exception {
         return patientCreationService.createPatient(patientDto);
