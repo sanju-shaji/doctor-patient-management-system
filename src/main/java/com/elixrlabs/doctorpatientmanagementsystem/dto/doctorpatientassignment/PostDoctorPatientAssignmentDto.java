@@ -15,5 +15,4 @@ public class PostDoctorPatientAssignmentDto {
     private UUID id;
     private UUID doctorId;
     private UUID patientId;
-    private Date dateOfAdmission;
 }

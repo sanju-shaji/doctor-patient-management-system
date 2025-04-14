@@ -26,13 +26,10 @@ public class DoctorPatientCreationService {
      * @return ResponseEntity in which the desired data is set for response
      */
     public ResponseEntity<BaseResponse> createDoctorPatientAssignment(PostDoctorPatientAssignmentDto assignmentDto) {
-        if (assignmentDto.getDateOfAdmission() == null) {
-            assignmentDto.setDateOfAdmission(new Date());
-        }
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = DoctorPatientAssignmentModel.builder()
                 .id(UUID.randomUUID()).patientId(assignmentDto.getPatientId())
                 .doctorId(assignmentDto.getPatientId())
-                .dateOfAdmission(assignmentDto.getDateOfAdmission())
+                .dateOfAdmission(new Date())
                 .build();
         doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
         BaseResponse postAssignmentResponse = new BaseResponse();
