@@ -32,18 +32,18 @@ public class PatientValidation {
      * Validates the patient details based on pre-defined rules
      * This method ensures that all required fields are present and meet the validation criteria
      *
-     * @param patientDto DTO object containing patient details for validation
+     * @param patient DTO object containing patient details for validation
      * @return a list of error messages if validation fails and an empty list if validation passes
      */
-    public void validatePatient(PatientDto patientDto) throws InvalidUserInputException {
-        if (StringUtils.isBlank(patientDto.getFirstName())) {
+    public void validatePatient(PatientDto patient) throws InvalidUserInputException {
+        if (StringUtils.isBlank(patient.getFirstName())) {
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_FIRSTNAME_ERROR);
-        } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
+        } else if (!NAME_PATTERN.matcher(patient.getFirstName()).matches()) {
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
         }
-        if (StringUtils.isBlank(patientDto.getLastName())) {
+        if (StringUtils.isBlank(patient.getLastName())) {
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_LASTNAME_ERROR);
-        } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
+        } else if (!NAME_PATTERN.matcher(patient.getLastName()).matches()) {
             throw new InvalidUserInputException(ApplicationConstants.PATIENT_LASTNAME_PATTERN_ERROR);
         }
     }
@@ -56,7 +56,7 @@ public class PatientValidation {
      */
     public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidExcetion {
         if (StringUtils.isBlank(id)) {
-            throw new EmptyUuidException(ApplicationConstants.BLANK_UUID);
+            throw new InvalidUuidExcetion(ApplicationConstants.BLANK_UUID);
         }
         if (!UUID_PATTERN.matcher(id).matches()) {
             throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID_FORMAT);
@@ -74,7 +74,7 @@ public class PatientValidation {
     public void validatePatientsId(String id) throws EmptyUuidException, InvalidUuidExcetion {
         if (StringUtils.isBlank(id)) {
             String message = messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey());
-            throw new EmptyUuidException(message);
+            throw new InvalidUuidExcetion(message);
         }
         try {
             UUID.fromString(id);

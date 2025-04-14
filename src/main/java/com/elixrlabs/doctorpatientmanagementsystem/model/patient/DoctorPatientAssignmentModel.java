@@ -2,7 +2,6 @@ package com.elixrlabs.doctorpatientmanagementsystem.model.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

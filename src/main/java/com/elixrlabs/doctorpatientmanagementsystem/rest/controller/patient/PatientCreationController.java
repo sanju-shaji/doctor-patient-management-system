@@ -23,7 +23,7 @@ public class PatientCreationController {
     }
 
     @PostMapping(ApiConstants.PATIENTS_API)
-    public ResponseEntity<PatientResponse> createPatient(@RequestBody PatientDto patientDto) {
+    public ResponseEntity<PatientResponse> createPatient(@RequestBody PatientDto patientDto) throws Exception {
         return patientCreationService.createPatient(patientDto);
     }
 }

@@ -35,13 +35,13 @@ public class PatientJsonPatchValidator {
             }
             if (!ApplicationConstants.REPLACE.equalsIgnoreCase(operations)) {
                 String message = messageUtil.getMessage(MessageKeyEnum.ONLY_REPLACE_OPERATION_ARE_PERMITTED.getKey());
-                errors.add(operations + ApplicationConstants.BLANK + message);
+                errors.add(operations + ApplicationConstants.EMPTY_SPACE + message);
             }
             if (!ApplicationConstants.FIRSTNAME.equalsIgnoreCase(path) && !ApplicationConstants.LASTNAME.equalsIgnoreCase(path)) {
                 String message = messageUtil.getMessage(MessageKeyEnum.FIRSTNAME_AND_LASTNAME_PATHS_ARE_ALLOWED.getKey());
                 errors.add(message);
             }
-            if (valueNode == null || valueNode.isNull() || valueNode.asText().trim().isEmpty()) {
+            if (valueNode == null || valueNode.asText().trim().isEmpty()) {
                 String message = messageUtil.getMessage(MessageKeyEnum.NULL_OR_EMPTY_VALUES_ARE_NOT_ALLOWED.getKey());
                 errors.add(message);
             }
