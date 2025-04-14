@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * DoctorPatientAssignmentModel class represents DoctorPatientAssignment entity in Doctor patient management system
+ * DoctorPatientAssignmentModel class represents DoctorPatientAssignment entity in Doctor-patient management system
  */
 @Data
 @NoArgsConstructor
