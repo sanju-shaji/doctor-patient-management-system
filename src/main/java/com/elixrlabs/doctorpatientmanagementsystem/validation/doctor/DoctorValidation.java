@@ -4,34 +4,35 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstant
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
+import java.util.regex.Pattern;
 
 /**
  * Validator class for validating doctor name input.
  */
+@RequiredArgsConstructor
 @Component
 public class DoctorValidation {
     private final MessageUtil messageUtil;
-
-    public DoctorValidation(MessageUtil messageUtil) {
-        this.messageUtil = messageUtil;
-    }
+    private final Pattern UUID_PATTERN = Pattern.compile(ApplicationConstants.REGEX_UUID_PATTERN);
 
     /**
      * method to check if the string is empty and if string follows the specified pattern
      *
-     * @param string              The string which is to be validated
-     * @param Pattern             The pattern which is to be matched with the string for validation
-     * @param emptyStringError    error message if the string is empty
+     * @param string The string which is to be validated
+     * @param Pattern The pattern which is to be matched with the string for validation
+     * @param emptyStringError error message if the string is empty
      * @param invalidPatternError error message if the string does for match the specified pattern
      * Validates the doctor name to ensure it is not empty and contains only letters and spaces.
      */
+
     public void validateString(String string, String Pattern,
                                String emptyStringError, String invalidPatternError) throws InvalidUserInputException {
         if (StringUtils.isBlank(string)) {
@@ -46,6 +47,7 @@ public class DoctorValidation {
      * method to validate the POST/doctor Api
      *
      * @param doctor-model entity which contains the actual data
+     * @return list which contains error messages if any
      */
     public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
         validateString(doctor.getFirstName(),
@@ -55,8 +57,8 @@ public class DoctorValidation {
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_LASTNAME.getKey()),
                 messageUtil.getMessage(MessageKeyEnum.LASTNAME_PATTERN_ERROR.getKey()));
         validateString(doctor.getDepartment(),
-                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENT.getKey()),
-                messageUtil.getMessage(MessageKeyEnum.DEPARTMENT_PATTERN_ERROR.getKey()));
+                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENTNAME.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.DEPARTMENTNAME_PATTERN_ERROR.getKey()));
     }
 
     /**
@@ -65,13 +67,8 @@ public class DoctorValidation {
      * @param id-UUID
      * @return True if id is valid else false
      */
-    public boolean isValidUUID(String id) {
-        try {
-            UUID.fromString(id);
-            return true;
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return false;
-        }
+    public boolean isValidUUID(String id) throws InvalidUuidException{
+        return UUID_PATTERN.matcher(id).matches();
     }
 
     /**
