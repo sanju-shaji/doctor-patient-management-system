@@ -1,6 +1,6 @@
-package com.elixrlabs.doctorpatientmanagementsystem.repository.patient;
+package com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorPatientAssignmentDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorPatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;

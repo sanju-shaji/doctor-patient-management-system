@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.repository.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientDAO;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

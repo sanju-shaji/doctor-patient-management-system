@@ -1,5 +1,6 @@
-package com.elixrlabs.doctorpatientmanagementsystem.dto.doctor;
+package com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment;
 
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
