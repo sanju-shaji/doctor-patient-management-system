@@ -28,7 +28,7 @@ public class DoctorPatientCreationService {
     public ResponseEntity<BaseResponse> createDoctorPatientAssignment(PostDoctorPatientAssignmentDto assignmentDto) {
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = DoctorPatientAssignmentModel.builder()
                 .id(UUID.randomUUID()).patientId(assignmentDto.getPatientId())
-                .doctorId(assignmentDto.getPatientId())
+                .doctorId(assignmentDto.getDoctorId())
                 .dateOfAdmission(new Date())
                 .build();
         doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
