@@ -3,12 +3,10 @@ package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
-import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +37,12 @@ public class GlobalExceptionHandler {
      * @return appropriate response
      */
     @ExceptionHandler(InvalidUserInputException.class)
-    public ResponseEntity<DoctorResponse> handleInvalidUserInputExcetion(InvalidUserInputException invalidUserInputException) {
+    public ResponseEntity<DoctorResponse> handleInvalidUserInputException(InvalidUserInputException invalidUserInputException) {
         DoctorResponse errorResponseDto = DoctorResponse.builder()
                 .success(false).errors(List.of(invalidUserInputException.getMessage())).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
+
 
     /**
      * Handles InvalidUuidException when an invalid UUID is provided.
@@ -66,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<DoctorResponse> handleInvalidRequestBody(HttpMessageNotReadableException invalidUserInputException) {
         DoctorResponse errorResponseDto = DoctorResponse.builder()
-                .success(false).errors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_REQUESTBODY_ERROR.getKey()))).build();
+                .success(false).errors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_REQUEST_BODY_ERROR.getKey()))).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 
@@ -114,7 +112,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * method to handle Doctornotfound exception
+     * method to handle DoctorNotFound exception
      *
      * @return ResponseEntity with error message and HTTP 400 (Bad Request)
      */

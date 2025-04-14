@@ -22,6 +22,6 @@ public class ResponseBuilder {
                 .success(true)
                 .doctorDto(data)
                 .build();
-        return new ResponseEntity<DoctorPatchResponse>(doctorPatchResponse, HttpStatus.OK);
+        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.OK);
     }
 }

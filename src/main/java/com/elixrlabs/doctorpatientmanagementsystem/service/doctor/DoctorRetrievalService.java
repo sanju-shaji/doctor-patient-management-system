@@ -81,7 +81,7 @@ public class DoctorRetrievalService {
         if (StringUtils.isBlank(id)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
-        if (!doctorValidation.isValidUUID(id)) {
+        if (doctorValidation.isInValidUUID(id)) {
             throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
         }
         UUID uuid = UUID.fromString(id);
@@ -107,7 +107,7 @@ public class DoctorRetrievalService {
         if (StringUtils.isEmpty(patientId)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
-        if (!doctorValidation.isValidUUID(patientId)) {
+        if (doctorValidation.isInValidUUID(patientId)) {
             throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
         }
         if (!patientRepository.existsById(UUID.fromString(patientId))) {

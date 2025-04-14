@@ -19,23 +19,15 @@ public enum MessageKeyEnum {
     EMPTY_LASTNAME("empty.lastname"),
     FIRSTNAME_PATTERN_ERROR("firstname.pattern.error"),
     LASTNAME_PATTERN_ERROR("last.name.pattern.error"),
-    EMPTY_DEPARTMENTNAME("empty.department.name"),
-    DEPARTMENTNAME_PATTERN_ERROR("department.name.pattern.error"),
+    EMPTY_DEPARTMENT_NAME("empty.department.name"),
+    DEPARTMENT_NAME_PATTERN_ERROR("department.name.pattern.error"),
     PATIENT_NOT_FOUND_ERROR("patient.not.found.error"),
     SERVER_ERROR("server.error"),
-    INVALID_REQUESTBODY_ERROR("invalid.request.body.error"),
-    //PATIENT_DELETED_SUCCESSFULLY("patient.deleted.successfully"),
+    INVALID_REQUEST_BODY_ERROR("invalid.request.body.error"),
     REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED("replace.non.existent.field.not.allowed"),
     ADD_OPERATION_NOT_ALLOWED("add.operation.not.allowed"),
     REMOVE_OPERATION_NOT_ALLOWED("remove.operation.not.allowed"),
-    MISSING_ID("missing.id"),
-   // EMPTY_FIRSTNAME("empty.first.name"),
-   // EMPTY_LASTNAME("empty.lastname"),
-    EMPTY_DEPARTMENT("empty.department.name"),
-  //  FIRSTNAME_PATTERN_ERROR("firstname.pattern.error"),
-    //LASTNAME_PATTERN_ERROR("last.name.pattern.error"),
-    DEPARTMENT_PATTERN_ERROR("department.name.pattern.error");
-//    SERVER_ERROR("server.error");
+    MISSING_ID("missing.id");
     private final String key;
 
     MessageKeyEnum(String Key) {

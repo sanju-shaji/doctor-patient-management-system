@@ -54,8 +54,8 @@ public class DoctorValidation {
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_LASTNAME.getKey()),
                 messageUtil.getMessage(MessageKeyEnum.LASTNAME_PATTERN_ERROR.getKey()));
         validateString(doctor.getDepartment(),
-                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENTNAME.getKey()),
-                messageUtil.getMessage(MessageKeyEnum.DEPARTMENTNAME_PATTERN_ERROR.getKey()));
+                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENT_NAME.getKey()),
+                messageUtil.getMessage(MessageKeyEnum.DEPARTMENT_NAME_PATTERN_ERROR.getKey()));
     }
 
     /**
@@ -64,8 +64,8 @@ public class DoctorValidation {
      * @param id-UUID
      * @return True if id is valid else false
      */
-    public boolean isValidUUID(String id){
-        return UUID_PATTERN.matcher(id).matches();
+    public boolean isInValidUUID(String id){
+        return !UUID_PATTERN.matcher(id).matches();
     }
 
     /**
@@ -89,7 +89,7 @@ public class DoctorValidation {
             String message =messageUtil.getMessage(MessageKeyEnum.MISSING_ID.getKey());
             throw new InvalidUuidException(message);
         }
-        if (!isValidUUID(doctorId)) {
+        if (isInValidUUID(doctorId)) {
             String message =messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
             throw new InvalidUuidException(message);
         }
