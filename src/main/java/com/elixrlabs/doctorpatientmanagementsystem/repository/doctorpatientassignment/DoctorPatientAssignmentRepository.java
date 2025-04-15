@@ -12,5 +12,8 @@ import java.util.UUID;
  */
 @Repository
 public interface DoctorPatientAssignmentRepository extends MongoRepository<DoctorPatientAssignmentModel, UUID> {
-    List<DoctorPatientAssignmentModel> findByPatientId(UUID patientId);;
+
+    List<DoctorPatientAssignmentModel> findByPatientId(UUID patientId);
+
+    List<DoctorPatientAssignmentModel> findByDoctorId(UUID doctorId);
 }

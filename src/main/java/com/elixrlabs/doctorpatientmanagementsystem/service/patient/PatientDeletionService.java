@@ -3,7 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
@@ -39,7 +39,7 @@ public class PatientDeletionService {
         this.messageUtil = messageUtil;
     }
 
-    public ResponseEntity<BaseResponse> deletePatientById(String patientId) throws EmptyUuidException, DataNotFoundException, InvalidUuidExcetion, PatientAlreadyAssignedException {
+    public ResponseEntity<BaseResponse> deletePatientById(String patientId) throws EmptyUuidException, DataNotFoundException, InvalidUuidException, PatientAlreadyAssignedException {
         patientValidation.validatePatientId(patientId);
         Optional<PatientModel> patientModelOptional = patientRepository.findById(UUID.fromString(patientId));
         if (!patientModelOptional.isPresent()) {

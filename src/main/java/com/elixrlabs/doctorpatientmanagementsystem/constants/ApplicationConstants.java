@@ -6,8 +6,8 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
  * across the application.
  */
 public class ApplicationConstants {
-    public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENT_COLLECTION = "tp_doctor_patient_assignment";
+    public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENTS_DATE_OF_ADMISSION_VALUE = "$assignments.dateOfAdmission";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
     public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctor_id";
@@ -30,6 +30,14 @@ public class ApplicationConstants {
     public static final String LAST_NAME = "lastName";
     public static final String NO_PATIENTS_FOUND = "No patients found";
     public static final String PARAM_DOCTOR_NAME = "name";
+    public static final String PATCH_ADD_OPERATION = "add";
+    public static final String PATCH_OPERATION_KEY = "op";
+    public static final String PATCH_PATH_DEPARTMENT = "/department";
+    public static final String PATCH_PATH_FIRST_NAME = "/firstName";
+    public static final String PATCH_PATH_KEY = "path";
+    public static final String PATCH_PATH_LAST_NAME = "/lastName";
+    public static final String PATCH_REMOVE_OPERATION = "remove";
+    public static final String PATCH_REPLACE_OPERATION = "replace";
     public static final String PATIENT_COLLECTION = "tp_patients";
     public static final String PATIENT_ID = "patient_id";
     public static final String PATIENTS = "patients";

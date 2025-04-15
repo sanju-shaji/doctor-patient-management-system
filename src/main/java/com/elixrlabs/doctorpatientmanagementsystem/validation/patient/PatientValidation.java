@@ -5,8 +5,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -51,12 +51,12 @@ public class PatientValidation {
      * @param id the patient id as String.
      * @return a list of validation error messages. Empty if valid.
      */
-    public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidExcetion {
+    public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidException {
         if (StringUtils.isBlank(id)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey()));
         }
         if(!UUID_PATTERN.matcher(id).matches()){
-            throw new InvalidUuidExcetion(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey()));
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey()));
         }
     }
 
