@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithAssignedPatientsDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithAssignedPatientsData;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
@@ -34,7 +34,7 @@ public class DoctorWithAssignedPatientsDAOImpl implements DoctorWithAssignedPati
      * Groups the result by doctorId and places assigned patients in a list.
      */
     @Override
-    public DoctorWithAssignedPatientsDto getAssignedPatientsByDoctorId(UUID id) {
+    public DoctorWithAssignedPatientsData getAssignedPatientsByDoctorId(UUID id) {
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where(ApplicationConstants.ID).is(id)),
                 Aggregation.lookup(DataBaseConstants.DOCTOR_PATIENT_ASSIGNMENT_COLLECTION_NAME, ApplicationConstants.ID, ApplicationConstants.DOCTOR_ID, ApplicationConstants.ASSIGNMENTS),
@@ -51,7 +51,7 @@ public class DoctorWithAssignedPatientsDAOImpl implements DoctorWithAssignedPati
                                 .append(ApplicationConstants.LAST_NAME, ApplicationConstants.ASSIGNMENTS_PATIENT_LASTNAME_VALUE)
                                 .append(ApplicationConstants.DATE_OF_ADMISSION, ApplicationConstants.ASSIGNMENTS_DATE_OF_ADMISSION_VALUE)).as(ApplicationConstants.PATIENTS)
         );
-        AggregationResults<DoctorWithAssignedPatientsDto> results = mongoTemplate.aggregate(aggregation, DataBaseConstants.DOCTOR_COLLECTION_NAME, DoctorWithAssignedPatientsDto.class);
+        AggregationResults<DoctorWithAssignedPatientsData> results = mongoTemplate.aggregate(aggregation, DataBaseConstants.DOCTOR_COLLECTION_NAME, DoctorWithAssignedPatientsData.class);
         return results.getUniqueMappedResult();
     }
 }

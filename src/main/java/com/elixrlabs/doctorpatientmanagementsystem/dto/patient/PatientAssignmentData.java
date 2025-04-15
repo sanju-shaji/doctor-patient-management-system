@@ -2,7 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.dto.patient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -12,11 +12,11 @@ import java.util.UUID;
  * Dto representing patient details for doctor patient assignment
  */
 
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PatientAssignmentDto {
+public class PatientAssignmentData {
     private UUID id;
     private String firstName;
     private String lastName;

@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithAssignedPatientsDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithAssignedPatientsData;
 
 import java.util.UUID;
 
@@ -9,5 +9,5 @@ import java.util.UUID;
  */
 
 public interface DoctorWithAssignedPatientsDAO {
-    DoctorWithAssignedPatientsDto getAssignedPatientsByDoctorId(UUID id);
+    DoctorWithAssignedPatientsData getAssignedPatientsByDoctorId(UUID id);
 }

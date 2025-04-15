@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithAssignedPatientsDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithAssignedPatientsData;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
@@ -17,8 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -34,14 +35,15 @@ public class PatientRetrievalService {
     private final PatientValidation patientValidation;
     private final MessageUtil messageUtil;
     private final DoctorRepository doctorRepository;
+
     public PatientRetrievalService(PatientRepository patientRepository,
                                    PatientValidation patientValidation,
                                    MessageUtil messageUtil,
-                                   DoctorRepository doctorRepository  ){
-        this.patientRepository=patientRepository;
-        this.patientValidation=patientValidation;
-        this.messageUtil=messageUtil;
-        this.doctorRepository=doctorRepository;
+                                   DoctorRepository doctorRepository) {
+        this.patientRepository = patientRepository;
+        this.patientValidation = patientValidation;
+        this.messageUtil = messageUtil;
+        this.doctorRepository = doctorRepository;
     }
 
     public ResponseEntity<PatientResponseDto> getPatientsByNamePrefixWithValidation(String name) {
@@ -92,8 +94,8 @@ public class PatientRetrievalService {
         if (!doctorRepository.existsById(doctorUuid)) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_FOUND_ERROR.getKey()), doctorUuid);
         }
-        DoctorWithAssignedPatientsDto assignedPatientsToDoctorData = doctorRepository.getAssignedPatientsByDoctorId(doctorUuid);
-        if(assignedPatientsToDoctorData.getPatients().isEmpty()){
+        DoctorWithAssignedPatientsData assignedPatientsToDoctorData = doctorRepository.getAssignedPatientsByDoctorId(doctorUuid);
+        if (assignedPatientsToDoctorData.getPatients().isEmpty()) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED.getKey()), doctorUuid);
         }
         DoctorWithAssignedPatientsResponse doctorWithAssignedPatientsResponse = DoctorWithAssignedPatientsResponse.builder()

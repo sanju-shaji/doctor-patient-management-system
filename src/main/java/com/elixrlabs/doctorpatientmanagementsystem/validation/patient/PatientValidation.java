@@ -3,7 +3,6 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
@@ -30,7 +29,6 @@ public class PatientValidation {
      * This method ensures that all required fields are present and meet the validation criteria
      *
      * @param patient DTO object containing patient details for validation
-     * @return a list of error messages if validation fails and an empty list if validation passes
      */
     public void validatePatient(PatientDto patient) throws InvalidUserInputException {
         if (StringUtils.isBlank(patient.getFirstName())) {
@@ -49,11 +47,10 @@ public class PatientValidation {
      * Validates the format and presence of patient UUID.
      *
      * @param id the patient id as String.
-     * @return a list of validation error messages. Empty if valid.
      */
-    public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidException {
+    public void validatePatientId(String id) throws InvalidUuidException {
         if (StringUtils.isBlank(id)) {
-            throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey()));
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey()));
         }
         if(!UUID_PATTERN.matcher(id).matches()){
             throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey()));
