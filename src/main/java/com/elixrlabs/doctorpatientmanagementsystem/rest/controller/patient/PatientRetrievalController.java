@@ -2,7 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorWithPatientsResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorWithAssignedPatientsResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientRetrievalService;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +44,7 @@ public class PatientRetrievalController {
      * Endpoint to get the list of patients assigned to a specific doctor
      */
     @GetMapping(ApiConstants.GET_PATIENTS_BY_DOCTOR_ID)
-    public ResponseEntity<DoctorWithPatientsResponse> getPatientList(@RequestParam String doctorId) throws Exception {
+    public ResponseEntity<DoctorWithAssignedPatientsResponse> getPatientList(@RequestParam String doctorId) throws Exception {
         return patientRetrievalService.getPatientsWithDoctor(doctorId);
     }
 }

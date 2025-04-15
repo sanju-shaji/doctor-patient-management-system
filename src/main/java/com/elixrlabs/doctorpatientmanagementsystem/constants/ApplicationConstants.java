@@ -8,11 +8,16 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
 public class ApplicationConstants {
     public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENT_COLLECTION = "tp_doctor_patient_assignment";
+    public static final String ASSIGNMENTS_DATE_OF_ADMISSION_VALUE = "$assignments.dateOfAdmission";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
     public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctor_id";
     public static final String ASSIGNMENTS_PATIENT = "assignments.patient";
+    public static final String ASSIGNMENTS_PATIENT_FIRSTNAME_VALUE = "$assignments.patient.firstName";
     public static final String ASSIGNMENTS_PATIENT_ID = "assignments.patientId";
+    public static final String ASSIGNMENTS_PATIENT_ID_VALUE = "$assignments.patientId";
+    public static final String ASSIGNMENTS_PATIENT_LASTNAME_VALUE="$assignments.patient.lastName";
     public static final String COLON = " :";
+    public static final String DATE_OF_ADMISSION="dateOfAdmission";
     public static final String DEPARTMENT="department";
     public static final String DOCTOR_ID = "doctorId";
     public static final String DOCTORS = "doctors";

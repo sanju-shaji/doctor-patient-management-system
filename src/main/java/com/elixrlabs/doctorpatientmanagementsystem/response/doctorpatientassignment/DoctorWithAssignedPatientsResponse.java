@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,10 +18,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DoctorWithPatientsResponse extends BaseResponse {
+public class DoctorWithAssignedPatientsResponse extends BaseResponse {
     private String id;
     private String firstName;
     private String lastName;
     private String department;
-    private List<PatientDto> patients;
+    private List<PatientAssignmentDto> patients;
 }

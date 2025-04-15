@@ -1,9 +1,10 @@
 package com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithPatientsDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorWithAssignedPatientsDto;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -20,7 +21,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwi
  */
 @RequiredArgsConstructor
 @Repository
-public class DoctorWithPatientsDAOImpl implements DoctorWithPatientsDAO {
+public class DoctorWithAssignedPatientsDAOImpl implements DoctorWithAssignedPatientsDAO {
     private final MongoTemplate mongoTemplate;
 
     /**
@@ -33,7 +34,7 @@ public class DoctorWithPatientsDAOImpl implements DoctorWithPatientsDAO {
      * Groups the result by doctorId and places assigned patients in a list.
      */
     @Override
-    public DoctorWithPatientsDto getAssignedPatientsByDoctorId(UUID id) {
+    public DoctorWithAssignedPatientsDto getAssignedPatientsByDoctorId(UUID id) {
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where(ApplicationConstants.ID).is(id)),
                 Aggregation.lookup(DataBaseConstants.DOCTOR_PATIENT_ASSIGNMENT_COLLECTION_NAME, ApplicationConstants.ID, ApplicationConstants.DOCTOR_ID, ApplicationConstants.ASSIGNMENTS),
@@ -45,8 +46,12 @@ public class DoctorWithPatientsDAOImpl implements DoctorWithPatientsDAO {
                         .first(ApplicationConstants.LAST_NAME).as(ApplicationConstants.LAST_NAME)
                         .first(ApplicationConstants.DEPARTMENT).as(ApplicationConstants.DEPARTMENT)
                         .push(ApplicationConstants.ASSIGNMENTS_PATIENT).as(ApplicationConstants.PATIENTS)
+                        .push(new Document().append(ApplicationConstants.ID,ApplicationConstants.ASSIGNMENTS_PATIENT_ID_VALUE)
+                                .append(ApplicationConstants.FIRST_NAME, ApplicationConstants.ASSIGNMENTS_PATIENT_FIRSTNAME_VALUE)
+                                .append(ApplicationConstants.LAST_NAME, ApplicationConstants.ASSIGNMENTS_PATIENT_LASTNAME_VALUE)
+                                .append(ApplicationConstants.DATE_OF_ADMISSION, ApplicationConstants.ASSIGNMENTS_DATE_OF_ADMISSION_VALUE)).as(ApplicationConstants.PATIENTS)
         );
-        AggregationResults<DoctorWithPatientsDto> results = mongoTemplate.aggregate(aggregation, DataBaseConstants.DOCTOR_COLLECTION_NAME, DoctorWithPatientsDto.class);
+        AggregationResults<DoctorWithAssignedPatientsDto> results = mongoTemplate.aggregate(aggregation, DataBaseConstants.DOCTOR_COLLECTION_NAME, DoctorWithAssignedPatientsDto.class);
         return results.getUniqueMappedResult();
     }
 }
