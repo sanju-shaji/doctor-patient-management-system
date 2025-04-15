@@ -22,7 +22,6 @@ import java.util.UUID;
 public class DoctorCreationService {
     private final DoctorRepository doctorRepository;
     private final DoctorValidation doctorValidation;
-    private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
 
     /**
      * Method which contains the business logic to validate the inputs and post doctor details to database

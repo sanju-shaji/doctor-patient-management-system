@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.response.doctor;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.List;
 @SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
+@AllArgsConstructor
 public class BaseResponse {
     private boolean success;
     private List<String> errors;
