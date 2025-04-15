@@ -7,9 +7,12 @@ import lombok.Getter;
  */
 @Getter
 public enum MessageKeyEnum {
+    ADD_OPERATION_NOT_ALLOWED("add.operation.not.allowed"),
     BLANK_UUID("blank.uuid"),
+    DEPARTMENT_NAME_PATTERN_ERROR("department.name.pattern.error"),
     DEPARTMENTNAME_PATTERN_ERROR("department.name.pattern.error"),
     EMPTY_DEPARTMENTNAME("empty.department.name"),
+    EMPTY_DEPARTMENT_NAME("empty.department.name"),
     EMPTY_FIRSTNAME("empty.first.name"),
     EMPTY_LASTNAME("empty.lastname"),
     EMPTY_UUID("empty.uuid"),
@@ -17,9 +20,11 @@ public enum MessageKeyEnum {
     FIRSTNAME_PATTERN_ERROR("firstname.pattern.error"),
     ID_CANNOT_BE_CHANGED("id.cannot.be.changed"),
     INVALID_REQUESTBODY_ERROR("invalid.request.body.error"),
+    INVALID_REQUEST_BODY_ERROR("invalid.request.body.error"),
     INVALID_UUID_ERROR("invalid.uuid.error"),
     INVALID_UUID_FORMAT("invalid.uuid.format"),
     LASTNAME_PATTERN_ERROR("last.name.pattern.error"),
+    MISSING_ID("missing.id"),
     MODIFICATION_OF_PATIENT_ID_IS_NOT_ALLOWED("modification.of.patientId.is.not.allowed"),
     NO_PATIENT_FOUND("no.patient.found"),
     NULL_OR_EMPTY_VALUES_ARE_NOT_ALLOWED("null.or.empty.values.are.not.allowed"),
@@ -30,9 +35,11 @@ public enum MessageKeyEnum {
     PATIENT_NOT_ASSIGNED("patient.not.assigned"),
     PATIENT_NOT_FOUND("patient.not.found"),
     PATIENT_NOT_FOUND_ERROR("patient.not.found.error"),
-    USER_NOT_FOUND_ERROR("user.not.found.error"),
     QUERY_PARAMS_CANNOT_BE_NULL("query.params.cannot.be.null"),
-    SERVER_ERROR("server.error");
+    REMOVE_OPERATION_NOT_ALLOWED("remove.operation.not.allowed"),
+    REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED("replace.non.existent.field.not.allowed"),
+    SERVER_ERROR("server.error"),
+    USER_NOT_FOUND_ERROR("user.not.found.error");
     private final String key;
 
     MessageKeyEnum(String Key) {

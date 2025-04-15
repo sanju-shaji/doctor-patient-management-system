@@ -29,7 +29,7 @@ public class PatientJsonPatchValidator {
             String operations = operation.get(ApplicationConstants.OPERATION).asText();
             String path = operation.get(ApplicationConstants.PATH).asText();
             JsonNode valueNode = operation.get(ApplicationConstants.VALUE);
-            if (ApplicationConstants.ID.equalsIgnoreCase(path)) {
+            if (ApplicationConstants.ID.equalsIgnoreCase(path.substring(1))) {
                 String message = messageUtil.getMessage(MessageKeyEnum.MODIFICATION_OF_PATIENT_ID_IS_NOT_ALLOWED.getKey());
                 errors.add(message);
             }

@@ -5,7 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
@@ -54,12 +54,12 @@ public class PatientValidation {
      * @param id the patient id as String.
      * @return a list of validation error messages. Empty if valid.
      */
-    public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidExcetion {
+    public void validatePatientId(String id) throws InvalidUuidException {
         if (StringUtils.isBlank(id)) {
-            throw new InvalidUuidExcetion(ApplicationConstants.BLANK_UUID);
+            throw new InvalidUuidException(ApplicationConstants.BLANK_UUID);
         }
         if (!UUID_PATTERN.matcher(id).matches()) {
-            throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID_FORMAT);
+            throw new InvalidUuidException(ApplicationConstants.INVALID_UUID_FORMAT);
         }
     }
 
@@ -71,16 +71,16 @@ public class PatientValidation {
         return errors;
     }
 
-    public void validatePatientsId(String id) throws EmptyUuidException, InvalidUuidExcetion {
+    public void validatePatientsId(String id) throws EmptyUuidException, InvalidUuidException {
         if (StringUtils.isBlank(id)) {
             String message = messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey());
-            throw new InvalidUuidExcetion(message);
+            throw new InvalidUuidException(message);
         }
         try {
             UUID.fromString(id);
         } catch (IllegalArgumentException illegalArgumentException) {
             String message = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
-            throw new InvalidUuidExcetion(message);
+            throw new InvalidUuidException(message);
         }
     }
 

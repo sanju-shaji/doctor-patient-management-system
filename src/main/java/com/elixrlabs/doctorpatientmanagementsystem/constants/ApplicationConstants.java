@@ -29,6 +29,14 @@ public class ApplicationConstants {
     public static final String PARAM_DOCTOR_NAME = "name";
     public static final String PATH = "path";
     public static final String PATIENT_COLLECTION = "tp_patients";
+    public static final String PATCH_ADD_OPERATION = "add";
+    public static final String PATCH_OPERATION_KEY = "op";
+    public static final String PATCH_PATH_DEPARTMENT = "/department";
+    public static final String PATCH_PATH_FIRST_NAME = "/firstName";
+    public static final String PATCH_PATH_KEY = "path";
+    public static final String PATCH_PATH_LAST_NAME = "/lastName";
+    public static final String PATCH_REMOVE_OPERATION = "remove";
+    public static final String PATCH_REPLACE_OPERATION = "replace";
     public static final String PATIENT_FIRSTNAME_ERROR = "Patient first name cannot be empty or null.";
     public static final String PATIENT_FIRSTNAME_PATTERN_ERROR = "Patient first name must contain only alphabet.";
     public static final String PATIENT_ID = "patient_id";
