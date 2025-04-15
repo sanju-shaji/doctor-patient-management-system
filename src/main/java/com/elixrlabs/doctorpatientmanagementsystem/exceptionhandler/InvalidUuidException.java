@@ -5,7 +5,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
  */
 public class InvalidUuidException extends Exception {
     /**
-     * Creates a new InvalidUuidExcetion with the specified error message.
+     * Creates a new InvalidUuidException with the specified error message.
      */
     public InvalidUuidException(String message) {
         super(message);

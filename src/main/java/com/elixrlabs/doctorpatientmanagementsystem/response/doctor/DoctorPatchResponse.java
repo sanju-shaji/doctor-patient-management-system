@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Component;
 
 /**
- * Response class for returning a updated doctor data.
+ * Response class for returning updated doctor data.
  */
 @Getter
 @Setter

@@ -50,7 +50,7 @@ public class DoctorModificationService {
     /**
      * This method validate the doctorId and return the updated doctorDetails
      *
-     * @param doctorId it will helps to validate doctorId.The id of the doctor to update
+     * @param doctorId it will help to validate doctorId.The id of the doctor to update
      * @param patch    the details need to be changed
      * @return it will return  the ResponseEntity<DoctorPatchResponse>  to the DoctorModificationController
      */
@@ -65,7 +65,7 @@ public class DoctorModificationService {
     }
 
     /**
-     * This method validates the empty/null/blank UUID
+     * This method validates the empty/null/blank UUID,
      * and it validates the jsonOperations like add/remove
      */
     private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidException, DataNotFoundException {
@@ -81,11 +81,11 @@ public class DoctorModificationService {
 
     /**
      * \
-     * Here we are converting entity -> dto -> jsonNode ->patchedNode -> entity ->dto
-     * and we are save the updated doctorDetails in the db
+     * Here we are converting entity -> dto -> jsonNode ->patchedNode -> entity ->dto,
+     * and we are saves the updated doctorDetails in the db
      *
-     * @param doctorEntity it will stores the doctorDetails by using doctorId
-     * @param patch        it will stores the doctorDetails from the requestBody
+     * @param doctorEntity it will store the doctorDetails by using doctorId
+     * @param patch        it will store the doctorDetails from the requestBody
      * @return the updated DoctorDto with the patched values
      * @throws JsonPatchException      if there is a problem while applying the patch
      * @throws JsonProcessingException if there is an error in JSON processing
