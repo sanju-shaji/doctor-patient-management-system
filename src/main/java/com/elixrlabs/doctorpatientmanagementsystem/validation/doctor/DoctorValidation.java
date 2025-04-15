@@ -23,12 +23,12 @@ public class DoctorValidation {
 
     /**
      * method to check if the string is empty and if string follows the specified pattern
+     * Validates the doctor name to ensure it is not empty and contains only letters and spaces.
      *
-     * @param string The string which is to be validated
-     * @param Pattern The pattern which is to be matched with the string for validation
-     * @param emptyStringError error message if the string is empty
+     * @param string              The string which is to be validated
+     * @param Pattern             The pattern which is to be matched with the string for validation
+     * @param emptyStringError    error message if the string is empty
      * @param invalidPatternError error message if the string does for match the specified pattern
-     *                            Validates the doctor name to ensure it is not empty and contains only letters and spaces.
      */
 
     public void validateString(String string, String Pattern,
@@ -45,7 +45,7 @@ public class DoctorValidation {
      * method to validate the POST/doctor Api
      *
      * @param doctor-model entity which contains the actual data
-     * */
+     */
     public void validateDoctorDetails(DoctorDto doctor) throws InvalidUserInputException {
         validateString(doctor.getFirstName(),
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_FIRSTNAME.getKey()),
@@ -64,7 +64,7 @@ public class DoctorValidation {
      * @param id-UUID
      * @return True if id is valid else false
      */
-    public boolean isInValidUUID(String id){
+    public boolean isInValidUUID(String id) {
         return !UUID_PATTERN.matcher(id).matches();
     }
 
@@ -84,7 +84,7 @@ public class DoctorValidation {
      *
      * @param doctorId to validate the  doctorId
      */
-    public void validatePatchDoctor(String doctorId) throws InvalidUuidException {
+    public void validateDoctorId(String doctorId) throws InvalidUuidException {
         if (StringUtils.isBlank(doctorId)) {
             String message = messageUtil.getMessage(MessageKeyEnum.MISSING_ID.getKey());
             throw new InvalidUuidException(message);

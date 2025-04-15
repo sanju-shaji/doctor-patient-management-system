@@ -49,7 +49,7 @@ public class DoctorDeletionService {
      * - If no patients are assigned, the doctor is deleted from the database.
      */
      public ResponseEntity<BaseResponse> deleteDoctorById(String doctorId) throws InvalidUuidException, DataNotFoundException {
-        doctorValidation.validatePatchDoctor(doctorId);
+        doctorValidation.validateDoctorId(doctorId);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
             String message = messageUtil.getMessage(MessageKeyEnum.NO_DOCTOR_FOUND.getKey());
@@ -64,12 +64,4 @@ public class DoctorDeletionService {
         String message = messageUtil.getMessage(MessageKeyEnum.DELETE_DOCTOR_SUCCESSFULLY.getKey());
         return responseBuilder.buildSuccessDeleteResponse(List.of(message));
     }
-
-    /**
-     * Builds a success response with a list of messages.
-     *
-     * @param messages A list of messages to include in the response.
-     * @return A ResponseEntity containing a BaseResponse with success status and messages.
-     */
-
 }

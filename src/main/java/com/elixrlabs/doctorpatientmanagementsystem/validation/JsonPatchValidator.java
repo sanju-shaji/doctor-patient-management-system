@@ -11,7 +11,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class is responsible for validating JSON Patch operations
  * before they are applied to the Doctor entity.
