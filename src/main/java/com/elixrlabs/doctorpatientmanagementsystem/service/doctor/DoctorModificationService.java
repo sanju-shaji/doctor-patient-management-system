@@ -70,12 +70,12 @@ public class DoctorModificationService {
      */
     private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidException, DataNotFoundException {
         doctorValidation.validateDoctorId(doctorId);
-       JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
-        jsonPatchValidator.validateJsonOperations(patch);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
             throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND, UUID.fromString(doctorId));
         }
+        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
+        jsonPatchValidator.validateJsonOperations(patch);
         return doctorEntityOptional.get();
     }
 

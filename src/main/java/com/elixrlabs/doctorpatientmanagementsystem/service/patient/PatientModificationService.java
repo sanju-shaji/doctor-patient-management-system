@@ -3,13 +3,12 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.JsonPatchProcessingException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientValidationException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.validation.PatientJsonPatchValidator;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.validation.JsonPatchValidator;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,17 +26,14 @@ public class PatientModificationService {
     private final PatientRepository patientRepository;
     private final ObjectMapper objectMapper;
     private final PatientValidation patientValidation;
-    private final PatientJsonPatchValidator jsonPatchValidator;
     private final MessageUtil messageUtil;
 
     public PatientModificationService(PatientRepository patientRepository,
                                       ObjectMapper objectMapper,
-                                      PatientValidation patientValidation,
-                                      PatientJsonPatchValidator jsonPatchValidator, MessageUtil messageUtil) {
+                                      PatientValidation patientValidation, MessageUtil messageUtil) {
         this.patientRepository = patientRepository;
         this.objectMapper = objectMapper;
         this.patientValidation = patientValidation;
-        this.jsonPatchValidator = jsonPatchValidator;
         this.messageUtil = messageUtil;
     }
 
@@ -49,11 +45,8 @@ public class PatientModificationService {
             String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey());
             throw new DataNotFoundException(message, UUID.fromString(patientId));
         }
-        List<String> patchErrors = jsonPatchValidator.validatePatch(patch, objectMapper);
-        if (!patchErrors.isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.PATCH_REQUEST_FAILED.getKey());
-            throw new JsonPatchProcessingException(message, patchErrors);
-        }
+        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
+        jsonPatchValidator.validateJsonOperations(patch);
         PatientModel patientModel = patientModelOptional.get();
         PatientDto patientDto = objectMapper.convertValue(patientModel, PatientDto.class);
         JsonNode patientNode = objectMapper.convertValue(patientDto, JsonNode.class);
