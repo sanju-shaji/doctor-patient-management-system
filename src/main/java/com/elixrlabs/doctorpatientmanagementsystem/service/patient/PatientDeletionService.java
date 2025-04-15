@@ -4,7 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
-import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.DoctorPatientAssignmentRepository;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;

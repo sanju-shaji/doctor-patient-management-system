@@ -1,4 +1,4 @@
-package com.elixrlabs.doctorpatientmanagementsystem.model.patient;
+package com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
 import lombok.AllArgsConstructor;
