@@ -10,7 +10,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidE
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatientAssignmentResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
