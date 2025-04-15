@@ -43,7 +43,8 @@ public class PatientRetrievalService {
             throw new PatientValidationException(message);
         }
         String[] names = separateFirstAndLastName(name);
-        List<PatientDto> patients = getPatientsByNamePrefix(name);
+        getPatientsByNamePrefix(name);
+        List<PatientDto> patients;
         if (!names[1].isEmpty()) {
             patients = getPatientsByFirstAndLastName(names[0], names[1]);
         } else {
@@ -104,10 +105,8 @@ public class PatientRetrievalService {
 
     private String[] separateFirstAndLastName(String name) {
         String[] names = name.trim().split(" ");
-        System.out.println(names);
         String firstName = names[0];
         String lastName = names.length > 1 ? names[1] : "";
         return new String[]{firstName, lastName};
     }
 }
-

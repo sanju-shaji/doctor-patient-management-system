@@ -10,7 +10,6 @@ public class ApplicationConstants {
     public static final String ASSIGNMENT_COLLECTION = "tp_doctor_patient_assignment";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
     public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctor_id";
-    public static final String BLANK_UUID = "Patient Id must not be null or blank.";
     public static final String COLON = " :";
     public static final String DOCTORS = "doctors";
     public static final String DOCTORS_COLLECTION = "tp_doctors";
@@ -21,7 +20,6 @@ public class ApplicationConstants {
     public static final String FIRSTNAME = "/firstName";
     public static final String ID = "_id";
     public static final String INVALID_URL = "Invalid URL";
-    public static final String INVALID_UUID_FORMAT = "Invalid UUID format. Please provide valid UUID.";
     public static final String LAST_NAME = "lastName";
     public static final String LASTNAME = "/lastName";
     public static final String NO_PATIENTS_FOUND = "No patients found";

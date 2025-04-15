@@ -43,7 +43,7 @@ public class PatientModificationService {
 
     public ResponseEntity<PatchPatientResponse> applyPatch(String patientId, JsonPatch patch) throws Exception {
         PatchPatientResponse patchPatientResponse = new PatchPatientResponse();
-        patientValidation.validatePatientsId(patientId);
+        patientValidation.validatePatientId(patientId);
         Optional<PatientModel> patientModelOptional = patientRepository.findById(UUID.fromString(patientId));
         if (patientModelOptional.isEmpty()) {
             String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey());
@@ -55,7 +55,7 @@ public class PatientModificationService {
             throw new JsonPatchProcessingException(message, patchErrors);
         }
         PatientModel patientModel = patientModelOptional.get();
-        JsonNode patchNode = objectMapper.valueToTree(patch);
+        //JsonNode patchNode = objectMapper.valueToTree(patch);
         PatientDto patientDto = objectMapper.convertValue(patientModel, PatientDto.class);
         JsonNode patientNode = objectMapper.convertValue(patientDto, JsonNode.class);
         JsonNode patchedNode = patch.apply(patientNode);

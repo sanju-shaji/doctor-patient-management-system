@@ -22,7 +22,7 @@ public class PatientJsonPatchValidator {
         this.messageUtil = messageUtil;
     }
 
-    public List<String> validatePatch(JsonPatch patch, ObjectMapper objectMapper) throws Exception {
+    public List<String> validatePatch(JsonPatch patch, ObjectMapper objectMapper) {
         List<String> errors = new ArrayList<>();
         JsonNode patchNode = objectMapper.valueToTree(patch);
         for (JsonNode operation : patchNode) {

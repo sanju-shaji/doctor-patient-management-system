@@ -3,7 +3,6 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
@@ -11,8 +10,8 @@ import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -56,10 +55,12 @@ public class PatientValidation {
      */
     public void validatePatientId(String id) throws InvalidUuidException {
         if (StringUtils.isBlank(id)) {
-            throw new InvalidUuidException(ApplicationConstants.BLANK_UUID);
+            String message = messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey());
+            throw new InvalidUuidException(message);
         }
         if (!UUID_PATTERN.matcher(id).matches()) {
-            throw new InvalidUuidException(ApplicationConstants.INVALID_UUID_FORMAT);
+            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
+            throw new InvalidUuidException(message);
         }
     }
 
@@ -71,19 +72,6 @@ public class PatientValidation {
         return errors;
     }
 
-    public void validatePatientsId(String id) throws EmptyUuidException, InvalidUuidException {
-        if (StringUtils.isBlank(id)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey());
-            throw new InvalidUuidException(message);
-        }
-        try {
-            UUID.fromString(id);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
-            throw new InvalidUuidException(message);
-        }
-    }
-
     public List<String> validatePatients(PatientDto patientDto) {
         List<String> errors = new ArrayList<>();
 
@@ -92,7 +80,6 @@ public class PatientValidation {
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
             errors.add(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
         }
-
         if (StringUtils.isBlank(patientDto.getLastName())) {
             errors.add(ApplicationConstants.PATIENT_LASTNAME_ERROR);
         } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
