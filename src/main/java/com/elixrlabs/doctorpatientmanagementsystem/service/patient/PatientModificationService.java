@@ -55,7 +55,6 @@ public class PatientModificationService {
             throw new JsonPatchProcessingException(message, patchErrors);
         }
         PatientModel patientModel = patientModelOptional.get();
-        //JsonNode patchNode = objectMapper.valueToTree(patch);
         PatientDto patientDto = objectMapper.convertValue(patientModel, PatientDto.class);
         JsonNode patientNode = objectMapper.convertValue(patientDto, JsonNode.class);
         JsonNode patchedNode = patch.apply(patientNode);
