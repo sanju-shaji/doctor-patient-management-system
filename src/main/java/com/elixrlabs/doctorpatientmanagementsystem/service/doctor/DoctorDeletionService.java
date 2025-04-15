@@ -10,8 +10,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepos
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.util.ResponseBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +29,14 @@ public class DoctorDeletionService {
     private final DoctorRepository doctorRepository;
     private final MessageUtil messageUtil;
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
+    private final ResponseBuilder responseBuilder;
 
-    public DoctorDeletionService(DoctorValidation doctorValidation, DoctorRepository doctorRepository, MessageUtil messageUtil, DoctorPatientAssignmentRepository doctorPatientAssignmentRepository) {
+    public DoctorDeletionService(DoctorValidation doctorValidation, DoctorRepository doctorRepository, MessageUtil messageUtil, DoctorPatientAssignmentRepository doctorPatientAssignmentRepository, ResponseBuilder responseBuilder) {
         this.doctorValidation = doctorValidation;
         this.doctorRepository = doctorRepository;
         this.messageUtil = messageUtil;
         this.doctorPatientAssignmentRepository = doctorPatientAssignmentRepository;
+        this.responseBuilder = responseBuilder;
     }
 
     /**
@@ -60,7 +62,7 @@ public class DoctorDeletionService {
         }
         doctorRepository.deleteById(UUID.fromString(doctorId));
         String message = messageUtil.getMessage(MessageKeyEnum.DELETE_DOCTOR_SUCCESSFULLY.getKey());
-        return buildSuccess(List.of(message));
+        return responseBuilder.buildSuccessDeleteResponse(List.of(message));
     }
 
     /**
@@ -69,11 +71,5 @@ public class DoctorDeletionService {
      * @param messages A list of messages to include in the response.
      * @return A ResponseEntity containing a BaseResponse with success status and messages.
      */
-    private ResponseEntity<BaseResponse> buildSuccess(List<String> messages) {
-        BaseResponse baseResponse = BaseResponse.builder()
-                .success(true)
-                .messages(messages)
-                .build();
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
-    }
+
 }

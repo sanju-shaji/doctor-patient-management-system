@@ -28,9 +28,7 @@ public enum MessageKeyEnum {
     REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED("replace.non.existent.field.not.allowed"),
     ADD_OPERATION_NOT_ALLOWED("add.operation.not.allowed"),
     REMOVE_OPERATION_NOT_ALLOWED("remove.operation.not.allowed"),
-    MISSING_ID("missing.id");
-    DEPARTMENT_PATTERN_ERROR("department.name.pattern.error"),
-    SERVER_ERROR("server.error"),
+    MISSING_ID("missing.id"),
     DELETE_DOCTOR_SUCCESSFULLY("doctor.deleted.successfully");
     private final String key;
 
