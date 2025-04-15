@@ -32,8 +32,10 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private final MessageUtil messageUtil;
+
     /**
      * method to handle invalid userInput
+     *
      * @param invalidUserInputException-exception class
      * @return appropriate response
      */
@@ -149,27 +151,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
     }
 
-//    @ExceptionHandler(JsonPatchProcessingException.class)
-//    public ResponseEntity<Object> handleJsonPatchError(JsonPatchProcessingException jsonPatchProcessingException) {
-//        DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
-//                .success(false)
-//                .errors(Collections.singletonList(jsonPatchProcessingException.getMessage()))
-//                .build();
-//        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
-//    }
-
-    /**
-     * method to handle JsonPatchProcessing exception
-     *
-     * @param jsonPatchProcessingException-exception class
-     * @return appropriate response
-     */
     @ExceptionHandler(JsonPatchProcessingException.class)
-    public ResponseEntity<PatchPatientResponse> handleJsonPatchProcessing(JsonPatchProcessingException jsonPatchProcessingException) {
-        PatchPatientResponse patchPatientResponse = new PatchPatientResponse();
-        patchPatientResponse.setSuccess(false);
-        patchPatientResponse.setErrors(jsonPatchProcessingException.getErrors());
-        return new ResponseEntity<>(patchPatientResponse, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> handleJsonPatchError(JsonPatchProcessingException jsonPatchProcessingException) {
+        DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
+                .success(false)
+                .errors(Collections.singletonList(jsonPatchProcessingException.getMessage()))
+                .build();
+        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
     }
 
     /**
