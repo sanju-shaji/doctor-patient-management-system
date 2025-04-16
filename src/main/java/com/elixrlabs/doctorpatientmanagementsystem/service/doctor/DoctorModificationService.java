@@ -69,13 +69,13 @@ public class DoctorModificationService {
      * and it validates the jsonOperations like add/remove
      */
     private DoctorEntity validateAndFetchDoctor(String doctorId, JsonPatch patch) throws InvalidUuidException, DataNotFoundException {
-        doctorValidation.validatePatchDoctor(doctorId);
-       JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
-        jsonPatchValidator.validateJsonOperations(patch);
+        doctorValidation.validateDoctorId(doctorId);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
             throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND, UUID.fromString(doctorId));
         }
+        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
+        jsonPatchValidator.validateJsonOperations(patch);
         return doctorEntityOptional.get();
     }
 
