@@ -1,20 +1,19 @@
 package com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import java.util.List;
+import lombok.Setter;
+
+import java.util.UUID;
 
 /**
- * DTO to transfer data of Get doctors by patient id api
+ *  DTO to transfer data of POST doctors api from controller to service layer
  */
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter
+@Builder
 public class DoctorPatientAssignmentDto {
-    private String id;
-    private String firstName;
-    private String lastName;
-    private List<DoctorDto> doctors;
+    private UUID id;
+    private UUID doctorId;
+    private UUID patientId;
 }

@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.PostDoctorPatientAssignmentDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorPatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.PostResponse;
@@ -30,7 +30,7 @@ public class DoctorPatientCreationService {
      * @return ResponseEntity in which the desired data is set for response
      */
 
-    public ResponseEntity<PostResponse> createDoctorPatientAssignment(PostDoctorPatientAssignmentDto assignmentDto) {
+    public ResponseEntity<PostResponse> createDoctorPatientAssignment(DoctorPatientAssignmentDto assignmentDto) {
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = DoctorPatientAssignmentModel.builder()
                 .id(UUID.randomUUID()).patientId(assignmentDto.getPatientId())
                 .doctorId(assignmentDto.getDoctorId())
