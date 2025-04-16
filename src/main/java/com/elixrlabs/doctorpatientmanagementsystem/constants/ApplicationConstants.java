@@ -6,11 +6,20 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
  * across the application.
  */
 public class ApplicationConstants {
-    public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENT_COLLECTION = "tp_doctor_patient_assignment";
+    public static final String ASSIGNMENTS = "assignments";
+    public static final String ASSIGNMENTS_DATE_OF_ADMISSION_VALUE = "$assignments.dateOfAdmission";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
     public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctor_id";
+    public static final String ASSIGNMENTS_PATIENT = "assignments.patient";
+    public static final String ASSIGNMENTS_PATIENT_FIRSTNAME_VALUE = "$assignments.patient.firstName";
+    public static final String ASSIGNMENTS_PATIENT_ID = "assignments.patientId";
+    public static final String ASSIGNMENTS_PATIENT_ID_VALUE = "$assignments.patientId";
+    public static final String ASSIGNMENTS_PATIENT_LASTNAME_VALUE="$assignments.patient.lastName";
     public static final String COLON = " :";
+    public static final String DATE_OF_ADMISSION="dateOfAdmission";
+    public static final String DEPARTMENT="department";
+    public static final String DOCTOR_ID = "doctorId";
     public static final String DOCTORS = "doctors";
     public static final String DOCTORS_COLLECTION = "tp_doctors";
     public static final String DOCTORS_NOT_FOUND = "No Doctors found";
@@ -26,7 +35,6 @@ public class ApplicationConstants {
     public static final String OPERATION = "op";
     public static final String PARAM_DOCTOR_NAME = "name";
     public static final String PATH = "path";
-    public static final String PATIENT_COLLECTION = "tp_patients";
     public static final String PATCH_ADD_OPERATION = "add";
     public static final String PATCH_OPERATION_KEY = "op";
     public static final String PATCH_PATH_DEPARTMENT = "/department";
@@ -35,12 +43,9 @@ public class ApplicationConstants {
     public static final String PATCH_PATH_LAST_NAME = "/lastName";
     public static final String PATCH_REMOVE_OPERATION = "remove";
     public static final String PATCH_REPLACE_OPERATION = "replace";
-    public static final String PATIENT_FIRSTNAME_ERROR = "Patient first name cannot be empty or null.";
-    public static final String PATIENT_FIRSTNAME_PATTERN_ERROR = "Patient first name must contain only alphabet.";
+    public static final String PATIENT_COLLECTION = "tp_patients";
     public static final String PATIENT_ID = "patient_id";
-    public static final String PATIENT_ID_NOT_FOUND = "Patient not found with Id : ";
-    public static final String PATIENT_LASTNAME_ERROR = "Patient last name cannot be empty or null.";
-    public static final String PATIENT_LASTNAME_PATTERN_ERROR = "Patient last name must contain only alphabet.";
+    public static final String PATIENTS = "patients";
     public static final String QUERY_PARAMS_CANNOT_NULL = "Query params cannot be null.";
     public static final String REGEX_ALPHABET_PATTERN = "^[a-zA-Z\\s]+$";
     public static final String REGEX_DEPARTMENTNAME_PATTERN = "^[a-zA-Z\\s\\-'.,]+$";

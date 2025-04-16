@@ -30,7 +30,8 @@ public class PatientModificationService {
 
     public PatientModificationService(PatientRepository patientRepository,
                                       ObjectMapper objectMapper,
-                                      PatientValidation patientValidation, MessageUtil messageUtil) {
+                                      PatientValidation patientValidation,
+                                      MessageUtil messageUtil) {
         this.patientRepository = patientRepository;
         this.objectMapper = objectMapper;
         this.patientValidation = patientValidation;
