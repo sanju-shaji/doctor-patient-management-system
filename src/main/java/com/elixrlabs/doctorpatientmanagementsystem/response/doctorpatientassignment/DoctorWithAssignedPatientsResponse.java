@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassign
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientAssignmentData;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -16,6 +17,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class DoctorWithAssignedPatientsResponse extends BaseResponse {
     private String id;
     private String firstName;
