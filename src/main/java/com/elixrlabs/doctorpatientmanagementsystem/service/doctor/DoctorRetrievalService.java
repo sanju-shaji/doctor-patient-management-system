@@ -6,7 +6,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
@@ -38,6 +38,7 @@ public class DoctorRetrievalService {
     private final DoctorRepository doctorRepository;
     private final MessageUtil messageUtil;
     private final PatientRepository patientRepository;
+
     /**
      * Retrieves doctors by first doctorName, last doctorName, or both, with validation.
      */
@@ -80,8 +81,8 @@ public class DoctorRetrievalService {
         if (StringUtils.isBlank(id)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
-        if (!doctorValidation.isValidUUID(id)) {
-            throw new InvalidUuidExcetion(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
+        if (doctorValidation.isInValidUUID(id)) {
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
         }
         UUID uuid = UUID.fromString(id);
         Optional<DoctorEntity> doctorEntity = doctorRepository.findById(uuid);
@@ -106,8 +107,8 @@ public class DoctorRetrievalService {
         if (StringUtils.isEmpty(patientId)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
-        if (!doctorValidation.isValidUUID(patientId)) {
-            throw new InvalidUuidExcetion(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
+        if (doctorValidation.isInValidUUID(patientId)) {
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
         }
         if (!patientRepository.existsById(UUID.fromString(patientId))) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_FOUND_ERROR.getKey()), UUID.fromString(patientId));

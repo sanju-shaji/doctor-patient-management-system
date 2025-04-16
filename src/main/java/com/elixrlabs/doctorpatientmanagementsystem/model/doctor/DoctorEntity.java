@@ -1,10 +1,13 @@
 package com.elixrlabs.doctorpatientmanagementsystem.model.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.DataBaseConstants;
-import lombok.Builder;
+
+
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,6 +22,7 @@ import java.util.UUID;
 @Builder
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class DoctorEntity {
     @Id
     private UUID id;

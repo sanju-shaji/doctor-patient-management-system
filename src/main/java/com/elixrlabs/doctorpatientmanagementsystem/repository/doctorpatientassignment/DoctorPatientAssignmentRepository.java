@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Repository layer interface for DoctorPatientAssignmentRepository entity
+ * Repository layer interface for DoctorPatientAssignment collection
  */
 @Repository
 public interface DoctorPatientAssignmentRepository extends MongoRepository<DoctorPatientAssignmentModel, UUID> {
+
     List<DoctorPatientAssignmentModel> findByPatientId(UUID patientId);
+
+    List<DoctorPatientAssignmentModel> findByDoctorId(UUID doctorId);
 }
