@@ -9,7 +9,7 @@ public class ApplicationConstants {
     public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENT_COLLECTION = "tp_doctor_patient_assignment";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
-    public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctor_id";
+    public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctorId";
     public static final String COLON = " :";
     public static final String DOCTORS = "doctors";
     public static final String DOCTORS_COLLECTION = "tp_doctors";
@@ -37,7 +37,7 @@ public class ApplicationConstants {
     public static final String PATCH_REPLACE_OPERATION = "replace";
     public static final String PATIENT_FIRSTNAME_ERROR = "Patient first name cannot be empty or null.";
     public static final String PATIENT_FIRSTNAME_PATTERN_ERROR = "Patient first name must contain only alphabet.";
-    public static final String PATIENT_ID = "patient_id";
+    public static final String PATIENT_ID = "patientId";
     public static final String PATIENT_ID_NOT_FOUND = "Patient not found with Id : ";
     public static final String PATIENT_LASTNAME_ERROR = "Patient last name cannot be empty or null.";
     public static final String PATIENT_LASTNAME_PATTERN_ERROR = "Patient last name must contain only alphabet.";

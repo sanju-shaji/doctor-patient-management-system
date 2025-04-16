@@ -35,6 +35,7 @@ public class DoctorPatientCreationService {
                 .id(UUID.randomUUID()).patientId(assignmentDto.getPatientId())
                 .doctorId(assignmentDto.getDoctorId())
                 .dateOfAdmission(Date.from(Instant.now()))
+                .isUnAssigned(false)
                 .build();
         DoctorPatientAssignmentModel savedAssignmentData = doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
         PostResponse postAssignmentResponse = PostResponse.builder()
