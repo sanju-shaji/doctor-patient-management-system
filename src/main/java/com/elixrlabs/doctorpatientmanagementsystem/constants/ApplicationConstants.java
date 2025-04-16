@@ -15,7 +15,6 @@ public class ApplicationConstants {
     public static final String ASSIGNMENTS_DOCTOR_LASTNAME_VALUE = "$assignments.doctor.lastName";
     public static final String ASSIGNMENTS_DOCTOR_DEPARTMENT_VALUE = "$assignments.doctor.department";
     public static final String ASSIGNMENTS_DOCTOR_DATE_VALUE = "$assignments.dateOfAdmission";
-    public static final String BLANK_UUID = "Patient Id must not be null or blank.";
     public static final String COLON = " :";
     public static final String DATE_OF_ADMISSION = "dateOfAdmission";
     public static final String DEPARTMENT = "department";
