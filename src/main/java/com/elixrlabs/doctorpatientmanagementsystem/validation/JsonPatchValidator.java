@@ -51,7 +51,6 @@ public class JsonPatchValidator {
                 String message = messageUtil.getMessage(MessageKeyEnum.REMOVE_OPERATION_NOT_ALLOWED.getKey());
                 errors.add(message + path);
             }
-
             if ((operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REPLACE_OPERATION)
                     && !isAllowedReplacePath(path))) {
                 String message = messageUtil.getMessage(MessageKeyEnum.REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED.getKey());

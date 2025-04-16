@@ -28,7 +28,7 @@ public class PatientCreationController {
      * Api end point to create a new patient
      */
     @PostMapping(ApiConstants.PATIENTS_API)
-    public ResponseEntity<PatientResponse> createPatient(@RequestBody PatientDto patientDto) throws Exception {
-        return patientCreationService.createPatient(patientDto);
+    public ResponseEntity<PatientResponse> createPatient(@RequestBody PatientDto patient) throws Exception {
+        return patientCreationService.createPatient(patient);
     }
 }

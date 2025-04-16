@@ -1,12 +1,14 @@
 package com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -30,12 +32,14 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private final MessageUtil messageUtil;
+
     /**
      * method to handle invalid userInput
      *
      * @param invalidUserInputException-exception class
      * @return appropriate response
      */
+
     @ExceptionHandler(InvalidUserInputException.class)
     public ResponseEntity<DoctorResponse> handleInvalidUserInputException(InvalidUserInputException invalidUserInputException) {
         DoctorResponse errorResponseDto = DoctorResponse.builder()
@@ -154,5 +158,34 @@ public class GlobalExceptionHandler {
                 .errors(Collections.singletonList(jsonPatchProcessingException.getMessage()))
                 .build();
         return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * method to handle PatientValidation exception
+     *
+     * @param patientValidationException-exception class
+     * @return appropriate response
+     */
+    @ExceptionHandler(PatientValidationException.class)
+    public ResponseEntity<PatchPatientResponse> handlePatientValidation(PatientValidationException patientValidationException) {
+        PatchPatientResponse patchPatientResponse = new PatchPatientResponse();
+        patchPatientResponse.setSuccess(false);
+        patchPatientResponse.setErrors(List.of(patientValidationException.getMessage()));
+        return new ResponseEntity<>(patchPatientResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * method to handle PatientNotFoundException exception
+     *
+     * @param patientNotFoundException-exception class
+     * @return appropriate response
+     */
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<PatientResponseDto> handlePatientNotFound(PatientNotFoundException patientNotFoundException) {
+        PatientResponseDto patientResponseDto = PatientResponseDto.builder()
+                .success(false)
+                .errors(List.of(ApplicationConstants.NO_PATIENTS_FOUND))
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(patientResponseDto);
     }
 }

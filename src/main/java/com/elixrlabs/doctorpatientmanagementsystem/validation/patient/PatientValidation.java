@@ -7,7 +7,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserI
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import io.micrometer.common.util.StringUtils;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,11 +17,14 @@ import java.util.regex.Pattern;
  * Validation class for validating patient details
  */
 @Component
-@RequiredArgsConstructor
 public class PatientValidation {
     private final Pattern NAME_PATTERN = Pattern.compile(ApplicationConstants.REGEX_PATIENT_NAME_PATTERN);
     private final Pattern UUID_PATTERN = Pattern.compile(ApplicationConstants.REGEX_UUID_PATTERN);
     private final MessageUtil messageUtil;
+
+    public PatientValidation(MessageUtil messageUtil) {
+        this.messageUtil = messageUtil;
+    }
 
     /**
      * Validates the patient details based on pre-defined rules
@@ -61,6 +63,22 @@ public class PatientValidation {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(name)) {
             errors.add(ApplicationConstants.QUERY_PARAMS_CANNOT_NULL);
+        }
+        return errors;
+    }
+
+    public List<String> validatePatients(PatientDto patientDto) {
+        List<String> errors = new ArrayList<>();
+
+        if (StringUtils.isBlank(patientDto.getFirstName())) {
+            errors.add(MessageKeyEnum.PATIENT_FIRSTNAME_ERROR.getKey());
+        } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
+            errors.add(MessageKeyEnum.PATIENT_FIRSTNAME_PATTERN_ERROR.getKey());
+        }
+        if (StringUtils.isBlank(patientDto.getLastName())) {
+            errors.add(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey());
+        } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
+            errors.add(MessageKeyEnum.PATIENT_LASTNAME_PATTERN_ERROR.getKey());
         }
         return errors;
     }
