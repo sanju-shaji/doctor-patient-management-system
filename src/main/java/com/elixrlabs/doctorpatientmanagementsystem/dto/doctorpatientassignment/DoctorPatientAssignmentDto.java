@@ -2,6 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment;
 
 import lombok.Builder;
 import lombok.Getter;
+import java.util.UUID;
 import lombok.Setter;
 
 import java.util.UUID;

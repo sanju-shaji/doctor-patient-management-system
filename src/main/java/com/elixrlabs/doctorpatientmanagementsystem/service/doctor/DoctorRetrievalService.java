@@ -119,7 +119,7 @@ public class DoctorRetrievalService {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey()), UUID.fromString(patientId));
         }
         DoctorPatientAssignmentResponse doctorPatientAssignmentResponse = DoctorPatientAssignmentResponse.builder()
-                .id(assignedDoctorsToPatientData.getId())
+                .id(UUID.fromString(assignedDoctorsToPatientData.getId()))
                 .firstName(assignedDoctorsToPatientData.getFirstName())
                 .lastName(assignedDoctorsToPatientData.getLastName())
                 .doctors(assignedDoctorsToPatientData.getDoctors())
