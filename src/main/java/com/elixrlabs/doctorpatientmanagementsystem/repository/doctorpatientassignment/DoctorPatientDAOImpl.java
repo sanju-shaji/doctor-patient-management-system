@@ -31,13 +31,13 @@ private final MongoTemplate mongoTemplate;
      * performs another lookup to join with the doctors' collection.
      * Unwinds the doctors information.
      * Groups the result by patient id and places assigned doctors in a list.
-     * @param id-patientId
+     * @param patientId-patientId
      * @return Patient data with list of assigned doctors
      */
     @Override
-    public AssignedDoctorsToPatientDto getAssignedDoctorsByPatientId(UUID id) {
+    public AssignedDoctorsToPatientDto getAssignedDoctorsByPatientId(UUID patientId) {
         Aggregation aggregation = newAggregation(
-                Aggregation.match(Criteria.where(ApplicationConstants.ID).is(id)),
+                Aggregation.match(Criteria.where(ApplicationConstants.ID).is(patientId)),
                 Aggregation.lookup(ApplicationConstants.ASSIGNMENT_COLLECTION, ApplicationConstants.ID, ApplicationConstants.PATIENT_ID, ApplicationConstants.ASSIGNMENTS),
                 unwind(ApplicationConstants.ASSIGNMENTS, true),
                 Aggregation.lookup(ApplicationConstants.DOCTORS_COLLECTION, ApplicationConstants.ASSIGNMENTS_DOCTOR_ID, ApplicationConstants.ID, ApplicationConstants.ASSIGNMENTS_DOCTOR),
