@@ -2,11 +2,9 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
-import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.DoctorPatientAssignmentRepository;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
@@ -39,12 +37,12 @@ public class PatientDeletionService {
         this.messageUtil = messageUtil;
     }
 
-    public ResponseEntity<BaseResponse> deletePatientById(String patientId) throws EmptyUuidException, DataNotFoundException, InvalidUuidExcetion, PatientAlreadyAssignedException {
+    public ResponseEntity<BaseResponse> deletePatientById(String patientId) throws Exception {
         patientValidation.validatePatientId(patientId);
         Optional<PatientModel> patientModelOptional = patientRepository.findById(UUID.fromString(patientId));
-        if (!patientModelOptional.isPresent()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey());
-            throw new DataNotFoundException(message, UUID.fromString(patientId));
+        if (patientModelOptional.isEmpty()) {
+            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey(),patientId);
+            throw new DataNotFoundException(message);
         }
         boolean isAssigned = !doctorPatientAssignmentRepository.findByPatientId(UUID.fromString(patientId)).isEmpty();
         if (isAssigned) {
@@ -53,22 +51,14 @@ public class PatientDeletionService {
         }
         patientRepository.deleteById(UUID.fromString(patientId));
         String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_DELETED_SUCCESSFULLY.getKey());
-        return buildSuccess(HttpStatus.OK, List.of(message));
+        return buildSuccess(List.of(message));
     }
 
-    private ResponseEntity<BaseResponse> buildError(HttpStatus status, List<String> errors) {
-        BaseResponse baseResponse = BaseResponse.builder()
-                .success(false)
-                .errors(errors)
-                .build();
-        return new ResponseEntity<>(baseResponse, status);
-    }
-
-    private ResponseEntity<BaseResponse> buildSuccess(HttpStatus status, List<String> messages) {
+    private ResponseEntity<BaseResponse> buildSuccess(List<String> messages) {
         BaseResponse baseResponse = BaseResponse.builder()
                 .success(true)
                 .messages(messages)
                 .build();
-        return new ResponseEntity<>(baseResponse, status);
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 }

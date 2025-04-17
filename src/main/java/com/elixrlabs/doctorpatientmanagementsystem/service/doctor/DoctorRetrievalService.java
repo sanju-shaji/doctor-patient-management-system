@@ -1,16 +1,16 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorPatientAssignmentDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.AssignedDoctorsToPatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatientAssignmentResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
@@ -38,6 +38,7 @@ public class DoctorRetrievalService {
     private final DoctorRepository doctorRepository;
     private final MessageUtil messageUtil;
     private final PatientRepository patientRepository;
+
     /**
      * Retrieves doctors by first doctorName, last doctorName, or both, with validation.
      */
@@ -80,8 +81,8 @@ public class DoctorRetrievalService {
         if (StringUtils.isBlank(id)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
-        if (!doctorValidation.isValidUUID(id)) {
-            throw new InvalidUuidExcetion(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
+        if (doctorValidation.isInValidUUID(id)) {
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
         }
         UUID uuid = UUID.fromString(id);
         Optional<DoctorEntity> doctorEntity = doctorRepository.findById(uuid);
@@ -93,7 +94,7 @@ public class DoctorRetrievalService {
                     .success(true).build();
             return ResponseEntity.ok().body(responseDto);
         }
-        throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.USER_NOT_FOUND_ERROR.getKey()), uuid);
+        throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.USER_NOT_FOUND_ERROR.getKey(), uuid));
     }
 
     /**
@@ -106,16 +107,16 @@ public class DoctorRetrievalService {
         if (StringUtils.isEmpty(patientId)) {
             throw new EmptyUuidException(messageUtil.getMessage(MessageKeyEnum.EMPTY_UUID.getKey()));
         }
-        if (!doctorValidation.isValidUUID(patientId)) {
-            throw new InvalidUuidExcetion(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
+        if (doctorValidation.isInValidUUID(patientId)) {
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_ERROR.getKey()));
         }
         if (!patientRepository.existsById(UUID.fromString(patientId))) {
-            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_FOUND_ERROR.getKey()), UUID.fromString(patientId));
+            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_FOUND_ERROR.getKey(), UUID.fromString(patientId)));
         }
         UUID id = UUID.fromString(patientId);
-        DoctorPatientAssignmentDto assignedDoctorsToPatientData = patientRepository.getAssignedDoctorsByPatientId(id);
+        AssignedDoctorsToPatientDto assignedDoctorsToPatientData = patientRepository.getAssignedDoctorsByPatientId(id);
         if(assignedDoctorsToPatientData.getDoctors().isEmpty()){
-            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey()), UUID.fromString(patientId));
+            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey(), UUID.fromString(patientId)));
         }
         DoctorPatientAssignmentResponse doctorPatientAssignmentResponse = DoctorPatientAssignmentResponse.builder()
                 .id(assignedDoctorsToPatientData.getId())

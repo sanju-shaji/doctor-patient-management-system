@@ -22,7 +22,7 @@ public class PatientCreationService {
     private final PatientRepository patientRepository;
     private final PatientValidation patientValidation;
 
-    PatientCreationService(PatientRepository patientRepository, PatientValidation patientValidation) {
+    public PatientCreationService(PatientRepository patientRepository, PatientValidation patientValidation) {
         this.patientRepository = patientRepository;
         this.patientValidation = patientValidation;
     }

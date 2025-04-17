@@ -3,16 +3,14 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidExcetion;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -33,18 +31,17 @@ public class PatientValidation {
      * This method ensures that all required fields are present and meet the validation criteria
      *
      * @param patient DTO object containing patient details for validation
-     * @return a list of error messages if validation fails and an empty list if validation passes
      */
     public void validatePatient(PatientDto patient) throws InvalidUserInputException {
         if (StringUtils.isBlank(patient.getFirstName())) {
-            throw new InvalidUserInputException(ApplicationConstants.PATIENT_FIRSTNAME_ERROR);
+            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_FIRSTNAME_ERROR.getKey());
         } else if (!NAME_PATTERN.matcher(patient.getFirstName()).matches()) {
-            throw new InvalidUserInputException(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
+            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_FIRSTNAME_PATTERN_ERROR.getKey());
         }
         if (StringUtils.isBlank(patient.getLastName())) {
-            throw new InvalidUserInputException(ApplicationConstants.PATIENT_LASTNAME_ERROR);
+            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey());
         } else if (!NAME_PATTERN.matcher(patient.getLastName()).matches()) {
-            throw new InvalidUserInputException(ApplicationConstants.PATIENT_LASTNAME_PATTERN_ERROR);
+            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_LASTNAME_PATTERN_ERROR.getKey());
         }
     }
 
@@ -52,14 +49,13 @@ public class PatientValidation {
      * Validates the format and presence of patient UUID.
      *
      * @param id the patient id as String.
-     * @return a list of validation error messages. Empty if valid.
      */
-    public void validatePatientId(String id) throws EmptyUuidException, InvalidUuidExcetion {
+    public void validatePatientId(String id) throws InvalidUuidException {
         if (StringUtils.isBlank(id)) {
-            throw new InvalidUuidExcetion(ApplicationConstants.BLANK_UUID);
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey()));
         }
-        if (!UUID_PATTERN.matcher(id).matches()) {
-            throw new InvalidUuidExcetion(ApplicationConstants.INVALID_UUID_FORMAT);
+        if(!UUID_PATTERN.matcher(id).matches()){
+            throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey()));
         }
     }
 
@@ -71,32 +67,18 @@ public class PatientValidation {
         return errors;
     }
 
-    public void validatePatientsId(String id) throws EmptyUuidException, InvalidUuidExcetion {
-        if (StringUtils.isBlank(id)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey());
-            throw new InvalidUuidExcetion(message);
-        }
-        try {
-            UUID.fromString(id);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
-            throw new InvalidUuidExcetion(message);
-        }
-    }
-
     public List<String> validatePatients(PatientDto patientDto) {
         List<String> errors = new ArrayList<>();
 
         if (StringUtils.isBlank(patientDto.getFirstName())) {
-            errors.add(ApplicationConstants.PATIENT_FIRSTNAME_ERROR);
+            errors.add(MessageKeyEnum.PATIENT_FIRSTNAME_ERROR.getKey());
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
-            errors.add(ApplicationConstants.PATIENT_FIRSTNAME_PATTERN_ERROR);
+            errors.add(MessageKeyEnum.PATIENT_FIRSTNAME_PATTERN_ERROR.getKey());
         }
-
         if (StringUtils.isBlank(patientDto.getLastName())) {
-            errors.add(ApplicationConstants.PATIENT_LASTNAME_ERROR);
+            errors.add(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey());
         } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
-            errors.add(ApplicationConstants.PATIENT_LASTNAME_PATTERN_ERROR);
+            errors.add(MessageKeyEnum.PATIENT_LASTNAME_PATTERN_ERROR.getKey());
         }
         return errors;
     }

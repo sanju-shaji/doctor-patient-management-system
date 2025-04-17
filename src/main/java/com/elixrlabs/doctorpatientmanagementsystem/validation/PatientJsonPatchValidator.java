@@ -22,14 +22,14 @@ public class PatientJsonPatchValidator {
         this.messageUtil = messageUtil;
     }
 
-    public List<String> validatePatch(JsonPatch patch, ObjectMapper objectMapper) throws Exception {
+    public List<String> validatePatch(JsonPatch patch, ObjectMapper objectMapper) {
         List<String> errors = new ArrayList<>();
         JsonNode patchNode = objectMapper.valueToTree(patch);
         for (JsonNode operation : patchNode) {
             String operations = operation.get(ApplicationConstants.OPERATION).asText();
             String path = operation.get(ApplicationConstants.PATH).asText();
             JsonNode valueNode = operation.get(ApplicationConstants.VALUE);
-            if (ApplicationConstants.ID.equalsIgnoreCase(path)) {
+            if (ApplicationConstants.ID.equalsIgnoreCase(path.substring(1))) {
                 String message = messageUtil.getMessage(MessageKeyEnum.MODIFICATION_OF_PATIENT_ID_IS_NOT_ALLOWED.getKey());
                 errors.add(message);
             }

@@ -1,6 +1,7 @@
-package com.elixrlabs.doctorpatientmanagementsystem.response.doctor;
+package com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment;
 
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

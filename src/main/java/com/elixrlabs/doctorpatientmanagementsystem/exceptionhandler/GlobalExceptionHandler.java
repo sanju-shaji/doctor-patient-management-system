@@ -4,6 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstant
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientResponseDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,44 +13,62 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
+ * This class handles exceptions globally for the application.
+ * It catches specific exceptions and returns appropriate HTTP responses
+ * with error messages in a standard format using DoctorPatchResponse.
  * Global exception handler class
  */
 @RestControllerAdvice
 @RequiredArgsConstructor
+
+@ControllerAdvice
 public class GlobalExceptionHandler {
     private final MessageUtil messageUtil;
 
     /**
-     * method to handle invalid userinput
+     * method to handle invalid userInput
      *
      * @param invalidUserInputException-exception class
      * @return appropriate response
      */
 
     @ExceptionHandler(InvalidUserInputException.class)
-    public ResponseEntity<DoctorResponse> handleInvalidUserInputExcetion(InvalidUserInputException invalidUserInputException) {
+    public ResponseEntity<DoctorResponse> handleInvalidUserInputException(InvalidUserInputException invalidUserInputException) {
         DoctorResponse errorResponseDto = DoctorResponse.builder()
                 .success(false).errors(List.of(invalidUserInputException.getMessage())).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 
+
     /**
+     * Handles InvalidUuidException when an invalid UUID is provided.
      * method to handle Invalid request body
      *
-     * @param invalidUserInputException-exception class
-     * @return appropriate response
+     * @param invalidUuidException the exception thrown
+     * @return ResponseEntity with error message and HTTP 400 (Bad Request)
      */
+    @ExceptionHandler(InvalidUuidException.class)
+    public ResponseEntity<DoctorPatchResponse> handleInvalidUuid(InvalidUuidException invalidUuidException) {
+        DoctorPatchResponse doctorPatchResponse =
+                DoctorPatchResponse.builder()
+                        .success(false)
+                        .errors(Collections.singletonList(invalidUuidException.getMessage()))
+                        .build();
+        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<DoctorResponse> handleInvalidRequestBody(HttpMessageNotReadableException invalidUserInputException) {
         DoctorResponse errorResponseDto = DoctorResponse.builder()
-                .success(false).errors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_REQUESTBODY_ERROR.getKey()))).build();
+                .success(false).errors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_REQUEST_BODY_ERROR.getKey()))).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 
@@ -67,7 +86,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * method to handle empty uuid
+     * Handles handleEmptyUuidException when the UUID is missing/empty from the request.
      *
      * @param emptyUuidException-exception class
      * @return appropriate response
@@ -80,27 +99,31 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles InvalidJsonOperation when an unsupported JSON Patch operation is used (like add/remove).
      * method to handle Invalid uuid
      *
-     * @param invalidUuidExcetion-exception class
-     * @return appropriate response
+     * @param invalidJsonOperation the exception thrown
+     * @return ResponseEntity with error message and HTTP 400 (Bad Request)
      */
-    @ExceptionHandler(InvalidUuidExcetion.class)
-    public ResponseEntity<DoctorResponse> handleInvalidUuid(InvalidUuidExcetion invalidUuidExcetion) {
-        DoctorResponse responseDto = DoctorResponse.builder().success(false)
-                .errors(List.of(invalidUuidExcetion.getMessage())).build();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+
+    @ExceptionHandler(InvalidJsonOperationException.class)
+    public ResponseEntity<DoctorPatchResponse> handleInvalidJsonOperation(InvalidJsonOperationException invalidJsonOperation) {
+        DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
+                .success(false)
+                .errors(invalidJsonOperation.getErrors())
+                .build();
+        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.BAD_REQUEST);
     }
 
     /**
-     * method to handle Doctornotfound exception
+     * method to handle DoctorNotFound exception
      *
-     * @param dataNotFoundException-exception class
-     * @return appropriate response
+     * @return ResponseEntity with error message and HTTP 400 (Bad Request)
      */
+
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<DoctorResponse> handleDoctorNotFound(DataNotFoundException dataNotFoundException) {
-        DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(dataNotFoundException.getMessage() + dataNotFoundException.getId())).build();
+        DoctorResponse responseDto = DoctorResponse.builder().success(false).errors(List.of(dataNotFoundException.getMessage())).build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 
@@ -128,18 +151,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
     }
 
-    /**
-     * method to handle JsonPatchProcessing exception
-     *
-     * @param jsonPatchProcessingException-exception class
-     * @return appropriate response
-     */
     @ExceptionHandler(JsonPatchProcessingException.class)
-    public ResponseEntity<PatchPatientResponse> handleJsonPatchProcessing(JsonPatchProcessingException jsonPatchProcessingException) {
-        PatchPatientResponse patchPatientResponse = new PatchPatientResponse();
-        patchPatientResponse.setSuccess(false);
-        patchPatientResponse.setErrors(jsonPatchProcessingException.getErrors());
-        return new ResponseEntity<>(patchPatientResponse, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> handleJsonPatchError(JsonPatchProcessingException jsonPatchProcessingException) {
+        DoctorPatchResponse doctorPatchResponse = DoctorPatchResponse.builder()
+                .success(false)
+                .errors(Collections.singletonList(jsonPatchProcessingException.getMessage()))
+                .build();
+        return new ResponseEntity<>(doctorPatchResponse, HttpStatus.NOT_FOUND);
     }
 
     /**
