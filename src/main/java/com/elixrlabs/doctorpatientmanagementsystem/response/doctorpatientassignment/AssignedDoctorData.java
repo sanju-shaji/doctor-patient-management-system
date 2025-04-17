@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.UUID;
+
+/**
+ * response object that holds each doctor data in doctors array
+ */
 @Data
 @Builder
 public class AssignedDoctorData {
