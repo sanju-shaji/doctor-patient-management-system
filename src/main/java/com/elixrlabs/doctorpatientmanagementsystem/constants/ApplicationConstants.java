@@ -9,12 +9,12 @@ public class ApplicationConstants {
     public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENT_COLLECTION = "tp_doctor_patient_assignment";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
+    public static final String ASSIGNMENTS_DOCTOR_DATE_VALUE = "$assignments.dateOfAdmission";
+    public static final String ASSIGNMENTS_DOCTOR_DEPARTMENT_VALUE = "$assignments.doctor.department";
+    public static final String ASSIGNMENTS_DOCTOR_FIRSTNAME_VALUE = "$assignments.doctor.firstName";
     public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctorId";
     public static final String ASSIGNMENTS_DOCTOR_ID_VALUE = "$assignments.doctorId";
-    public static final String ASSIGNMENTS_DOCTOR_FIRSTNAME_VALUE = "$assignments.doctor.firstName";
     public static final String ASSIGNMENTS_DOCTOR_LASTNAME_VALUE = "$assignments.doctor.lastName";
-    public static final String ASSIGNMENTS_DOCTOR_DEPARTMENT_VALUE = "$assignments.doctor.department";
-    public static final String ASSIGNMENTS_DOCTOR_DATE_VALUE = "$assignments.dateOfAdmission";
     public static final String ASSIGNMENTS_IS_UNASSIGNED = "assignments.isUnAssigned";
     public static final String COLON = " :";
     public static final String DATE_OF_ADMISSION = "dateOfAdmission";
