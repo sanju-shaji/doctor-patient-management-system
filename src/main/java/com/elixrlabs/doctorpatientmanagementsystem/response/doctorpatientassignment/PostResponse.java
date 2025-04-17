@@ -6,6 +6,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 import java.util.UUID;
+/**
+ * Response object of individual doctor which is to be added to the list
+ */
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
