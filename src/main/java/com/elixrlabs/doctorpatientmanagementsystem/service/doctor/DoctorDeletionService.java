@@ -52,8 +52,8 @@ public class DoctorDeletionService {
         doctorValidation.validateDoctorId(doctorId);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NO_DOCTOR_FOUND.getKey());
-            throw new DataNotFoundException(message, UUID.fromString(doctorId));
+            String message = messageUtil.getMessage(MessageKeyEnum.NO_DOCTOR_FOUND.getKey(),doctorId);
+            throw new DataNotFoundException(message);
         }
          List<DoctorPatientAssignmentModel> assignedPatients = doctorPatientAssignmentRepository.findByDoctorId(UUID.fromString(doctorId));
         if (!assignedPatients.isEmpty()) {

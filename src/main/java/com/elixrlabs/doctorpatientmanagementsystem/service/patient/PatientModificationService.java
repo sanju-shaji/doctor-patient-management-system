@@ -43,8 +43,8 @@ public class PatientModificationService {
         patientValidation.validatePatientId(patientId);
         Optional<PatientModel> patientModelOptional = patientRepository.findById(UUID.fromString(patientId));
         if (patientModelOptional.isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey());
-            throw new DataNotFoundException(message, UUID.fromString(patientId));
+            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey(),patientId);
+            throw new DataNotFoundException(message);
         }
         JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
         jsonPatchValidator.validateJsonOperations(patch);

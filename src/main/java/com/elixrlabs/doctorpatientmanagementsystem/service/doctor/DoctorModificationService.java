@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.*;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
@@ -35,16 +35,18 @@ public class DoctorModificationService {
     private final DoctorValidation doctorValidation;
     private final ResponseBuilder responseBuilder;
     private final MessageUtil messageUtil;
+    private final JsonPatchValidator jsonPatchValidator;
 
     public DoctorModificationService(DoctorRepository doctorRepository,
                                      ObjectMapper objectMapper,
                                      DoctorValidation doctorValidation,
-                                     ResponseBuilder responseBuilder, MessageUtil messageUtil) {
+                                     ResponseBuilder responseBuilder, MessageUtil messageUtil, JsonPatchValidator jsonPatchValidator) {
         this.doctorRepository = doctorRepository;
         this.objectMapper = objectMapper;
         this.doctorValidation = doctorValidation;
         this.responseBuilder = responseBuilder;
         this.messageUtil = messageUtil;
+        this.jsonPatchValidator = jsonPatchValidator;
     }
 
     /**
@@ -72,9 +74,9 @@ public class DoctorModificationService {
         doctorValidation.validateDoctorId(doctorId);
         Optional<DoctorEntity> doctorEntityOptional = doctorRepository.findById(UUID.fromString(doctorId));
         if (doctorEntityOptional.isEmpty()) {
-            throw new DataNotFoundException(ApplicationConstants.DOCTORS_NOT_FOUND, UUID.fromString(doctorId));
+            String message  =messageUtil.getMessage(MessageKeyEnum.NO_DOCTOR_FOUND.getKey(),doctorId);
+            throw new DataNotFoundException(message);
         }
-        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
         jsonPatchValidator.validateJsonOperations(patch);
         return doctorEntityOptional.get();
     }
