@@ -2,6 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
@@ -29,15 +30,15 @@ public class DoctorCreationService {
      * @return ResponseEntity in which the desired data is set for response
      */
     public ResponseEntity<DoctorResponse> createDoctor(DoctorDto doctorResponse) throws InvalidUserInputException {
-            doctorValidation.validateDoctorDetails(doctorResponse);
-            DoctorEntity doctorEntity = DoctorEntity.builder().id(UUID.randomUUID()).
-                    firstName(doctorResponse.getFirstName().trim())
-                    .lastName(doctorResponse.getLastName().trim()).
-                    department(doctorResponse.getDepartment()).build();
-            doctorEntity = doctorRepository.save(doctorEntity);
-            DoctorResponse responseDto = DoctorResponse.builder().id(doctorEntity.getId()).firstName(doctorEntity.getFirstName()).
-                    lastName(doctorEntity.getLastName()).department(doctorEntity.getDepartment())
-                    .success(true).build();
-            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        doctorValidation.validateDoctorDetails(doctorResponse);
+        DoctorEntity doctorEntity = DoctorEntity.builder().id(UUID.randomUUID()).
+                firstName(doctorResponse.getFirstName().trim())
+                .lastName(doctorResponse.getLastName().trim()).
+                department(doctorResponse.getDepartment()).build();
+        doctorEntity = doctorRepository.save(doctorEntity);
+        DoctorResponse responseDto = DoctorResponse.builder().id(doctorEntity.getId()).firstName(doctorEntity.getFirstName()).
+                lastName(doctorEntity.getLastName()).department(doctorEntity.getDepartment())
+                .success(true).build();
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

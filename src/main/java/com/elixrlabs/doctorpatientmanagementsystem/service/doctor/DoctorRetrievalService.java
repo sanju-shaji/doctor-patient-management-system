@@ -1,7 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorPatientAssignmentDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.AssignedDoctorsToPatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
@@ -114,9 +114,9 @@ public class DoctorRetrievalService {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_FOUND_ERROR.getKey(), UUID.fromString(patientId)));
         }
         UUID id = UUID.fromString(patientId);
-        DoctorPatientAssignmentDto assignedDoctorsToPatientData = patientRepository.getAssignedDoctorsByPatientId(id);
-        if (assignedDoctorsToPatientData.getDoctors().isEmpty()) {
-            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey(), UUID.fromString(patientId)));
+        AssignedDoctorsToPatientDto assignedDoctorsToPatientData = patientRepository.getAssignedDoctorsByPatientId(id);
+        if(assignedDoctorsToPatientData.getDoctors().isEmpty()){
+            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey()), UUID.fromString(patientId));
         }
         DoctorPatientAssignmentResponse doctorPatientAssignmentResponse = DoctorPatientAssignmentResponse.builder()
                 .id(assignedDoctorsToPatientData.getId())
