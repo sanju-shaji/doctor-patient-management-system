@@ -26,6 +26,7 @@ public class DoctorPatientDAOImpl implements DoctorPatientDAO {
 
     /**
      * method to implement aggregation query for getAssignedDoctorsByPatient api
+     *
      * @param id-patient id
      * @return - patient data with list of doctors mapped to DoctorPatientAssignmentDto
      */
@@ -35,6 +36,7 @@ public class DoctorPatientDAOImpl implements DoctorPatientDAO {
                 Aggregation.match(Criteria.where(ApplicationConstants.ID).is(id)),
                 Aggregation.lookup(ApplicationConstants.ASSIGNMENT_COLLECTION, ApplicationConstants.ID, ApplicationConstants.PATIENT_ID, ApplicationConstants.ASSIGNMENTS),
                 unwind(ApplicationConstants.ASSIGNMENTS, true),
+                Aggregation.match(Criteria.where(ApplicationConstants.ASSIGNMENTS_IS_UNASSIGNED).is(false)),
                 Aggregation.lookup(ApplicationConstants.DOCTORS_COLLECTION, ApplicationConstants.ASSIGNMENTS_DOCTOR_ID, ApplicationConstants.ID, ApplicationConstants.ASSIGNMENTS_DOCTOR),
                 unwind(ApplicationConstants.ASSIGNMENTS_DOCTOR, true),
                 group(ApplicationConstants.ID).first(ApplicationConstants.FIRST_NAME).as(ApplicationConstants.FIRST_NAME)
