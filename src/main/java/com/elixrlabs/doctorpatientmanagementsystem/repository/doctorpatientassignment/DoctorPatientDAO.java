@@ -5,7 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.A
 import java.util.UUID;
 
 /**
- * Interface for implementing custom query for patient repository
+ *Data Access Object interface responsible for handling custom database operations related to doctor-patient assignments.
  */
 public interface DoctorPatientDAO {
     AssignedDoctorsToPatientDto getAssignedDoctorsByPatientId(UUID id);

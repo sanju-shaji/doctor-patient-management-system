@@ -17,23 +17,28 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwi
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 
 /**
- * Implementation class for DoctorPatientDAO interface
+ * Implementation of interface that performs custom aggregation queries to retrieve doctor-patient assignment data.
  */
 @RequiredArgsConstructor
 @Repository
 public class DoctorPatientDAOImpl implements DoctorPatientDAO {
-    private final MongoTemplate mongoTemplate;
+private final MongoTemplate mongoTemplate;
 
     /**
-     * method to implement aggregation query for getAssignedDoctorsByPatient api
-     *
-     * @param id-patient id
-     * @return - patient data with list of doctors mapped to DoctorPatientAssignmentDto
+     * Method that retrieves the details of a Patient and the list of doctors assigned to them.
+     * Matches the patient by the given UUID.
+     * Performs a lookup to join with the tp_doctor_patient_assignment collection.
+     * Unwinds the assignments array to normalize data.
+     * performs another lookup to join with the doctors' collection.
+     * Unwinds the doctors information.
+     * Groups the result by patient id and places assigned doctors in a list.
+     * @param patientId-patientId
+     * @return Patient data with list of assigned doctors
      */
     @Override
-    public AssignedDoctorsToPatientDto getAssignedDoctorsByPatientId(UUID id) {
+    public AssignedDoctorsToPatientDto getAssignedDoctorsByPatientId(UUID patientId) {
         Aggregation aggregation = newAggregation(
-                Aggregation.match(Criteria.where(ApplicationConstants.ID).is(id)),
+                Aggregation.match(Criteria.where(ApplicationConstants.ID).is(patientId)),
                 Aggregation.lookup(ApplicationConstants.ASSIGNMENT_COLLECTION, ApplicationConstants.ID, ApplicationConstants.PATIENT_ID, ApplicationConstants.ASSIGNMENTS),
                 unwind(ApplicationConstants.ASSIGNMENTS, true),
                 Aggregation.match(Criteria.where(ApplicationConstants.ASSIGNMENTS_IS_UNASSIGNED).is(false)),
