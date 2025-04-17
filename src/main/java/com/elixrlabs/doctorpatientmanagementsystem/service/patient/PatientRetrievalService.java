@@ -90,7 +90,7 @@ public class PatientRetrievalService {
                     .build();
             return ResponseEntity.ok(patientResponse);
         }
-        throw new DataNotFoundException(MessageKeyEnum.PATIENT_ID_NOT_FOUND.getKey(), patientId);
+        throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_ID_NOT_FOUND.getKey(), patientId));
     }
 
     /**
@@ -100,11 +100,11 @@ public class PatientRetrievalService {
         patientValidation.validatePatientId(doctorId);
         UUID doctorUuid = UUID.fromString(doctorId);
         if (!doctorRepository.existsById(doctorUuid)) {
-            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_FOUND_ERROR.getKey()), doctorUuid);
+            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_FOUND_ERROR.getKey(), doctorUuid));
         }
         DoctorWithAssignedPatientsData assignedPatientsToDoctorData = doctorRepository.getAssignedPatientsByDoctorId(doctorUuid);
         if (assignedPatientsToDoctorData.getPatients().get(0).getId()==null) {
-            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED.getKey()), doctorUuid);
+            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED.getKey(), doctorUuid));
         }
         DoctorWithAssignedPatientsResponse doctorWithAssignedPatientsResponse = DoctorWithAssignedPatientsResponse.builder()
                 .id(assignedPatientsToDoctorData.getId())

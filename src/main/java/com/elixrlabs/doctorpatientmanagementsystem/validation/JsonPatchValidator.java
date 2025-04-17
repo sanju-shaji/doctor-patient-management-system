@@ -7,6 +7,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
  * - Disallowed operations like 'add' and 'remove'
  * - Restricted paths like replacing the 'id' field
  */
+
+@Component
 public class JsonPatchValidator {
 
     private final MessageUtil messageUtil;
@@ -44,17 +47,17 @@ public class JsonPatchValidator {
             String operationType = patchOperation.get(ApplicationConstants.PATCH_OPERATION_KEY).asText();
             String path = patchOperation.get(ApplicationConstants.PATCH_PATH_KEY).asText();
             if (operationType.equalsIgnoreCase(ApplicationConstants.PATCH_ADD_OPERATION)) {
-                String message = messageUtil.getMessage(MessageKeyEnum.ADD_OPERATION_NOT_ALLOWED.getKey());
-                errors.add(message + path);
+                String message = messageUtil.getMessage(MessageKeyEnum.ADD_OPERATION_NOT_ALLOWED.getKey(),path);
+                errors.add(message);
             }
             if (operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REMOVE_OPERATION)) {
-                String message = messageUtil.getMessage(MessageKeyEnum.REMOVE_OPERATION_NOT_ALLOWED.getKey());
-                errors.add(message + path);
+                String message = messageUtil.getMessage(MessageKeyEnum.REMOVE_OPERATION_NOT_ALLOWED.getKey(),path);
+                errors.add(message);
             }
             if ((operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REPLACE_OPERATION)
                     && !isAllowedReplacePath(path))) {
-                String message = messageUtil.getMessage(MessageKeyEnum.REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED.getKey());
-                errors.add(message + path);
+                String message = messageUtil.getMessage(MessageKeyEnum.REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED.getKey(),path);
+                errors.add(message);
             }
         }
         if (!errors.isEmpty()) {
