@@ -25,4 +25,5 @@ public class DoctorPatientAssignmentModel {
     private UUID doctorId;
     private UUID patientId;
     private Date dateOfAdmission;
+    private Boolean isUnAssigned;
 }

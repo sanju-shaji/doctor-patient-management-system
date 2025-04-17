@@ -10,7 +10,7 @@ public class ApplicationConstants {
     public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENTS_DATE_OF_ADMISSION_VALUE = "$assignments.dateOfAdmission";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
-    public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctor_id";
+    public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctorId";
     public static final String ASSIGNMENTS_PATIENT = "assignments.patient";
     public static final String ASSIGNMENTS_PATIENT_FIRSTNAME_VALUE = "$assignments.patient.firstName";
     public static final String ASSIGNMENTS_PATIENT_ID = "assignments.patientId";
@@ -35,6 +35,7 @@ public class ApplicationConstants {
     public static final String OPERATION = "op";
     public static final String PARAM_DOCTOR_NAME = "name";
     public static final String PATH = "path";
+    public static final String PATIENT_COLLECTION = "tp_patients";
     public static final String PATCH_ADD_OPERATION = "add";
     public static final String PATCH_OPERATION_KEY = "op";
     public static final String PATCH_PATH_DEPARTMENT = "/department";
@@ -43,8 +44,7 @@ public class ApplicationConstants {
     public static final String PATCH_PATH_LAST_NAME = "/lastName";
     public static final String PATCH_REMOVE_OPERATION = "remove";
     public static final String PATCH_REPLACE_OPERATION = "replace";
-    public static final String PATIENT_COLLECTION = "tp_patients";
-    public static final String PATIENT_ID = "patient_id";
+    public static final String PATIENT_ID = "patientId";
     public static final String PATIENTS = "patients";
     public static final String QUERY_PARAMS_CANNOT_NULL = "Query params cannot be null.";
     public static final String REGEX_ALPHABET_PATTERN = "^[a-zA-Z\\s]+$";
