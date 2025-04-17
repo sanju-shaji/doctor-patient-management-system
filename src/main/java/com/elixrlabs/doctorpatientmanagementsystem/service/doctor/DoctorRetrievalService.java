@@ -116,7 +116,7 @@ public class DoctorRetrievalService {
         UUID id = UUID.fromString(patientId);
         AssignedDoctorsToPatientDto assignedDoctorsToPatientData = patientRepository.getAssignedDoctorsByPatientId(id);
         if(assignedDoctorsToPatientData.getDoctors().isEmpty()){
-            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey()), UUID.fromString(patientId));
+            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.PATIENT_NOT_ASSIGNED.getKey(), UUID.fromString(patientId)));
         }
         DoctorPatientAssignmentResponse doctorPatientAssignmentResponse = DoctorPatientAssignmentResponse.builder()
                 .id(assignedDoctorsToPatientData.getId())
