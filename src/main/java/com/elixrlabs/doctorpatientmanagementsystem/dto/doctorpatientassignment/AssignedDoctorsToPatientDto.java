@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.AssignedDoctorData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +16,5 @@ public class AssignedDoctorsToPatientDto {
     private String id;
     private String firstName;
     private String lastName;
-    private List<DoctorDto> doctors;
+    private List<AssignedDoctorData> doctors;
 }
