@@ -13,7 +13,13 @@ public enum MessageKeyEnum {
     DEPARTMENT_NAME_PATTERN_ERROR("department.name.pattern.error"),
     DOCTOR_NOT_ASSIGNED("doctor.not.assigned"),
     DOCTOR_NOT_FOUND_ERROR("doctor.not.found.error"),
+    DUPLICATE_FIRST_NAME("error.duplicate.firstName"),
+    DUPLICATE_LAST_NAME("error.duplicate.lastName"),
     EMPTY_DEPARTMENT_NAME("empty.department.name"),
+    DEPARTMENTNAME_PATTERN_ERROR("department.name.pattern.error"),
+    DOCTOR_NOT_ASSIGNED_TO_PATIENT("doctor.not.assigned.to.patient"),
+    DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT("doctor.successfully.unassigned.from.patient"),
+    EMPTY_DEPARTMENTNAME("empty.department.name"),
     EMPTY_FIRSTNAME("empty.first.name"),
     EMPTY_LASTNAME("empty.lastname"),
     EMPTY_UUID("empty.uuid"),
@@ -42,7 +48,8 @@ public enum MessageKeyEnum {
     REMOVE_OPERATION_NOT_ALLOWED("remove.operation.not.allowed"),
     REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED("replace.non.existent.field.not.allowed"),
     SERVER_ERROR("server.error"),
-    USER_NOT_FOUND_ERROR("user.not.found.error");
+    USER_NOT_FOUND_ERROR("user.not.found.error"),
+    VALIDATION_FAILED_FOR("validation.failed.for");
     private final String key;
 
     MessageKeyEnum(String Key) {

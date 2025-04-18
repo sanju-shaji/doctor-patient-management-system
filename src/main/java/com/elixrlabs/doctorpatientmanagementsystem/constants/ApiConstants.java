@@ -15,6 +15,6 @@ public class ApiConstants {
     public static final String PATIENT_API = "/patient";
     public static final String PATIENT_BY_ID = "patient/{id}";
     public static final String PATIENT_ID = "/{patientId}";
-    public static final String UN_ASSIGN_DOCTOR_FROM_PATIENT="UnAssignDoctorFromPatient";
     public static final String PATIENTS_API = "/patients";
+    public static final String UN_ASSIGN_DOCTOR_FROM_PATIENT = "/UnAssignDoctorFromPatient";
 }

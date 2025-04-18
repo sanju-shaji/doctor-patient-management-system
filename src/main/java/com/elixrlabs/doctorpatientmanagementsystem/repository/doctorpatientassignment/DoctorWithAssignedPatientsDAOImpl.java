@@ -39,6 +39,7 @@ public class DoctorWithAssignedPatientsDAOImpl implements DoctorWithAssignedPati
                 Aggregation.match(Criteria.where(ApplicationConstants.ID).is(id)),
                 Aggregation.lookup(DataBaseConstants.DOCTOR_PATIENT_ASSIGNMENT_COLLECTION_NAME, ApplicationConstants.ID, ApplicationConstants.DOCTOR_ID, ApplicationConstants.ASSIGNMENTS),
                 unwind(ApplicationConstants.ASSIGNMENTS, true),
+                Aggregation.match(Criteria.where(ApplicationConstants.ASSIGNMENTS_IS_UNASSIGNED).is(false)),
                 Aggregation.lookup(DataBaseConstants.PATIENT_COLLECTION_NAME, ApplicationConstants.ASSIGNMENTS_PATIENT_ID, ApplicationConstants.ID, ApplicationConstants.ASSIGNMENTS_PATIENT),
                 unwind(ApplicationConstants.ASSIGNMENTS_PATIENT, true),
                 group(ApplicationConstants.ID)
