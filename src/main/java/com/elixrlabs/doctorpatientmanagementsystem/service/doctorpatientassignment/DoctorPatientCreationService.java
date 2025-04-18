@@ -8,7 +8,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.PostResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-@Slf4j
 public class DoctorPatientCreationService {
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
     private final MessageUtil messageUtil;
@@ -50,7 +48,6 @@ public class DoctorPatientCreationService {
                 .patientId(savedAssignmentData.getPatientId())
                 .dateOfAdmission(savedAssignmentData.getDateOfAdmission())
                 .build();
-        log.info(postAssignmentResponse.toString());
         return new ResponseEntity<>(postAssignmentResponse, HttpStatus.OK);
     }
     /**
