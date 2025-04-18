@@ -1,9 +1,12 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctorpatientassignment;
 
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorPatientAssignmentDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.PostResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassignment.DoctorPatientAssignmentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import java.util.UUID;
 @Service
 public class DoctorPatientCreationService {
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
+    private final DoctorPatientAssignmentValidator doctorPatientAssignmentValidator;
 
     /**
      * Method which contains the business logic to Post the assignments data to database
@@ -28,10 +32,11 @@ public class DoctorPatientCreationService {
      * @return ResponseEntity in which the desired data is set for response
      */
 
-    public ResponseEntity<PostResponse> createDoctorPatientAssignment(DoctorPatientAssignmentDto assignmentDto) {
+    public ResponseEntity<PostResponse> createDoctorPatientAssignment(DoctorPatientAssignmentDto assignmentDto) throws InvalidUuidException, DataNotFoundException {
+        doctorPatientAssignmentValidator.validateAssignmentDto(assignmentDto);
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = DoctorPatientAssignmentModel.builder()
-                .id(UUID.randomUUID()).patientId(assignmentDto.getPatientId())
-                .doctorId(assignmentDto.getDoctorId())
+                .id(UUID.randomUUID()).patientId(UUID.fromString(assignmentDto.getPatientId()))
+                .doctorId(UUID.fromString(assignmentDto.getDoctorId()))
                 .dateOfAdmission(Date.from(Instant.now()))
                 .isUnAssigned(false)
                 .build();

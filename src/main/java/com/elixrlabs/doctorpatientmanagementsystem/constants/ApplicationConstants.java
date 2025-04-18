@@ -25,6 +25,7 @@ public class ApplicationConstants {
     public static final String COLON = " :";
     public static final String DATE_OF_ADMISSION="dateOfAdmission";
     public static final String DEPARTMENT="department";
+    public static final String DOCTOR = "doctor";
     public static final String DOCTOR_ID = "doctorId";
     public static final String DOCTORS = "doctors";
     public static final String DOCTORS_COLLECTION = "tp_doctors";
@@ -50,6 +51,7 @@ public class ApplicationConstants {
     public static final String PATCH_PATH_LAST_NAME = "/lastName";
     public static final String PATCH_REMOVE_OPERATION = "remove";
     public static final String PATCH_REPLACE_OPERATION = "replace";
+    public static final String PATIENT = "patient";
     public static final String PATIENT_ID = "patientId";
     public static final String PATIENTS = "patients";
     public static final String QUERY_PARAMS_CANNOT_NULL = "Query params cannot be null.";
