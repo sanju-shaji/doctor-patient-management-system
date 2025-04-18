@@ -3,13 +3,15 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctor;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidAssignmentDataException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -84,15 +86,44 @@ public class DoctorValidation {
      *
      * @param doctorId to validate the  doctorId
      */
-    public void validateDoctorId(String doctorId) throws InvalidUuidException {
+    public void validateDoctorId(String doctorId) {
+        List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.MISSING_ID.getKey());
-            throw new InvalidUuidException(message);
+            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_BLANK_UUID.getKey(), ApplicationConstants.DOCTOR);
+            errors.add(message);
+        } else if (isInValidUUID(doctorId)) {
+            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.DOCTOR);
+            errors.add(message);
         }
-        if (isInValidUUID(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey());
-            throw new InvalidUuidException(message);
+        if (!errors.isEmpty()) {
+            throw new InvalidAssignmentDataException(errors);
         }
     }
 
+    /**
+     * Validates the UUID format and presence of both doctorId and patientId.
+     * This method checks if the provided doctor and patient IDs are non-blank and follow the standard UUID format.
+     * If either ID is missing or invalid, corresponding error messages are collected
+     */
+    public void validateDoctorAndPatientIds(String doctorId, String patientId) {
+        List<String> errors = new ArrayList<>();
+
+        if (StringUtils.isBlank(doctorId)) {
+            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_BLANK_UUID.getKey(), ApplicationConstants.DOCTOR);
+            errors.add(message);
+        } else if (isInValidUUID(doctorId)) {
+            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.DOCTOR);
+            errors.add(message);
+        }
+        if (StringUtils.isBlank(patientId)) {
+            String msg = messageUtil.getMessage(MessageKeyEnum.DOCTOR_BLANK_UUID.getKey(), ApplicationConstants.PATIENT);
+            errors.add(msg);
+        } else if (isInValidUUID(patientId)) {
+            String msg = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.PATIENT);
+            errors.add(msg);
+        }
+        if (!errors.isEmpty()) {
+            throw new InvalidAssignmentDataException(errors);
+        }
+    }
 }

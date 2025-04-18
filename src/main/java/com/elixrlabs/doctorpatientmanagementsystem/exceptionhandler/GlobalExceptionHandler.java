@@ -188,4 +188,18 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(patientResponseDto);
     }
+    /**
+     * Handles InvalidAssignmentDataException and returns a list of validation errors.
+     *
+     * @param invalidAssignmentDataException the exception containing validation error messages
+     * @return a response with error messages and HTTP 404 status
+     */
+    @ExceptionHandler(InvalidAssignmentDataException.class)
+    public ResponseEntity<BaseResponse> handleDoctorPatientNotFound(InvalidAssignmentDataException invalidAssignmentDataException) {
+        BaseResponse baseResponse =BaseResponse.builder()
+                .success(false)
+                .errors(invalidAssignmentDataException.getErrors())
+                .build();
+                return new ResponseEntity<>(baseResponse,HttpStatus.NOT_FOUND);
+}
 }
