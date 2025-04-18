@@ -21,4 +21,5 @@ public class PatchPatientResponse extends BaseResponse {
     private String lastName;
     private List<String> message;
     private PatientDto patient;
+    private List<String> errors;
 }
