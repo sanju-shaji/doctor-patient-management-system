@@ -37,6 +37,7 @@ public class ApplicationConstants {
     public static final String INVALID_URL = "Invalid URL";
     public static final String LAST_NAME = "lastName";
     public static final String LASTNAME = "/lastName";
+    public static final String MOCK_EXCEPTION_MESSAGE = "Exception Message";
     public static final String NO_PATIENTS_FOUND = "No patients found";
     public static final String OPERATION = "op";
     public static final String PARAM_DOCTOR_NAME = "name";
