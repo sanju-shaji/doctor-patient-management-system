@@ -1,0 +1,51 @@
+package com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassignment;
+
+import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DoctorAlreadyUnassignedException;
+import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * Validator class for handling validations related to doctor-patient UnAssignment operations
+ */
+@RequiredArgsConstructor
+@Component
+public class DoctorPatientUnAssignmentValidator {
+    public final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
+    private final MessageUtil messageUtil;
+
+    /**
+     * Validates whether the given doctor and patient combination is valid and not already unassigned
+     * @param doctorId UUID of the doctor
+     * @param patientId UUID of the patient
+     * @throws DataNotFoundException if no assignment is found for the given doctor-patient combination
+     * @throws DoctorAlreadyUnassignedException if all records for the doctor-patient combination are already unassigned
+     */
+    public void validateDoctorPatientCombination(UUID doctorId, UUID patientId) throws DataNotFoundException, DoctorAlreadyUnassignedException{
+        // Fetch all records with the given doctor and patient id
+        List<DoctorPatientAssignmentModel> assignments =
+                doctorPatientAssignmentRepository.findByDoctorIdAndPatientId(doctorId, patientId);
+        if (assignments.isEmpty()) {
+            throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_PATIENT_COMBINATION_NOT_FOUND.getKey()));
+        }
+        boolean isAlreadyUnassigned =true;
+        for(DoctorPatientAssignmentModel assignment : assignments){
+            if(!assignment.getIsUnAssigned()){
+                isAlreadyUnassigned=false;
+                break;
+            }
+        }
+        if(isAlreadyUnassigned){
+            throw new DoctorAlreadyUnassignedException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_ALREADY_UNASSIGNED.getKey(),patientId));
+        }
+
+
+    }
+}

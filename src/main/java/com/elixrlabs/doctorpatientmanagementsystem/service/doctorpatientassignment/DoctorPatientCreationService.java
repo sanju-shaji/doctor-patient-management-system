@@ -7,6 +7,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassig
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.PostResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassignment.DoctorPatientUnAssignmentValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ import java.util.UUID;
 public class DoctorPatientCreationService {
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
     private final MessageUtil messageUtil;
-
+    private final DoctorPatientUnAssignmentValidator doctorPatientUnAssignmentValidator;
     /**
      * Method which contains the business logic to Post the assignments data to database
      *
@@ -59,16 +60,9 @@ public class DoctorPatientCreationService {
      * @return ResponseEntity in which the desired data is set for response
      */
 
-    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) {
+    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) throws Exception{
+        doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(dto.getDoctorId(), dto.getPatientId());
         List<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(dto.getDoctorId(), dto.getPatientId());
-        if (doctorPatientAssignments.isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED_TO_PATIENT.getKey());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(BaseResponse.builder()
-                            .success(false)
-                            .errors(List.of(message))
-                            .build());
-        }
         for (DoctorPatientAssignmentModel assignment : doctorPatientAssignments) {
             assignment.setIsUnAssigned(true);
         }

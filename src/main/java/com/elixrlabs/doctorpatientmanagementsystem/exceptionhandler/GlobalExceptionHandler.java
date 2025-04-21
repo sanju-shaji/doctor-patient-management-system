@@ -6,6 +6,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
@@ -187,5 +188,13 @@ public class GlobalExceptionHandler {
                 .errors(List.of(ApplicationConstants.NO_PATIENTS_FOUND))
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(patientResponseDto);
+    }
+    @ExceptionHandler(DoctorAlreadyUnassignedException.class)
+    public ResponseEntity<BaseResponse> handleDoctorAlreadyUnassigned(DoctorAlreadyUnassignedException doctorAlreadyUnassignedException){
+        BaseResponse baseResponse=BaseResponse.builder()
+                .success(false)
+                .errors(List.of(doctorAlreadyUnassignedException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
     }
 }

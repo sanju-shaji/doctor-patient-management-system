@@ -35,7 +35,7 @@ public class DoctorPatientCreationController {
      * @return - response entity of type PostResponse
      */
     @PostMapping(ApiConstants.UN_ASSIGN_DOCTOR_FROM_PATIENT)
-    public ResponseEntity<BaseResponse> unAssignDoctor(@RequestBody DoctorPatientAssignmentDto assignmentDto) {
+    public ResponseEntity<BaseResponse> unAssignDoctor(@RequestBody DoctorPatientAssignmentDto assignmentDto)throws Exception {
         return doctorCreationService.unAssignDoctorFromPatient(assignmentDto);
     }
 }
