@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Service
-public class DoctorPatientCreationService {
+public class DoctorPatientAssignmentService {
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
     private final DoctorPatientAssignmentValidator doctorPatientAssignmentValidator;
 

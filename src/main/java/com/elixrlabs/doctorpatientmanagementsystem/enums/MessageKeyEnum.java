@@ -8,10 +8,11 @@ import lombok.Getter;
 @Getter
 public enum MessageKeyEnum {
     ADD_OPERATION_NOT_ALLOWED("add.operation.not.allowed"),
+    ASSIGNMENT_FAILED("assignment.failed"),
     BLANK_UUID("blank.uuid"),
     DELETE_DOCTOR_SUCCESSFULLY("doctor.deleted.successfully"),
     DEPARTMENT_NAME_PATTERN_ERROR("department.name.pattern.error"),
-    DOCTOR_BLANK_UUID("doctor.blank.uuid"),
+    UUID_NOT_PRESENT("uuid.not.present"),
     DOCTOR_INVALID_UUID_FORMAT("doctor.invalid.uuid.format"),
     DOCTOR_NOT_ASSIGNED("doctor.not.assigned"),
     DOCTOR_NOT_FOUND_ERROR("doctor.not.found.error"),
@@ -30,7 +31,6 @@ public enum MessageKeyEnum {
     NO_PATIENT_FOUND("no.patient.found"),
     NULL_OR_EMPTY_VALUES_ARE_NOT_ALLOWED("null.or.empty.values.are.not.allowed"),
     ONLY_REPLACE_OPERATION_ARE_PERMITTED("cannot.allowed.only.'replace'.operation.are.permitted"),
-    PATIENT_ALREADY_ASSIGN_TO_DOCTOR("patient.already.assign.to.doctor"),
     PATIENT_ASSIGNED_TO_DOCTOR("patient.assigned.to.doctor"),
     PATIENT_DELETED_SUCCESSFULLY("patient.deleted.successfully"),
     PATIENT_FIRSTNAME_ERROR("patient.firstname.error"),

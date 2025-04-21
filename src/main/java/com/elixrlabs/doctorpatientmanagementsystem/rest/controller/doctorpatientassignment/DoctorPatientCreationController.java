@@ -5,7 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.D
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.PostResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.service.doctorpatientassignment.DoctorPatientCreationService;
+import com.elixrlabs.doctorpatientmanagementsystem.service.doctorpatientassignment.DoctorPatientAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class DoctorPatientCreationController {
-    private final DoctorPatientCreationService doctorCreationService;
+    private final DoctorPatientAssignmentService doctorCreationService;
 
     /**
      * Api mapping for assignDoctorToPatient endpoint

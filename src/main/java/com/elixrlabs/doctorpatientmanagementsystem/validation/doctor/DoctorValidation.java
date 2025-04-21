@@ -5,6 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidAssignmentDataException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.UuidValidationException;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +90,7 @@ public class DoctorValidation {
     public void validateDoctorId(String doctorId) {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_BLANK_UUID.getKey(), ApplicationConstants.DOCTOR);
+            String message = messageUtil.getMessage(MessageKeyEnum.UUID_NOT_PRESENT.getKey(), ApplicationConstants.DOCTOR);
             errors.add(message);
         } else if (isInValidUUID(doctorId)) {
             String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.DOCTOR);
@@ -109,21 +110,21 @@ public class DoctorValidation {
         List<String> errors = new ArrayList<>();
 
         if (StringUtils.isBlank(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_BLANK_UUID.getKey(), ApplicationConstants.DOCTOR);
+            String message = messageUtil.getMessage(MessageKeyEnum.UUID_NOT_PRESENT.getKey(), ApplicationConstants.DOCTOR);
             errors.add(message);
         } else if (isInValidUUID(doctorId)) {
             String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.DOCTOR);
             errors.add(message);
         }
         if (StringUtils.isBlank(patientId)) {
-            String msg = messageUtil.getMessage(MessageKeyEnum.DOCTOR_BLANK_UUID.getKey(), ApplicationConstants.PATIENT);
+            String msg = messageUtil.getMessage(MessageKeyEnum.UUID_NOT_PRESENT.getKey(), ApplicationConstants.PATIENT);
             errors.add(msg);
         } else if (isInValidUUID(patientId)) {
             String msg = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.PATIENT);
             errors.add(msg);
         }
         if (!errors.isEmpty()) {
-            throw new InvalidAssignmentDataException(errors);
+            throw new UuidValidationException(errors);
         }
     }
 }

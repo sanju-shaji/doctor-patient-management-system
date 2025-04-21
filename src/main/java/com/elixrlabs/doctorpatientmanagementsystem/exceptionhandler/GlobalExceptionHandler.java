@@ -196,10 +196,19 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(InvalidAssignmentDataException.class)
     public ResponseEntity<BaseResponse> handleDoctorPatientNotFound(InvalidAssignmentDataException invalidAssignmentDataException) {
-        BaseResponse baseResponse =BaseResponse.builder()
+        BaseResponse baseResponse = BaseResponse.builder()
                 .success(false)
                 .errors(invalidAssignmentDataException.getErrors())
                 .build();
                 return new ResponseEntity<>(baseResponse,HttpStatus.NOT_FOUND);
 }
+      @ExceptionHandler(UuidValidationException.class)
+    public ResponseEntity<BaseResponse> handleUuidValidationException(UuidValidationException uuidValidationException) {
+        BaseResponse baseResponse = BaseResponse.builder()
+                .success(false)
+                .errors(uuidValidationException.getErrors())
+                .build();
+        return new ResponseEntity<>(baseResponse,HttpStatus.BAD_REQUEST);
+    }
+
 }
