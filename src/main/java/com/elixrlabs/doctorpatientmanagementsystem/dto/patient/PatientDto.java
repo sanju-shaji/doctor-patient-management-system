@@ -19,6 +19,7 @@ public class PatientDto {
     private UUID id;
     private String firstName;
     private String lastName;
+
     public PatientDto(PatientModel patientModel) {
         this.id = patientModel.getId();
         this.firstName = patientModel.getFirstName();
