@@ -11,6 +11,7 @@ public class ApplicationConstants {
     public static final String ASSIGNMENTS_DATE_OF_ADMISSION_VALUE = "$assignments.dateOfAdmission";
     public static final String ASSIGNMENTS_DOCTOR = "assignments.doctor";
     public static final String ASSIGNMENTS_DOCTOR_ID = "assignments.doctorId";
+    public static final String ASSIGNMENTS_IS_UNASSIGNED = "assignments.isUnAssigned";
     public static final String ASSIGNMENTS_PATIENT = "assignments.patient";
     public static final String ASSIGNMENTS_PATIENT_FIRSTNAME_VALUE = "$assignments.patient.firstName";
     public static final String ASSIGNMENTS_PATIENT_ID = "assignments.patientId";
