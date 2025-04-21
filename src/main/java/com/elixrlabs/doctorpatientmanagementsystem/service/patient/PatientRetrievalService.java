@@ -103,7 +103,7 @@ public class PatientRetrievalService {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_FOUND_ERROR.getKey(), doctorUuid));
         }
         DoctorWithAssignedPatientsData assignedPatientsToDoctorData = doctorRepository.getAssignedPatientsByDoctorId(doctorUuid);
-        if (assignedPatientsToDoctorData == null || assignedPatientsToDoctorData.getPatients().get(0).getId() == null) {
+        if (assignedPatientsToDoctorData == null) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED.getKey(), doctorUuid));
         }
         DoctorWithAssignedPatientsResponse doctorWithAssignedPatientsResponse = DoctorWithAssignedPatientsResponse.builder()

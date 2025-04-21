@@ -58,8 +58,8 @@ public class DoctorPatientCreationService {
      */
 
     public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) {
-        List<DoctorPatientAssignmentModel> assignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(dto.getDoctorId(), dto.getPatientId());
-        if (assignments.isEmpty()) {
+        List<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(dto.getDoctorId(), dto.getPatientId());
+        if (doctorPatientAssignments.isEmpty()) {
             String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED_TO_PATIENT.getKey());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(BaseResponse.builder()
@@ -67,10 +67,10 @@ public class DoctorPatientCreationService {
                             .errors(List.of(message))
                             .build());
         }
-        for (DoctorPatientAssignmentModel assignment : assignments) {
+        for (DoctorPatientAssignmentModel assignment : doctorPatientAssignments) {
             assignment.setUnAssigned(true);
         }
-        doctorPatientAssignmentRepository.saveAll(assignments);
+        doctorPatientAssignmentRepository.saveAll(doctorPatientAssignments);
 
         String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT.getKey());
         BaseResponse baseResponse = BaseResponse.builder()

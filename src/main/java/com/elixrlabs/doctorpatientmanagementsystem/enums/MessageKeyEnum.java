@@ -28,13 +28,13 @@ public enum MessageKeyEnum {
     INVALID_REQUEST_BODY_ERROR("invalid.request.body.error"),
     INVALID_UUID_ERROR("invalid.uuid.error"),
     INVALID_UUID_FORMAT("invalid.uuid.format"),
+    JSON_PATCH_OPERATION_INVALID("json.patch.operation.invalid"),
     LASTNAME_PATTERN_ERROR("last.name.pattern.error"),
     MISSING_ID("missing.id"),
     MODIFICATION_OF_PATIENT_ID_IS_NOT_ALLOWED("modification.of.patientId.is.not.allowed"),
     NO_DOCTOR_FOUND("no.doctor.found"),
     NO_PATIENT_FOUND("no.patient.found"),
     NULL_OR_EMPTY_VALUES_ARE_NOT_ALLOWED("null.or.empty.values.are.not.allowed"),
-    ONLY_REPLACE_OPERATION_ARE_PERMITTED("cannot.allowed.only.'replace'.operation.are.permitted"),
     PATIENT_ASSIGNED_TO_DOCTOR("patient.assigned.to.doctor"),
     PATIENT_DELETED_SUCCESSFULLY("patient.deleted.successfully"),
     PATIENT_FIRSTNAME_ERROR("patient.firstname.error"),
@@ -48,8 +48,7 @@ public enum MessageKeyEnum {
     REMOVE_OPERATION_NOT_ALLOWED("remove.operation.not.allowed"),
     REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED("replace.non.existent.field.not.allowed"),
     SERVER_ERROR("server.error"),
-    USER_NOT_FOUND_ERROR("user.not.found.error"),
-    VALIDATION_FAILED_FOR("validation.failed.for");
+    USER_NOT_FOUND_ERROR("user.not.found.error");
     private final String key;
 
     MessageKeyEnum(String Key) {
