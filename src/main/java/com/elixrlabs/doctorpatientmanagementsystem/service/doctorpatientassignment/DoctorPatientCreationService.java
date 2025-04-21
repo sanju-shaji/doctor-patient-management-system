@@ -73,10 +73,10 @@ public class DoctorPatientCreationService {
         doctorPatientAssignmentRepository.saveAll(doctorPatientAssignments);
 
         String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT.getKey());
-        BaseResponse baseResponse = BaseResponse.builder()
-                .success(true)
-                .messages(List.of(message))
-                .build();
-        return ResponseEntity.ok(baseResponse);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(BaseResponse.builder()
+                        .success(true)
+                        .messages(List.of(message))
+                        .build());
     }
 }
