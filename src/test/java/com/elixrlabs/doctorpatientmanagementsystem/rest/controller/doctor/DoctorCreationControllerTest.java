@@ -5,6 +5,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorCreationService;
+import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +29,12 @@ class DoctorCreationControllerTest {
     DoctorCreationService doctorCreationService;
     @InjectMocks
     DoctorCreationController doctorCreationController;
+    TestDataBuilder testDataBuilder;
+
+    @BeforeEach
+    void setUp() {
+        testDataBuilder = new TestDataBuilder();
+    }
 
     /**
      * Method to testing Happy Path of createDoctor method
@@ -36,17 +44,8 @@ class DoctorCreationControllerTest {
      */
     @Test
     void testCreateDoctorController_validInputs() throws Exception {
-        DoctorDto doctorDto = DoctorDto.builder()
-                .firstName(ApplicationConstants.FIRST_NAME)
-                .lastName(ApplicationConstants.LAST_NAME)
-                .department(ApplicationConstants.DEPARTMENT)
-                .build();
-        DoctorResponse doctorResponse = DoctorResponse.builder()
-                .firstName(ApplicationConstants.FIRST_NAME)
-                .lastName(ApplicationConstants.LAST_NAME)
-                .department(ApplicationConstants.DEPARTMENT)
-                .success(true)
-                .build();
+        DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
+        DoctorResponse doctorResponse = testDataBuilder.doctorResponseBuilder();
         Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenReturn(ResponseEntity.ok().body(doctorResponse));
         ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationController.createDoctor(doctorDto);
         assertNotNull(doctorCreationResponse.getBody());
@@ -66,11 +65,7 @@ class DoctorCreationControllerTest {
      */
     @Test
     void estCreateDoctorController_inValidInputs() throws Exception {
-        DoctorDto doctorDto = DoctorDto.builder()
-                .firstName(ApplicationConstants.FIRST_NAME)
-                .lastName(ApplicationConstants.LAST_NAME)
-                .department(ApplicationConstants.DEPARTMENT)
-                .build();
+        DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         Mockito.when(doctorCreationService.createDoctor(doctorDto)).thenThrow(new InvalidUserInputException(ApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         try {
             ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationController.createDoctor(doctorDto);

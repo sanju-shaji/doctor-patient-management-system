@@ -6,7 +6,9 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserI
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,8 +18,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,6 +36,12 @@ class DoctorCreationServiceTest {
     DoctorValidation doctorValidation;
     @InjectMocks
     DoctorCreationService doctorCreationService;
+    TestDataBuilder testDataBuilder;
+
+    @BeforeEach
+    void setUp() {
+        testDataBuilder = new TestDataBuilder();
+    }
 
     /**
      * Test Method for testing the happy path
@@ -45,17 +51,8 @@ class DoctorCreationServiceTest {
      */
     @Test
     void testCreateDoctorService_validInputs() throws InvalidUserInputException {
-        DoctorDto doctorDto = DoctorDto.builder()
-                .firstName(ApplicationConstants.FIRST_NAME)
-                .lastName(ApplicationConstants.LAST_NAME)
-                .department(ApplicationConstants.DEPARTMENT)
-                .build();
-        DoctorEntity doctorEntity = DoctorEntity.builder()
-                .id(UUID.randomUUID())
-                .firstName(ApplicationConstants.FIRST_NAME)
-                .lastName(ApplicationConstants.LAST_NAME)
-                .department(ApplicationConstants.DEPARTMENT)
-                .build();
+        DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
+        DoctorEntity doctorEntity = testDataBuilder.doctorEntityBuilder();
         Mockito.when(doctorRepository.save(Mockito.any(DoctorEntity.class))).thenReturn(doctorEntity);
         ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationService.createDoctor(doctorDto);
         assertNotNull(doctorCreationResponse);
@@ -78,11 +75,8 @@ class DoctorCreationServiceTest {
      */
     @Test
     void testCreateDoctorService_invalidInputs() throws InvalidUserInputException {
-        DoctorDto doctorDto = DoctorDto.builder()
-                .firstName(ApplicationConstants.FIRST_NAME)
-                .lastName(ApplicationConstants.LAST_NAME)
-                .department(ApplicationConstants.DEPARTMENT)
-                .build();
+        DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
+        doctorDto.setFirstName(null);
         Mockito.doThrow(new InvalidUserInputException(ApplicationConstants.MOCK_EXCEPTION_MESSAGE)).when(doctorValidation).validateDoctorDetails(doctorDto);
         assertThrows(InvalidUserInputException.class, () -> {
             ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationService.createDoctor(doctorDto);
