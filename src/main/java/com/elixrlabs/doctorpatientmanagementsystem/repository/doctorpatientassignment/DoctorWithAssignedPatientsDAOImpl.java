@@ -47,7 +47,7 @@ public class DoctorWithAssignedPatientsDAOImpl implements DoctorWithAssignedPati
                         .first(ApplicationConstants.LAST_NAME).as(ApplicationConstants.LAST_NAME)
                         .first(ApplicationConstants.DEPARTMENT).as(ApplicationConstants.DEPARTMENT)
                         .push(ApplicationConstants.ASSIGNMENTS_PATIENT).as(ApplicationConstants.PATIENTS)
-                        .push(new Document().append(ApplicationConstants.ID,ApplicationConstants.ASSIGNMENTS_PATIENT_ID_VALUE)
+                        .push(new Document().append(ApplicationConstants.ID, ApplicationConstants.ASSIGNMENTS_PATIENT_ID_VALUE)
                                 .append(ApplicationConstants.FIRST_NAME, ApplicationConstants.ASSIGNMENTS_PATIENT_FIRSTNAME_VALUE)
                                 .append(ApplicationConstants.LAST_NAME, ApplicationConstants.ASSIGNMENTS_PATIENT_LASTNAME_VALUE)
                                 .append(ApplicationConstants.DATE_OF_ADMISSION, ApplicationConstants.ASSIGNMENTS_DATE_OF_ADMISSION_VALUE)).as(ApplicationConstants.PATIENTS)

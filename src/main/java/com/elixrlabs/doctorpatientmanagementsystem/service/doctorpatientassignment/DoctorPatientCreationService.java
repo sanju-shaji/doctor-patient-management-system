@@ -50,25 +50,28 @@ public class DoctorPatientCreationService {
                 .build();
         return new ResponseEntity<>(postAssignmentResponse, HttpStatus.OK);
     }
+
     /**
      * Method which contains the business logic to Post the UnAssign data to database
+     *
      * @return ResponseEntity in which the desired data is set for response
      */
 
-    public ResponseEntity<BaseResponse> UnAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) {
+    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) {
         List<DoctorPatientAssignmentModel> assignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(dto.getDoctorId(), dto.getPatientId());
         if (assignments.isEmpty()) {
             String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED_TO_PATIENT.getKey());
-            BaseResponse baseResponse = BaseResponse.builder()
-                    .success(false)
-                    .errors(List.of(message))
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(baseResponse);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(BaseResponse.builder()
+                            .success(false)
+                            .errors(List.of(message))
+                            .build());
         }
         for (DoctorPatientAssignmentModel assignment : assignments) {
             assignment.setUnAssigned(true);
-            doctorPatientAssignmentRepository.save(assignment);
         }
+        doctorPatientAssignmentRepository.saveAll(assignments);
+
         String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT.getKey());
         BaseResponse baseResponse = BaseResponse.builder()
                 .success(true)
@@ -77,4 +80,3 @@ public class DoctorPatientCreationService {
         return ResponseEntity.ok(baseResponse);
     }
 }
-
