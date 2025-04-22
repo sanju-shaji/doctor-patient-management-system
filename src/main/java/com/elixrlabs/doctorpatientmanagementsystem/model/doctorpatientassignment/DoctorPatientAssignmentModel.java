@@ -27,7 +27,7 @@ public class DoctorPatientAssignmentModel {
     private UUID doctorId;
     private UUID patientId;
     private Date dateOfAdmission;
-    private Boolean isUnAssigned;
+    private boolean isUnAssigned;
 
     /**
      * Constructor to create a DoctorPatientAssignmentModel from a DoctorPatientAssignmentDto.

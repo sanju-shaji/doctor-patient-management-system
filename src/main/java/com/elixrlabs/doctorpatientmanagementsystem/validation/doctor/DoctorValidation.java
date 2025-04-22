@@ -57,7 +57,7 @@ public class DoctorValidation {
                 ApplicationConstants.REGEX_ALPHABET_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_LASTNAME.getKey()),
                 messageUtil.getMessage(MessageKeyEnum.LASTNAME_PATTERN_ERROR.getKey()));
         validateString(doctor.getDepartment(),
-                ApplicationConstants.REGEX_DEPARTMENTNAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENT_NAME.getKey()),
+                ApplicationConstants.REGEX_DEPARTMENT_NAME_PATTERN, messageUtil.getMessage(MessageKeyEnum.EMPTY_DEPARTMENT_NAME.getKey()),
                 messageUtil.getMessage(MessageKeyEnum.DEPARTMENT_NAME_PATTERN_ERROR.getKey()));
     }
 
