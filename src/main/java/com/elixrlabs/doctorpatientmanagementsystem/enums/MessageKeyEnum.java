@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum MessageKeyEnum {
     ADD_OPERATION_NOT_ALLOWED("add.operation.not.allowed"),
-    ASSIGNMENT_FAILED("assignment.failed"),
+    DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT("duplication.doctor.patient.assignment"),
     BLANK_UUID("blank.uuid"),
     DELETE_DOCTOR_SUCCESSFULLY("doctor.deleted.successfully"),
     DEPARTMENT_NAME_PATTERN_ERROR("department.name.pattern.error"),

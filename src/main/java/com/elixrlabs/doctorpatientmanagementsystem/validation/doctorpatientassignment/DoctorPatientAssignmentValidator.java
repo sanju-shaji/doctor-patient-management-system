@@ -50,7 +50,7 @@ public class DoctorPatientAssignmentValidator {
             throw new InvalidAssignmentDataException(errors);
         }
         if (doctorPatientAssignmentRepository.findByDoctorIdAndPatientId(doctorId, patientId).isPresent()) {
-            throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.ASSIGNMENT_FAILED.getKey()));
+            throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT.getKey()));
         }
     }
 }

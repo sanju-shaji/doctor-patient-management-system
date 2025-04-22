@@ -38,7 +38,6 @@ public class DoctorPatientAssignmentService {
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = new DoctorPatientAssignmentModel(assignmentDto);
         DoctorPatientAssignmentModel savedAssignmentData = doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
         return responseBuilder.buildSuccessAssignDoctorToPatient(savedAssignmentData);
-
     }
 
     /**
