@@ -34,7 +34,7 @@ public class PatientJsonPatchValidator {
                 errors.add(message);
             }
             if (!ApplicationConstants.REPLACE.equalsIgnoreCase(operations)) {
-                String message = messageUtil.getMessage(MessageKeyEnum.ONLY_REPLACE_OPERATION_ARE_PERMITTED.getKey());
+                String message = messageUtil.getMessage(MessageKeyEnum.JSON_PATCH_OPERATION_INVALID.getKey());
                 errors.add(operations + ApplicationConstants.EMPTY_SPACE + message);
             }
             if (!ApplicationConstants.FIRSTNAME.equalsIgnoreCase(path) && !ApplicationConstants.LASTNAME.equalsIgnoreCase(path)) {
