@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -13,11 +14,13 @@ import java.util.UUID;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class DoctorPatientAssignmentDto {
-    private UUID id;
     private UUID doctorId;
     private UUID patientId;
+    private Date dateOfAdmission;
 }

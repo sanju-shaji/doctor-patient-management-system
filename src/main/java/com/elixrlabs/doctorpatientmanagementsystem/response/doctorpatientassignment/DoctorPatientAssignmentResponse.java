@@ -1,6 +1,5 @@
 package com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment;
 
-import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Response object of get doctors by patient id api
@@ -19,8 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DoctorPatientAssignmentResponse extends BaseResponse {
-    private String id;
+    private UUID id;
     private String firstName;
     private String lastName;
-    private List<DoctorDto> doctors;
+    private List<AssignedDoctorData> doctors;
 }

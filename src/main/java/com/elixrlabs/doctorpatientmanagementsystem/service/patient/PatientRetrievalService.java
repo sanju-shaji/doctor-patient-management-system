@@ -103,7 +103,7 @@ public class PatientRetrievalService {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_FOUND_ERROR.getKey(), doctorUuid));
         }
         DoctorWithAssignedPatientsData assignedPatientsToDoctorData = doctorRepository.getAssignedPatientsByDoctorId(doctorUuid);
-        if (assignedPatientsToDoctorData==null||assignedPatientsToDoctorData.getPatients().get(0).getId()==null) {
+        if (assignedPatientsToDoctorData == null) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_NOT_ASSIGNED.getKey(), doctorUuid));
         }
         DoctorWithAssignedPatientsResponse doctorWithAssignedPatientsResponse = DoctorWithAssignedPatientsResponse.builder()
@@ -129,7 +129,7 @@ public class PatientRetrievalService {
 
     private List<PatientDto> getPatientsByFirstAndLastName(String firstName, String lastName) {
 
-        List<PatientModel> patients = patientRepository.findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(firstName, lastName);
+        List<PatientModel> patients = patientRepository.findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(firstName, lastName);
         List<PatientDto> patientDtoList = new ArrayList<>();
         for (PatientModel patientModel : patients) {
             PatientDto patientDto = new PatientDto(patientModel);

@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassi
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.AssignedDoctorsToPatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -40,11 +41,16 @@ private final MongoTemplate mongoTemplate;
                 Aggregation.match(Criteria.where(ApplicationConstants.ID).is(patientId)),
                 Aggregation.lookup(ApplicationConstants.ASSIGNMENT_COLLECTION, ApplicationConstants.ID, ApplicationConstants.PATIENT_ID, ApplicationConstants.ASSIGNMENTS),
                 unwind(ApplicationConstants.ASSIGNMENTS, true),
+                Aggregation.match(Criteria.where(ApplicationConstants.ASSIGNMENTS_IS_UNASSIGNED).is(false)),
                 Aggregation.lookup(ApplicationConstants.DOCTORS_COLLECTION, ApplicationConstants.ASSIGNMENTS_DOCTOR_ID, ApplicationConstants.ID, ApplicationConstants.ASSIGNMENTS_DOCTOR),
                 unwind(ApplicationConstants.ASSIGNMENTS_DOCTOR, true),
                 group(ApplicationConstants.ID).first(ApplicationConstants.FIRST_NAME).as(ApplicationConstants.FIRST_NAME)
                         .first(ApplicationConstants.LAST_NAME).as(ApplicationConstants.LAST_NAME)
-                        .push(ApplicationConstants.ASSIGNMENTS_DOCTOR).as(ApplicationConstants.DOCTORS)
+                        .push(new Document().append(ApplicationConstants.ID, ApplicationConstants.ASSIGNMENTS_DOCTOR_ID_VALUE)
+                                .append(ApplicationConstants.FIRST_NAME, ApplicationConstants.ASSIGNMENTS_DOCTOR_FIRSTNAME_VALUE).append(ApplicationConstants.LAST_NAME,
+                                        ApplicationConstants.ASSIGNMENTS_DOCTOR_LASTNAME_VALUE)
+                                .append(ApplicationConstants.DEPARTMENT, ApplicationConstants.ASSIGNMENTS_DOCTOR_DEPARTMENT_VALUE)
+                                .append(ApplicationConstants.DATE_OF_ADMISSION, ApplicationConstants.ASSIGNMENTS_DOCTOR_DATE_VALUE)).as(ApplicationConstants.DOCTORS)
         );
         AggregationResults<AssignedDoctorsToPatientDto> results = mongoTemplate.aggregate(aggregation, ApplicationConstants.PATIENT_COLLECTION, AssignedDoctorsToPatientDto.class);
         return results.getUniqueMappedResult();
