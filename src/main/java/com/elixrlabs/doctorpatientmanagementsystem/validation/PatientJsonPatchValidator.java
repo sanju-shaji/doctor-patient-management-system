@@ -2,6 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,35 +18,54 @@ import java.util.List;
 @Component
 public class PatientJsonPatchValidator {
     private final MessageUtil messageUtil;
+    private final PatientRepository patientRepository;
 
-    public PatientJsonPatchValidator(MessageUtil messageUtil) {
+    public PatientJsonPatchValidator(MessageUtil messageUtil, PatientRepository patientRepository) {
         this.messageUtil = messageUtil;
+        this.patientRepository = patientRepository;
     }
 
-    public List<String> validatePatch(JsonPatch patch, ObjectMapper objectMapper) {
+
+    public List<String> validatePatch(JsonPatch patch, List<JsonNode> validOperations) {
         List<String> errors = new ArrayList<>();
-        JsonNode patchNode = objectMapper.valueToTree(patch);
-        for (JsonNode operation : patchNode) {
-            String operations = operation.get(ApplicationConstants.OPERATION).asText();
-            String path = operation.get(ApplicationConstants.PATH).asText();
-            JsonNode valueNode = operation.get(ApplicationConstants.VALUE);
-            if (ApplicationConstants.ID.equalsIgnoreCase(path.substring(1))) {
-                String message = messageUtil.getMessage(MessageKeyEnum.MODIFICATION_OF_PATIENT_ID_IS_NOT_ALLOWED.getKey());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode patchNode = mapper.valueToTree(patch);
+        for (JsonNode patchOperation : patchNode) {
+            String operationType = patchOperation.get(ApplicationConstants.PATCH_OPERATION_KEY).asText();
+            String path = patchOperation.get(ApplicationConstants.PATCH_PATH_KEY).asText();
+            String Value = patchOperation.get(ApplicationConstants.PATCH_VALUE_KEY).asText();
+            if (!operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REPLACE_OPERATION)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.ADD_OPERATION_NOT_ALLOWED.getKey(), path);
                 errors.add(message);
+                continue;
             }
-            if (!ApplicationConstants.REPLACE.equalsIgnoreCase(operations)) {
-                String message = messageUtil.getMessage(MessageKeyEnum.JSON_PATCH_OPERATION_INVALID.getKey());
-                errors.add(operations + ApplicationConstants.EMPTY_SPACE + message);
-            }
-            if (!ApplicationConstants.FIRSTNAME.equalsIgnoreCase(path) && !ApplicationConstants.LASTNAME.equalsIgnoreCase(path)) {
-                String message = messageUtil.getMessage(MessageKeyEnum.FIRSTNAME_AND_LASTNAME_PATHS_ARE_ALLOWED.getKey());
+            if (!isAllowedReplacePath(path)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED.getKey(), path);
                 errors.add(message);
+                continue;
             }
-            if (valueNode == null || valueNode.asText().trim().isEmpty()) {
-                String message = messageUtil.getMessage(MessageKeyEnum.NULL_OR_EMPTY_VALUES_ARE_NOT_ALLOWED.getKey());
+            if (path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_FIRST_NAME) && patientRepository.existsByFirstNameIgnoreCase(Value)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.DUPLICATE_FIRST_NAME.getKey(), Value);
                 errors.add(message);
+                continue;
             }
+            if (path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_LAST_NAME) && patientRepository.existsByLastNameIgnoreCase(Value)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.DUPLICATE_LAST_NAME.getKey(), Value);
+                errors.add(message);
+                continue;
+            }
+            validOperations.add(patchOperation);
         }
         return errors;
+    }
+
+    /**
+     * Checks if the given path is allowed for 'replace' operation.
+     */
+    private boolean isAllowedReplacePath(String path) {
+        return path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_FIRST_NAME)
+                || path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_LAST_NAME)
+                || path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_DEPARTMENT);
+
     }
 }
