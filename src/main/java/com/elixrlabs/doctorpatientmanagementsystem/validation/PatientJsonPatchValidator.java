@@ -34,7 +34,7 @@ public class PatientJsonPatchValidator {
             String operationType = patchOperation.get(ApplicationConstants.PATCH_OPERATION_KEY).asText();
             String path = patchOperation.get(ApplicationConstants.PATCH_PATH_KEY).asText();
             String Value = patchOperation.get(ApplicationConstants.PATCH_VALUE_KEY).asText();
-            if (!operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REPLACE_OPERATION)) {
+            if (!ApplicationConstants.PATCH_REPLACE_OPERATION.equalsIgnoreCase(operationType)) {
                 String message = messageUtil.getMessage(MessageKeyEnum.ADD_OPERATION_NOT_ALLOWED.getKey(), path);
                 errors.add(message);
                 continue;
@@ -44,12 +44,12 @@ public class PatientJsonPatchValidator {
                 errors.add(message);
                 continue;
             }
-            if (path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_FIRST_NAME) && patientRepository.existsByFirstNameIgnoreCase(Value)) {
+            if (ApplicationConstants.PATCH_PATH_FIRST_NAME.equalsIgnoreCase(path) && patientRepository.existsByFirstNameIgnoreCase(Value)) {
                 String message = messageUtil.getMessage(MessageKeyEnum.DUPLICATE_FIRST_NAME.getKey(), Value);
                 errors.add(message);
                 continue;
             }
-            if (path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_LAST_NAME) && patientRepository.existsByLastNameIgnoreCase(Value)) {
+            if (ApplicationConstants.PATCH_PATH_LAST_NAME.equalsIgnoreCase(path) && patientRepository.existsByLastNameIgnoreCase(Value)) {
                 String message = messageUtil.getMessage(MessageKeyEnum.DUPLICATE_LAST_NAME.getKey(), Value);
                 errors.add(message);
                 continue;
@@ -63,9 +63,9 @@ public class PatientJsonPatchValidator {
      * Checks if the given path is allowed for 'replace' operation.
      */
     private boolean isAllowedReplacePath(String path) {
-        return path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_FIRST_NAME)
-                || path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_LAST_NAME)
-                || path.equalsIgnoreCase(ApplicationConstants.PATCH_PATH_DEPARTMENT);
+        return (ApplicationConstants.PATCH_PATH_FIRST_NAME.equalsIgnoreCase(path))
+                || (ApplicationConstants.PATCH_PATH_LAST_NAME.equalsIgnoreCase(path))
+                || (ApplicationConstants.PATCH_PATH_DEPARTMENT.equalsIgnoreCase(path));
 
     }
 }

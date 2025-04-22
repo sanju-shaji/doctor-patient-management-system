@@ -1,6 +1,5 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
@@ -59,23 +58,18 @@ public class PatientModificationService {
         List<String> errors = patientJsonPatchValidator.validatePatch(patch, operations);
         boolean hasAnyUpdate = false;
         for (JsonNode operation : operations) {
-            try {
-                JsonPatch singlePatch = JsonPatch.fromJson(objectMapper.createArrayNode().add(operation));
-                JsonNode patchedNode = singlePatch.apply(patientNode);
-                PatientDto patchedDto = objectMapper.treeToValue(patchedNode, PatientDto.class);
-                List<String> fieldErrors = patientValidation.validatePatients(patchedDto);
-                if (fieldErrors.isEmpty()) {
-                    patientNode = patchedNode;
-                    hasAnyUpdate = true;
-                } else {
-                    errors.add(fieldErrors.toString());
-                }
-            } catch (Exception e) {
-                String op = operation.get(ApplicationConstants.PATCH_OPERATION_KEY).asText();
-                String path = operation.get(ApplicationConstants.PATCH_PATH_KEY).asText();
-                errors.add(ApplicationConstants.FAILED_TO_APPLY + op + ApplicationConstants.ON + path + ApplicationConstants.COLON + e.getMessage());
+            JsonPatch singlePatch = JsonPatch.fromJson(objectMapper.createArrayNode().add(operation));
+            JsonNode patchedNode = singlePatch.apply(patientNode);
+            PatientDto patchedDto = objectMapper.treeToValue(patchedNode, PatientDto.class);
+            List<String> fieldErrors = patientValidation.validatePatients(patchedDto);
+            if (fieldErrors.isEmpty()) {
+                patientNode = patchedNode;
+                hasAnyUpdate = true;
+            } else {
+                errors.add(fieldErrors.toString());
             }
         }
+        boolean hasError = !errors.isEmpty();
         if (hasAnyUpdate && patientNode != null) {
             PatientDto finalpatchedDto = objectMapper.treeToValue(patientNode, PatientDto.class);
             PatientModel updatedModel = objectMapper.convertValue(finalpatchedDto, PatientModel.class);
@@ -85,11 +79,10 @@ public class PatientModificationService {
                     .id(saved.getId())
                     .firstName(saved.getFirstName())
                     .lastName(saved.getLastName()).build();
-            patchPatientResponse.setSuccess(true);
+            patchPatientResponse.setSuccess(!hasError);
             patchPatientResponse.setPatient(responseDto);
             patchPatientResponse.setErrors(errors.isEmpty() ? null : errors);
-            HttpStatus status = errors.isEmpty() ? HttpStatus.OK : HttpStatus.PARTIAL_CONTENT;
-            return new ResponseEntity<>(patchPatientResponse, status);
+            return new ResponseEntity<>(patchPatientResponse, hasError ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
         } else {
             patchPatientResponse.setSuccess(false);
             patchPatientResponse.setErrors(errors);
