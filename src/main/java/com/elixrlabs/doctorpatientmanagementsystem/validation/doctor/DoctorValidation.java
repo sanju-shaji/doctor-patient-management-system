@@ -109,17 +109,17 @@ public class DoctorValidation {
     public void validateDoctorAndPatientIds(String doctorId, String patientId) {
         List<String> errors = new ArrayList<>();
 
-        if (StringUtils.isBlank(doctorId)) {
+        if (StringUtils.isBlank(String.valueOf(doctorId))) {
             String errorMessage = messageUtil.getMessage(MessageKeyEnum.EMPTY_VALUE.getKey(), ApplicationConstants.DOCTOR_ID);
             errors.add(errorMessage);
-        } else if (isInValidUUID(doctorId)) {
+        } else if (isInValidUUID(String.valueOf(doctorId))) {
             String errorMessage = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT_DETAILS.getKey(), ApplicationConstants.DOCTOR_ID);
             errors.add(errorMessage);
         }
-        if (StringUtils.isBlank(patientId)) {
+        if (StringUtils.isBlank(String.valueOf(patientId))) {
             String errorMessage = messageUtil.getMessage(MessageKeyEnum.EMPTY_VALUE.getKey(), ApplicationConstants.PATIENT_ID);
             errors.add(errorMessage);
-        } else if (isInValidUUID(patientId)) {
+        } else if (isInValidUUID(String.valueOf(patientId))) {
             String errorMessage = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT_DETAILS.getKey(), ApplicationConstants.PATIENT_ID);
             errors.add(errorMessage);
         }
