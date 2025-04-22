@@ -90,10 +90,10 @@ public class DoctorValidation {
     public void validateDoctorId(String doctorId) {
         List<String> errors = new ArrayList<>();
         if (StringUtils.isBlank(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.UUID_NOT_PRESENT.getKey(), ApplicationConstants.DOCTOR);
+            String message = messageUtil.getMessage(MessageKeyEnum.EMPTY_VALUE.getKey(), ApplicationConstants.DOCTOR_ID);
             errors.add(message);
         } else if (isInValidUUID(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.DOCTOR);
+            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT_DETAILS.getKey(), ApplicationConstants.DOCTOR_ID);
             errors.add(message);
         }
         if (!errors.isEmpty()) {
@@ -110,18 +110,18 @@ public class DoctorValidation {
         List<String> errors = new ArrayList<>();
 
         if (StringUtils.isBlank(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.UUID_NOT_PRESENT.getKey(), ApplicationConstants.DOCTOR);
-            errors.add(message);
+            String errorMessage = messageUtil.getMessage(MessageKeyEnum.EMPTY_VALUE.getKey(), ApplicationConstants.DOCTOR_ID);
+            errors.add(errorMessage);
         } else if (isInValidUUID(doctorId)) {
-            String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.DOCTOR);
-            errors.add(message);
+            String errorMessage = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT_DETAILS.getKey(), ApplicationConstants.DOCTOR_ID);
+            errors.add(errorMessage);
         }
         if (StringUtils.isBlank(patientId)) {
-            String msg = messageUtil.getMessage(MessageKeyEnum.UUID_NOT_PRESENT.getKey(), ApplicationConstants.PATIENT);
-            errors.add(msg);
+            String errorMessage = messageUtil.getMessage(MessageKeyEnum.EMPTY_VALUE.getKey(), ApplicationConstants.PATIENT_ID);
+            errors.add(errorMessage);
         } else if (isInValidUUID(patientId)) {
-            String msg = messageUtil.getMessage(MessageKeyEnum.DOCTOR_INVALID_UUID_FORMAT.getKey(), ApplicationConstants.PATIENT);
-            errors.add(msg);
+            String errorMessage = messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT_DETAILS.getKey(), ApplicationConstants.PATIENT_ID);
+            errors.add(errorMessage);
         }
         if (!errors.isEmpty()) {
             throw new UuidValidationException(errors);

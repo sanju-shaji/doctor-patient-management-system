@@ -25,7 +25,6 @@ public class ApplicationConstants {
     public static final String COLON = " :";
     public static final String DATE_OF_ADMISSION="dateOfAdmission";
     public static final String DEPARTMENT="department";
-    public static final String DOCTOR = "doctor";
     public static final String DOCTOR_ID = "doctorId";
     public static final String DOCTORS = "doctors";
     public static final String DOCTORS_COLLECTION = "tp_doctors";
