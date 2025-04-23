@@ -3,7 +3,10 @@ package com.elixrlabs.doctorpatientmanagementsystem.util;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,5 +78,25 @@ public class TestDataBuilder {
         List<DoctorEntity> doctorEntityList = new ArrayList<>();
         doctorEntityList.add(doctorEntityBuilder());
         return doctorEntityList;
+    }
+
+    /**
+     * Builds a successful response with a list of doctors and returns HTTP 200 OK.
+     */
+    public ResponseEntity<DoctorListResponse> buildDoctorListSuccessResponse(List<DoctorDto> doctors) {
+        DoctorListResponse doctorListResponse = new DoctorListResponse();
+        doctorListResponse.setDoctors(doctors);
+        doctorListResponse.setSuccess(true);
+        return ResponseEntity.ok().body(doctorListResponse);
+    }
+
+    /**
+     * Builds an error response with a given error message and HTTP status.
+     */
+    public ResponseEntity<DoctorListResponse> buildDoctorListErrorResponse(HttpStatus statuscode) {
+        DoctorListResponse doctorListResponse = new DoctorListResponse();
+        doctorListResponse.setSuccess(false);
+        doctorListResponse.setErrors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        return ResponseEntity.status(statuscode).body(doctorListResponse);
     }
 }

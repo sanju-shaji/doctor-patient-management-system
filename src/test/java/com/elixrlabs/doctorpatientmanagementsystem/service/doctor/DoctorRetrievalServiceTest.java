@@ -30,60 +30,54 @@ class DoctorRetrievalServiceTest {
 
     @Mock
     DoctorValidation doctorValidation;
-
     @Mock
     DoctorRepository doctorRepository;
-
     @InjectMocks
     DoctorRetrievalService doctorRetrievalService;
-
-
     TestDataBuilder testDataBuilder = new TestDataBuilder();
-
 
     /**
      * Tests valid doctor name input and checks if the service returns correct doctor data with HTTP 200.
      */
     @Test
-    void testDoctorRetrievalService_validInputs() {
+    void testRetrieveDoctorByName_withValidInput_returnsDoctorListResponse() {
         DoctorEntity doctorEntityResponse = testDataBuilder.doctorEntityBuilder();
-        List<DoctorDto> expectedDoctorDtoResponse = testDataBuilder.doctorDtoListBuilder();
-        List<DoctorEntity> expectedDoctorEntityResponse = testDataBuilder.doctorEntityListBuilder();
-        Mockito.when(doctorRepository.findByName(doctorEntityResponse.getFirstName())).thenReturn(expectedDoctorEntityResponse);
-        ResponseEntity<DoctorListResponse> actualDoctorsData = doctorRetrievalService.retrieveDoctorByName(doctorEntityResponse.getFirstName());
-        assertEquals(HttpStatus.OK.value(), actualDoctorsData.getStatusCode().value());
-        assertNotNull(actualDoctorsData.getBody());
-        assertTrue(actualDoctorsData.getBody().isSuccess());
-        assertEquals(expectedDoctorDtoResponse, actualDoctorsData.getBody().getDoctors());
-
+        List<DoctorDto> expectedDoctorDtoList = testDataBuilder.doctorDtoListBuilder();
+        List<DoctorEntity> expectedResponse = testDataBuilder.doctorEntityListBuilder();
+        Mockito.when(doctorRepository.findByName(doctorEntityResponse.getFirstName())).thenReturn(expectedResponse);
+        ResponseEntity<DoctorListResponse> actualResponse = doctorRetrievalService.retrieveDoctorByName(doctorEntityResponse.getFirstName());
+        assertEquals(HttpStatus.OK.value(), actualResponse.getStatusCode().value());
+        assertNotNull(actualResponse.getBody());
+        assertTrue(actualResponse.getBody().isSuccess());
+        assertEquals(expectedDoctorDtoList, actualResponse.getBody().getDoctors());
     }
 
     /**
      * Tests invalid (blank) doctor name input, expecting HTTP 400 response with appropriate error message.
      */
     @Test
-    void testDoctorRetrievalService_inValidDoctorName() {
+    void testRetrieveDoctorByName_withInValidDoctorName_returnsBadRequestErrorResponse() {
         Mockito.when(doctorValidation.validateDoctorName(TestApplicationConstants.BLANK_NAME)).thenReturn(true);
-        ResponseEntity<DoctorListResponse> doctorsData = doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.BLANK_NAME);
-        assertNotNull(doctorsData.getBody());
-        assertEquals(HttpStatus.BAD_REQUEST, doctorsData.getStatusCode());
-        assertEquals(1, doctorsData.getBody().getErrors().size());
-        assertFalse(doctorsData.getBody().isSuccess());
-        assertEquals(TestApplicationConstants.EMPTY_NAME_QUERY_PARAM, doctorsData.getBody().getErrors().get(0));
+        ResponseEntity<DoctorListResponse> doctorListResponse = doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.BLANK_NAME);
+        assertNotNull(doctorListResponse.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, doctorListResponse.getStatusCode());
+        assertEquals(1, doctorListResponse.getBody().getErrors().size());
+        assertFalse(doctorListResponse.getBody().isSuccess());
+        assertEquals(TestApplicationConstants.EMPTY_NAME_QUERY_PARAM, doctorListResponse.getBody().getErrors().get(0));
     }
 
     /**
      * Tests scenario when no doctors are found, expecting HTTP 404 with a "doctors not found" error message.
      */
     @Test
-    void testDoctorRetrievalService_emptyDoctorsData() {
+    void testRetrieveDoctorByName_withNotMatchingDoctorName_returnsNotFoundErrorResponse() {
         DoctorEntity doctorEntityResponse = testDataBuilder.doctorEntityBuilder();
         Mockito.when(doctorRepository.findByName(doctorEntityResponse.getFirstName())).thenReturn(List.of());
-        ResponseEntity<DoctorListResponse> doctorsData = doctorRetrievalService.retrieveDoctorByName(doctorEntityResponse.getFirstName());
-        assertNotNull(doctorsData.getBody());
-        assertFalse(doctorsData.getBody().isSuccess());
-        assertEquals(HttpStatus.NOT_FOUND, doctorsData.getStatusCode());
-        assertEquals(1, doctorsData.getBody().getErrors().size());
-        assertEquals(TestApplicationConstants.DOCTORS_NOT_FOUND,doctorsData.getBody().getErrors().get(0));
+        ResponseEntity<DoctorListResponse> doctorListResponse = doctorRetrievalService.retrieveDoctorByName(doctorEntityResponse.getFirstName());
+        assertNotNull(doctorListResponse.getBody());
+        assertFalse(doctorListResponse.getBody().isSuccess());
+        assertEquals(HttpStatus.NOT_FOUND, doctorListResponse.getStatusCode());
+        assertEquals(1, doctorListResponse.getBody().getErrors().size());
+        assertEquals(TestApplicationConstants.DOCTORS_NOT_FOUND, doctorListResponse.getBody().getErrors().get(0));
     }
 }
