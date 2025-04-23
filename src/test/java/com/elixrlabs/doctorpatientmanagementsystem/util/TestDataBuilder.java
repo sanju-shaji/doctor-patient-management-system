@@ -8,6 +8,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorRespons
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +36,9 @@ public class TestDataBuilder {
      * @return doctor entity
      */
     public DoctorEntity doctorEntityBuilder() {
-        DoctorDto doctorDto = doctorDtoBuilder();
+        DoctorDto doctorDto=doctorDtoBuilder();
         return DoctorEntity.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
                 .firstName(doctorDto.getFirstName())
                 .lastName(doctorDto.getLastName())
                 .department(doctorDto.getDepartment())
@@ -48,13 +51,25 @@ public class TestDataBuilder {
      * @return doctor response object
      */
     public DoctorResponse doctorResponseBuilder() {
-        DoctorEntity doctorEntity = doctorEntityBuilder();
+        DoctorEntity doctorEntity= doctorEntityBuilder();
         return DoctorResponse.builder()
                 .id(doctorEntity.getId())
                 .firstName(doctorEntity.getFirstName())
                 .lastName(doctorEntity.getLastName())
                 .department(doctorEntity.getDepartment())
                 .success(true)
+                .build();
+    }
+
+    /**
+     * This method initializes invalid doctor response object so that it can be reused for doctor module testing
+     *
+     * @return doctor response object
+     */
+    public DoctorResponse invalidDoctorResponseBuilder() {
+        return DoctorResponse.builder()
+                .success(false)
+                .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
                 .build();
     }
 
