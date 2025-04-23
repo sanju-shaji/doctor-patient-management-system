@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Service Class for creating doctor-patient-assignment
@@ -48,14 +50,12 @@ public class DoctorPatientAssignmentService {
      * @return ResponseEntity in which the desired data is set for response
      */
 
-    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) throws Exception{
-        doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(dto.getDoctorId(), dto.getPatientId());
-        List<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(dto.getDoctorId(), dto.getPatientId());
-        for (DoctorPatientAssignmentModel assignment : doctorPatientAssignments) {
-            assignment.setUnAssigned(true);
-        }
-        doctorPatientAssignmentRepository.saveAll(doctorPatientAssignments);
-
+    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) throws Exception {
+        doctorPatientAssignmentValidator.validateAssignmentDto(dto);
+        doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(UUID.fromString(dto.getDoctorId()), UUID.fromString(dto.getPatientId()));
+        DoctorPatientAssignmentModel doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID.fromString(dto.getDoctorId()), UUID.fromString(dto.getPatientId()));
+        doctorPatientAssignments.setUnAssigned(true);
+        doctorPatientAssignmentRepository.save(doctorPatientAssignments);
         String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT.getKey());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(BaseResponse.builder()

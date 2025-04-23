@@ -13,14 +13,11 @@ import java.util.UUID;
  */
 @Repository
 public interface DoctorPatientAssignmentRepository extends MongoRepository<DoctorPatientAssignmentModel, UUID> {
-
     List<DoctorPatientAssignmentModel> findByPatientId(UUID patientId);
 
     List<DoctorPatientAssignmentModel> findByDoctorId(UUID doctorId);
 
-    List<DoctorPatientAssignmentModel> findByDoctorIdAndPatientIdAndIsUnAssignedFalse(String doctorId, String patientId);
+    DoctorPatientAssignmentModel findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID doctorId, UUID patientId);
 
-    Optional<Object> findByDoctorIdAndPatientId(UUID doctorId, UUID patientId);
-    List<DoctorPatientAssignmentModel> findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID doctorId, UUID patientId);
-    List<DoctorPatientAssignmentModel> findByDoctorIdAndPatientId(UUID doctorID, UUID patientId);
+    Optional<DoctorPatientAssignmentModel> findByDoctorIdAndPatientId(UUID doctorId, UUID patientId);
 }
