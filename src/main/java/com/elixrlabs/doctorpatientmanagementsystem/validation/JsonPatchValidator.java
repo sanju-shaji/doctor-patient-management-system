@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidJsonOperationException;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,9 +25,11 @@ import java.util.List;
 public class JsonPatchValidator {
 
     private final MessageUtil messageUtil;
+    private final PatientRepository patientRepository;
 
-    public JsonPatchValidator(MessageUtil messageUtil) {
+    public JsonPatchValidator(MessageUtil messageUtil, PatientRepository patientRepository) {
         this.messageUtil = messageUtil;
+        this.patientRepository = patientRepository;
     }
 
     /**
@@ -46,17 +49,27 @@ public class JsonPatchValidator {
         for (JsonNode patchOperation : patchNode) {
             String operationType = patchOperation.get(ApplicationConstants.PATCH_OPERATION_KEY).asText();
             String path = patchOperation.get(ApplicationConstants.PATCH_PATH_KEY).asText();
-            if (operationType.equalsIgnoreCase(ApplicationConstants.PATCH_ADD_OPERATION)) {
-                String message = messageUtil.getMessage(MessageKeyEnum.ADD_OPERATION_NOT_ALLOWED.getKey(),path);
+            String Value = patchOperation.get(ApplicationConstants.PATCH_VALUE_KEY).asText();
+            if (ApplicationConstants.PATCH_ADD_OPERATION.equalsIgnoreCase(operationType)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.ADD_OPERATION_NOT_ALLOWED.getKey(), path);
                 errors.add(message);
             }
-            if (operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REMOVE_OPERATION)) {
-                String message = messageUtil.getMessage(MessageKeyEnum.REMOVE_OPERATION_NOT_ALLOWED.getKey(),path);
+            if (ApplicationConstants.PATCH_REMOVE_OPERATION.equalsIgnoreCase(operationType)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.REMOVE_OPERATION_NOT_ALLOWED.getKey(), path);
                 errors.add(message);
             }
-            if ((operationType.equalsIgnoreCase(ApplicationConstants.PATCH_REPLACE_OPERATION)
-                    && !isAllowedReplacePath(path))) {
-                String message = messageUtil.getMessage(MessageKeyEnum.REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED.getKey(),path);
+            if (ApplicationConstants.PATCH_REPLACE_OPERATION.equalsIgnoreCase(operationType)
+                    && !isAllowedReplacePath(path)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED.getKey(), path);
+                errors.add(message);
+            }
+            if (ApplicationConstants.PATCH_PATH_FIRST_NAME.equalsIgnoreCase(path) && patientRepository.existsByFirstNameIgnoreCase(Value)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.DUPLICATE_FIRST_NAME.getKey(), Value);
+                errors.add(message);
+                continue;
+            }
+            if (ApplicationConstants.PATCH_PATH_LAST_NAME.equalsIgnoreCase(path) && patientRepository.existsByLastNameIgnoreCase(Value)) {
+                String message = messageUtil.getMessage(MessageKeyEnum.DUPLICATE_LAST_NAME.getKey(), Value);
                 errors.add(message);
             }
         }
