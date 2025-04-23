@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -14,7 +15,12 @@ import java.util.UUID;
 public interface DoctorPatientAssignmentRepository extends MongoRepository<DoctorPatientAssignmentModel, UUID> {
 
     List<DoctorPatientAssignmentModel> findByPatientId(UUID patientId);
+
     List<DoctorPatientAssignmentModel> findByDoctorId(UUID doctorId);
+
+    List<DoctorPatientAssignmentModel> findByDoctorIdAndPatientIdAndIsUnAssignedFalse(String doctorId, String patientId);
+
+    Optional<Object> findByDoctorIdAndPatientId(UUID doctorId, UUID patientId);
     List<DoctorPatientAssignmentModel> findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID doctorId, UUID patientId);
     List<DoctorPatientAssignmentModel> findByDoctorIdAndPatientId(UUID doctorID, UUID patientId);
 }

@@ -4,7 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorPatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.PostResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.service.doctorpatientassignment.DoctorPatientCreationService;
+import com.elixrlabs.doctorpatientmanagementsystem.service.doctorpatientassignment.DoctorPatientAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-public class DoctorPatientCreationController {
-    private final DoctorPatientCreationService doctorCreationService;
+public class DoctorPatientAssignmentController {
+    private final DoctorPatientAssignmentService doctorCreationService;
 
 
     /**
@@ -27,11 +27,12 @@ public class DoctorPatientCreationController {
      * @return - response entity of type PostResponse
      */
     @PostMapping(ApiConstants.ASSIGN_DOCTOR_PATIENT)
-    public ResponseEntity<PostResponse> createDoctorPatientAssignment(@RequestBody DoctorPatientAssignmentDto assignmentDto) {
-        return doctorCreationService.createDoctorPatientAssignment(assignmentDto);
+    public ResponseEntity<PostResponse> assignDoctorToPatient(@RequestBody DoctorPatientAssignmentDto assignmentDto){
+      return doctorCreationService.createDoctorPatientAssignment(assignmentDto);
     }
 
     /**
+     *
      * Api mapping for UnAssignDoctorFromPatient endpoint
      *
      * @param assignmentDto - Which contains the data passed in request body
