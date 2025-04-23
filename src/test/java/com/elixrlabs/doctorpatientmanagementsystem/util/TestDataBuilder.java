@@ -5,6 +5,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -51,4 +53,16 @@ public class TestDataBuilder {
                 .success(true)
                 .build();
     }
+
+    /**
+     * Returns a list containing one sample DoctorEntity for test data.
+     *
+     * @return a list with one DoctorEntity object
+     */
+    public List<DoctorEntity> doctorEntityListBuilder() {
+        List<DoctorEntity> doctorEntityList = new ArrayList<>();
+        doctorEntityList.add(doctorEntityBuilder());
+        return doctorEntityList;
+    }
+
 }
