@@ -188,6 +188,7 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(patientResponseDto);
     }
+
     /**
      * Handles InvalidAssignmentDataException and returns a list of validation errors.
      *
@@ -200,15 +201,16 @@ public class GlobalExceptionHandler {
                 .success(false)
                 .errors(invalidAssignmentDataException.getErrors())
                 .build();
-                return new ResponseEntity<>(baseResponse,HttpStatus.NOT_FOUND);
-}
-      @ExceptionHandler(UuidValidationException.class)
+        return new ResponseEntity<>(baseResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UuidValidationException.class)
     public ResponseEntity<BaseResponse> handleUuidValidationException(UuidValidationException uuidValidationException) {
         BaseResponse baseResponse = BaseResponse.builder()
                 .success(false)
                 .errors(uuidValidationException.getErrors())
                 .build();
-        return new ResponseEntity<>(baseResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -1,13 +1,8 @@
 package com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassignment;
 
-
-
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorPatientAssignmentDto;
-
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidAssignmentDataException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
@@ -36,24 +31,24 @@ public class DoctorPatientAssignmentValidator {
         this.doctorPatientAssignmentRepository = doctorPatientAssignmentRepository;
     }
 
-    public void validateAssignmentDto(DoctorPatientAssignmentDto assignmentDto) throws InvalidUuidException, DataNotFoundException {
-        List<String>  errors =new ArrayList<>();
-        doctorValidation.validateDoctorAndPatientIds(assignmentDto.getDoctorId(),assignmentDto.getPatientId());
+    public void validateAssignmentDto(DoctorPatientAssignmentDto assignmentDto) {
+        List<String> errors = new ArrayList<>();
+        doctorValidation.validateDoctorAndPatientIds(assignmentDto.getDoctorId(), assignmentDto.getPatientId());
         UUID doctorId = UUID.fromString(assignmentDto.getDoctorId());
         UUID patientId = UUID.fromString(assignmentDto.getPatientId());
         if (doctorRepository.findById(doctorId).isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NO_DOCTOR_FOUND.getKey(),doctorId);
+            String message = messageUtil.getMessage(MessageKeyEnum.NO_DOCTOR_FOUND.getKey(), doctorId);
             errors.add(message);
         }
         if (patientRepository.findById(patientId).isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey(),patientId);
+            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey(), patientId);
             errors.add(message);
         }
-        if(! errors.isEmpty()){
+        if (!errors.isEmpty()) {
             throw new InvalidAssignmentDataException(errors);
         }
         if (doctorPatientAssignmentRepository.findByDoctorIdAndPatientId(doctorId, patientId).isPresent()) {
-            throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.ASSIGNMENT_FAILED.getKey()));
+            throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT.getKey()));
         }
     }
 }

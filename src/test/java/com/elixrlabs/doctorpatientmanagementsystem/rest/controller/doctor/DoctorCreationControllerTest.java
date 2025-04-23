@@ -1,6 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
@@ -46,14 +46,13 @@ class DoctorCreationControllerTest {
     void testCreateDoctorController_validInputs() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         DoctorResponse doctorResponse = testDataBuilder.doctorResponseBuilder();
+        DoctorResponse expectedResponse = testDataBuilder.doctorResponseBuilder();
         Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenReturn(ResponseEntity.ok().body(doctorResponse));
         ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationController.createDoctor(doctorDto);
         assertNotNull(doctorCreationResponse.getBody());
         assertEquals(HttpStatus.OK.value(), doctorCreationResponse.getStatusCode().value());
         assertTrue(doctorCreationResponse.getBody().isSuccess());
-        assertEquals(doctorDto.getFirstName(), doctorCreationResponse.getBody().getFirstName());
-        assertEquals(doctorDto.getLastName(), doctorCreationResponse.getBody().getLastName());
-        assertEquals(doctorDto.getDepartment(), doctorCreationResponse.getBody().getDepartment());
+        assertEquals(expectedResponse, doctorCreationResponse.getBody());
         Mockito.verify(doctorCreationService, Mockito.times(1)).createDoctor(doctorDto);
     }
 
@@ -66,16 +65,16 @@ class DoctorCreationControllerTest {
     @Test
     void estCreateDoctorController_inValidInputs() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
-        Mockito.when(doctorCreationService.createDoctor(doctorDto)).thenThrow(new InvalidUserInputException(ApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        Mockito.when(doctorCreationService.createDoctor(doctorDto)).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         try {
             ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationController.createDoctor(doctorDto);
             assertNotNull(doctorCreationResponse.getBody());
             assertEquals(HttpStatus.BAD_REQUEST.value(), doctorCreationResponse.getStatusCode().value());
             assertFalse(doctorCreationResponse.getBody().isSuccess());
-            assertEquals(ApplicationConstants.MOCK_EXCEPTION_MESSAGE, doctorCreationResponse.getBody().getErrors().get(0));
+            assertEquals(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE, doctorCreationResponse.getBody().getErrors().get(0));
             Mockito.verify(doctorCreationService, Mockito.times(1)).createDoctor(doctorDto);
         } catch (InvalidUserInputException invalidUserInputException) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(DoctorResponse.builder().success(false).errors(List.of(ApplicationConstants.MOCK_EXCEPTION_MESSAGE)));
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)));
         }
     }
 }

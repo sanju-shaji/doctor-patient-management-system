@@ -33,7 +33,7 @@ public class TestDataBuilder {
      */
     public DoctorEntity doctorEntityBuilder() {
         return DoctorEntity.builder()
-                .id(UUID.randomUUID())
+                .id(UUID.fromString(TestApplicationConstants.UUID))
                 .firstName(doctorDtoBuilder().getFirstName())
                 .lastName(doctorDtoBuilder().getLastName())
                 .department(doctorDtoBuilder().getDepartment())
@@ -47,6 +47,7 @@ public class TestDataBuilder {
      */
     public DoctorResponse doctorResponseBuilder() {
         return DoctorResponse.builder()
+                .id(doctorEntityBuilder().getId())
                 .firstName(doctorEntityBuilder().getFirstName())
                 .lastName(doctorEntityBuilder().getLastName())
                 .department(doctorEntityBuilder().getDepartment())
