@@ -5,6 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -50,6 +51,18 @@ public class TestDataBuilder {
                 .lastName(doctorEntityBuilder().getLastName())
                 .department(doctorEntityBuilder().getDepartment())
                 .success(true)
+                .build();
+    }
+
+    /**
+     * This method initializes invalid doctor response object so that it can be reused for doctor module testing
+     *
+     * @return doctor response object
+     */
+    public DoctorResponse invalidDoctorResponseBuilder() {
+        return DoctorResponse.builder()
+                .success(false)
+                .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
                 .build();
     }
 }
