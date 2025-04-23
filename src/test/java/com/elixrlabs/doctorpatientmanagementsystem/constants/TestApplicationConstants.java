@@ -1,5 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.constants;
 
+import java.util.Date;
+
 /**
  * Class to store the constants used in test package
  */

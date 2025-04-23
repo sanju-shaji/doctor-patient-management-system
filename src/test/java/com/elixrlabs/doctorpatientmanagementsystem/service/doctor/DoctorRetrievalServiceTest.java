@@ -1,12 +1,15 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.AssignedDoctorsToPatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
+import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
@@ -29,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class DoctorRetrievalServiceTest {
     @Mock
+    PatientRepository patientRepository;
+    @Mock
     DoctorRepository doctorRepository;
     @Mock
     DoctorValidation doctorValidation;
@@ -44,7 +49,7 @@ class DoctorRetrievalServiceTest {
     }
 
     /**
-     * Test Method for testing the happy path
+     * Test Method for testing the happy path of getDoctorsById method of DoctorRetrievalService
      * HTTP Status code-200
      *
      * @throws InvalidUserInputException - if invalid user inputs are provided by the user
@@ -103,5 +108,18 @@ class DoctorRetrievalServiceTest {
         } catch (DataNotFoundException dataNotFoundException) {
             ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
         }
+    }
+
+    @Test
+    void getDoctorsWithPatient_validInputs() throws Exception {
+        AssignedDoctorsToPatientDto aggregationResponse=testDataBuilder.assignmentsToPatientDtoBuilder();
+        DoctorPatientAssignmentResponse expectedResponse=testDataBuilder.assignmentResponseBuilder();
+        Mockito.when(patientRepository.getAssignedDoctorsByPatientId(Mockito.any(UUID.class))).thenReturn(aggregationResponse);
+        Mockito.when(patientRepository.existsById(Mockito.any(UUID.class))).thenReturn(true);
+        ResponseEntity<DoctorPatientAssignmentResponse> getDoctorsWithPatient=doctorRetrievalService.getDoctorsWithPatient(UUID.randomUUID().toString());
+        assertEquals(HttpStatus.OK.value(),getDoctorsWithPatient.getStatusCode().value());
+        assertEquals(expectedResponse,getDoctorsWithPatient.getBody());
+        Mockito.verify(patientRepository,Mockito.times(1)).getAssignedDoctorsByPatientId(Mockito.any(UUID.class));
+        Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
     }
 }

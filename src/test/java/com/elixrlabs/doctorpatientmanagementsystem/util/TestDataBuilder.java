@@ -2,9 +2,14 @@ package com.elixrlabs.doctorpatientmanagementsystem.util;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.AssignedDoctorsToPatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.AssignedDoctorData;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,4 +70,33 @@ public class TestDataBuilder {
                 .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
                 .build();
     }
+
+    public AssignedDoctorData assignedDoctorDataResponseBuilder(){
+        return AssignedDoctorData.builder()
+                .id(doctorEntityBuilder().getId())
+                .firstName(doctorEntityBuilder().getFirstName())
+                .lastName(doctorEntityBuilder().getLastName())
+                .department(doctorEntityBuilder().getDepartment())
+                .dateOfAdmission(Date.from(Instant.now()))
+                .build();
+    }
+
+    public AssignedDoctorsToPatientDto assignmentsToPatientDtoBuilder(){
+        return AssignedDoctorsToPatientDto.builder()
+                .id(doctorEntityBuilder().getId().toString())
+                .firstName(doctorEntityBuilder().getFirstName())
+                .lastName(doctorEntityBuilder().getLastName())
+                .doctors(List.of(assignedDoctorDataResponseBuilder()))
+                .build();
+    }
+    public DoctorPatientAssignmentResponse assignmentResponseBuilder(){
+        return DoctorPatientAssignmentResponse.builder()
+                .id(doctorEntityBuilder().getId())
+                .firstName(doctorEntityBuilder().getFirstName())
+                .lastName(doctorEntityBuilder().getLastName())
+                .doctors(List.of(assignedDoctorDataResponseBuilder()))
+                .success(true)
+                .build();
+    }
+
 }
