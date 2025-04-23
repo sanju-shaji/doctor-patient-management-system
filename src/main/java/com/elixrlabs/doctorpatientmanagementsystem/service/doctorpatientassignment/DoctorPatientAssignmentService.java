@@ -7,14 +7,12 @@ import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassig
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.PostResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.util.ResponseBuilder;
+import com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassignment.DoctorPatientAssignmentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.Date;
-import java.util.UUID;
 import java.util.List;
 
 /**
@@ -22,9 +20,11 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-public class DoctorPatientCreationService {
+public class DoctorPatientAssignmentService {
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
     private final MessageUtil messageUtil;
+    private final DoctorPatientAssignmentValidator doctorPatientAssignmentValidator;
+    private final ResponseBuilder responseBuilder;
 
     /**
      * Method which contains the business logic to Post the assignments data to database
@@ -34,21 +34,10 @@ public class DoctorPatientCreationService {
      */
 
     public ResponseEntity<PostResponse> createDoctorPatientAssignment(DoctorPatientAssignmentDto assignmentDto) {
-        DoctorPatientAssignmentModel doctorPatientAssignmentModel = DoctorPatientAssignmentModel.builder()
-                .id(UUID.randomUUID()).patientId(assignmentDto.getPatientId())
-                .doctorId(assignmentDto.getDoctorId())
-                .dateOfAdmission(Date.from(Instant.now()))
-                .isUnAssigned(false)
-                .build();
+        doctorPatientAssignmentValidator.validateAssignmentDto(assignmentDto);
+        DoctorPatientAssignmentModel doctorPatientAssignmentModel = new DoctorPatientAssignmentModel(assignmentDto);
         DoctorPatientAssignmentModel savedAssignmentData = doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
-        PostResponse postAssignmentResponse = PostResponse.builder()
-                .success(true)
-                .id(savedAssignmentData.getId())
-                .doctorId(savedAssignmentData.getDoctorId())
-                .patientId(savedAssignmentData.getPatientId())
-                .dateOfAdmission(savedAssignmentData.getDateOfAdmission())
-                .build();
-        return new ResponseEntity<>(postAssignmentResponse, HttpStatus.OK);
+        return responseBuilder.buildSuccessAssignDoctorToPatient(savedAssignmentData);
     }
 
     /**
