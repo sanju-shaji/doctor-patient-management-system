@@ -3,7 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientValidationException;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidJsonOperationException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 
 @Service
 public class PatientModificationService {
@@ -43,10 +44,10 @@ public class PatientModificationService {
         patientValidation.validatePatientId(patientId);
         Optional<PatientModel> patientModelOptional = patientRepository.findById(UUID.fromString(patientId));
         if (patientModelOptional.isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey(),patientId);
+            String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey(), patientId);
             throw new DataNotFoundException(message);
         }
-        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
+        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil, patientRepository);
         jsonPatchValidator.validateJsonOperations(patch);
         PatientModel patientModel = patientModelOptional.get();
         PatientDto patientDto = objectMapper.convertValue(patientModel, PatientDto.class);
@@ -55,8 +56,7 @@ public class PatientModificationService {
         PatientDto patchedDto = objectMapper.treeToValue(patchedNode, PatientDto.class);
         List<String> validationErrors = patientValidation.validatePatients(patchedDto);
         if (!validationErrors.isEmpty()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.NULL_OR_EMPTY_VALUES_ARE_NOT_ALLOWED.getKey());
-            throw new PatientValidationException(message);
+            throw new InvalidJsonOperationException(validationErrors);
         }
         PatientModel patchedModel = objectMapper.convertValue(patchedDto, PatientModel.class);
         patchedModel.setId(patchedModel.getId());
