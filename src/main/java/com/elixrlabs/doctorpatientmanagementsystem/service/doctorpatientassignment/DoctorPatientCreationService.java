@@ -26,7 +26,6 @@ import java.util.List;
 public class DoctorPatientCreationService {
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
     private final MessageUtil messageUtil;
-
     private final DoctorPatientUnAssignmentValidator doctorPatientUnAssignmentValidator;
     /**
      * Method which contains the business logic to Post the assignments data to database
@@ -59,7 +58,8 @@ public class DoctorPatientCreationService {
      * @return ResponseEntity in which the desired data is set for response
      */
 
-    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) {
+    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) throws Exception{
+        doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(dto.getDoctorId(), dto.getPatientId());
         List<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(dto.getDoctorId(), dto.getPatientId());
         for (DoctorPatientAssignmentModel assignment : doctorPatientAssignments) {
             assignment.setUnAssigned(true);

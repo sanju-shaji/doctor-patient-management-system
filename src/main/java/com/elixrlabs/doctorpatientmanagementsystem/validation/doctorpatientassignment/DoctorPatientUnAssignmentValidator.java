@@ -37,7 +37,7 @@ public class DoctorPatientUnAssignmentValidator {
         }
         boolean isAlreadyUnassigned =true;
         for(DoctorPatientAssignmentModel assignment : assignments){
-            if(!assignment.getIsUnAssigned()){
+            if(!assignment.isUnAssigned()){
                 isAlreadyUnassigned=false;
                 break;
             }
@@ -45,7 +45,5 @@ public class DoctorPatientUnAssignmentValidator {
         if(isAlreadyUnassigned){
             throw new DoctorAlreadyUnassignedException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_ALREADY_UNASSIGNED.getKey(),patientId));
         }
-
-
     }
 }
