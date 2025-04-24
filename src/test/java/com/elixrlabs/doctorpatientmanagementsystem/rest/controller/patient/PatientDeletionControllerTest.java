@@ -1,7 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
@@ -18,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -46,17 +47,12 @@ class PatientDeletionControllerTest {
     void testDeletePatientById_Success() throws Exception {
         UUID patientId = UUID.randomUUID();
         String patientIdString = patientId.toString();
-        String firstName = "kevin";
-        String lastName = "joseph";
-        PatientResponse patientResponse = testDataBuilder.patientResponseBuilder(patientId, firstName, lastName);
+        PatientResponse patientResponse = testDataBuilder.patientResponseBuilder(patientId);
         when(patientDeletionService.deletePatientById(patientIdString)).thenReturn(ResponseEntity.ok(patientResponse));
         ResponseEntity<BaseResponse> response = patientDeletionController.ResponseDto(patientIdString);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertTrue(response.getBody().isSuccess());
         assertEquals(List.of(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY), response.getBody().getMessages());
-        PatientResponse patientResponse1 = (PatientResponse) response.getBody();
-        PatientDto patientDto = (PatientDto) patientResponse1.getData();
-        assertEquals(patientId, patientDto.getId());
         verify(patientDeletionService, times(1)).deletePatientById(patientIdString);
     }
 

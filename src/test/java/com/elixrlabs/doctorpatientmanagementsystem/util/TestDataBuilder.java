@@ -2,7 +2,6 @@ package com.elixrlabs.doctorpatientmanagementsystem.util;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
-import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
@@ -70,16 +69,11 @@ public class TestDataBuilder {
                 .build();
     }
 
-    public PatientResponse patientResponseBuilder(UUID patientId, String firstName, String lastName) {
+    public PatientResponse patientResponseBuilder(UUID patientId) {
         List<String> message = List.of(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY);
-        PatientDto patientDto = PatientDto.builder()
-                .id(patientId)
-                .firstName(firstName)
-                .lastName(lastName).build();
         return PatientResponse.builder()
                 .success(true)
                 .messages(message)
-                .data(patientDto)
                 .build();
     }
 }

@@ -40,12 +40,16 @@ import java.util.UUID;
 class PatientDeletionServiceTest {
     @Mock
     private PatientRepository patientRepository;
+
     @Mock
     private DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
+
     @Mock
     private PatientValidation patientValidation;
+
     @Mock
     private MessageUtil messageUtil;
+    
     @InjectMocks
     private PatientDeletionService patientDeletionService;
 
@@ -58,8 +62,6 @@ class PatientDeletionServiceTest {
         String patientId = UUID.randomUUID().toString();
         PatientModel patient = new PatientModel();
         patient.setId(UUID.fromString(patientId));
-        patient.setFirstName("kevin");
-        patient.setLastName("joseph");
         when(patientRepository.findById(UUID.fromString(patientId))).thenReturn(Optional.of(patient));
         when(doctorPatientAssignmentRepository.findByPatientId(UUID.fromString(patientId))).thenReturn(Collections.emptyList());
         when(messageUtil.getMessage(MessageKeyEnum.PATIENT_DELETED_SUCCESSFULLY.getKey())).thenReturn(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY);
