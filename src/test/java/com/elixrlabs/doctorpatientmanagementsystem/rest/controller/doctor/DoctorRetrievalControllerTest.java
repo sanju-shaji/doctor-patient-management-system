@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(MockitoExtension.class)
 class DoctorRetrievalControllerTest {
-    TestDataBuilder testDataBuilder = new TestDataBuilder();
 
     @Mock
     DoctorRetrievalService doctorRetrievalService;
@@ -47,7 +46,7 @@ class DoctorRetrievalControllerTest {
      * HTTP Status Code-200
      *
      * @throws Exception - throws exception if user provide invalid inputs
-     * Tests retrieval of doctor by valid name and expects a successful response with doctor list.
+     *                   Tests retrieval of doctor by valid name and expects a successful response with doctor list.
      */
     @Test
     void getDoctorByID_validInput() throws Exception {
@@ -57,6 +56,12 @@ class DoctorRetrievalControllerTest {
         assertEquals(HttpStatus.OK.value(), doctorData.getStatusCode().value());
         assertEquals(expectedResponse, doctorData.getBody());
         Mockito.verify(doctorRetrievalService, Mockito.times(1)).getDoctorsById(Mockito.anyString());
+    }
+
+    /**
+     * Tests retrieval of doctor by valid name and expects a successful response with doctor list.
+     */
+    @Test
     void testRetrieveDoctorByName_withValidInput_returnsDoctorListResponse() {
         List<DoctorDto> expectedDoctorDtoListResponse = testDataBuilder.doctorDtoListBuilder();
         Mockito.when(doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.FIRST_NAME)).thenReturn(testDataBuilder.buildDoctorListSuccessResponse(expectedDoctorDtoListResponse));
@@ -72,7 +77,7 @@ class DoctorRetrievalControllerTest {
      * HTTP Status Code-400
      *
      * @throws Exception if invalid user provide invalid uuid
-     * Tests retrieval with an invalid (blank) doctor name and expects a 400 Bad Request with error message.
+     *                   Tests retrieval with an invalid (blank) doctor name and expects a 400 Bad Request with error message.
      */
     @Test
     void getDoctorByID_invalidUUID() throws Exception {
@@ -86,6 +91,12 @@ class DoctorRetrievalControllerTest {
         } catch (InvalidUuidException invalidUuidException) {
             ResponseEntity.badRequest().body(expectedResponse);
         }
+    }
+
+    /**
+     * Tests retrieval with an invalid (blank) doctor name and expects a 400 Bad Request with error message.
+     */
+    @Test
     void testRetrieveDoctorByName_withInValidDoctorName_returnsBadRequestErrorResponse() {
         Mockito.when(doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.BLANK_NAME)).thenReturn(testDataBuilder.buildDoctorListErrorResponse(HttpStatus.BAD_REQUEST));
         ResponseEntity<DoctorListResponse> actualResponse = doctorRetrievalController.getDoctorByName(TestApplicationConstants.BLANK_NAME);
@@ -100,7 +111,7 @@ class DoctorRetrievalControllerTest {
      * HTTP Status Code-404
      *
      * @throws Exception if no user is present in db
-     * Tests retrieval with a non-matching doctor name and expects a 404 Not Found with error message.
+     *                   Tests retrieval with a non-matching doctor name and expects a 404 Not Found with error message.
      */
     @Test
     void getDoctorByID_userNotFound() throws Exception {
@@ -114,6 +125,12 @@ class DoctorRetrievalControllerTest {
         } catch (DataNotFoundException dataNotFoundException) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body(expectedResponse);
         }
+    }
+
+    /**
+     * Tests retrieval with a non-matching doctor name and expects a 404 Not Found with error message.
+     */
+    @Test
     void testRetrieveDoctorByName_withNotMatchingDoctorName_returnsNotFoundErrorResponse() {
         Mockito.when(doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.FIRST_NAME)).thenReturn(testDataBuilder.buildDoctorListErrorResponse(HttpStatus.NOT_FOUND));
         ResponseEntity<DoctorListResponse> actualResponse = doctorRetrievalController.getDoctorByName(TestApplicationConstants.FIRST_NAME);

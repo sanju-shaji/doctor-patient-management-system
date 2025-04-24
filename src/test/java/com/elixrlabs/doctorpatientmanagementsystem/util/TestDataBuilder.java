@@ -8,10 +8,9 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorRespons
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Data builder class for initializing data objects
@@ -24,6 +23,7 @@ public class TestDataBuilder {
      */
     public DoctorDto doctorDtoBuilder() {
         return DoctorDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
                 .firstName(TestApplicationConstants.FIRST_NAME)
                 .lastName(TestApplicationConstants.LAST_NAME)
                 .department(TestApplicationConstants.DEPARTMENT_NAME)
@@ -36,7 +36,7 @@ public class TestDataBuilder {
      * @return doctor entity
      */
     public DoctorEntity doctorEntityBuilder() {
-        DoctorDto doctorDto=doctorDtoBuilder();
+        DoctorDto doctorDto = doctorDtoBuilder();
         return DoctorEntity.builder()
                 .id(UUID.fromString(TestApplicationConstants.UUID))
                 .firstName(doctorDto.getFirstName())
@@ -51,7 +51,7 @@ public class TestDataBuilder {
      * @return doctor response object
      */
     public DoctorResponse doctorResponseBuilder() {
-        DoctorEntity doctorEntity= doctorEntityBuilder();
+        DoctorEntity doctorEntity = doctorEntityBuilder();
         return DoctorResponse.builder()
                 .id(doctorEntity.getId())
                 .firstName(doctorEntity.getFirstName())
@@ -108,10 +108,10 @@ public class TestDataBuilder {
     /**
      * Builds an error response with a given error message and HTTP status.
      */
-    public ResponseEntity<DoctorListResponse> buildDoctorListErrorResponse(HttpStatus statuscode) {
+    public ResponseEntity<DoctorListResponse> buildDoctorListErrorResponse(HttpStatus statusCode) {
         DoctorListResponse doctorListResponse = new DoctorListResponse();
         doctorListResponse.setSuccess(false);
         doctorListResponse.setErrors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        return ResponseEntity.status(statuscode).body(doctorListResponse);
+        return ResponseEntity.status(statusCode).body(doctorListResponse);
     }
 }
