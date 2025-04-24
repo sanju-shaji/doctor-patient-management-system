@@ -64,11 +64,11 @@ public class PatientCreationControllerTest {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
         Mockito.when(patientCreationService.createPatient(patient)).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         try {
-            ResponseEntity<PatientResponse> doctorCreationResponse = patientCreationController.createPatient(patient);
-            Assertions.assertNotNull(doctorCreationResponse.getBody());
-            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), doctorCreationResponse.getStatusCode().value());
-            Assertions.assertFalse(doctorCreationResponse.getBody().isSuccess());
-            Assertions.assertEquals(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE, doctorCreationResponse.getBody().getErrors().get(0));
+            ResponseEntity<PatientResponse> patientCreationResponse = patientCreationController.createPatient(patient);
+            Assertions.assertNotNull(patientCreationResponse.getBody());
+            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), patientCreationResponse.getStatusCode().value());
+            Assertions.assertFalse(patientCreationResponse.getBody().isSuccess());
+            Assertions.assertEquals(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE, patientCreationResponse.getBody().getErrors().get(0));
             Mockito.verify(patientCreationService, Mockito.times(1)).createPatient(patient);
         } catch (InvalidUserInputException invalidUserInputException) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PatientResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)));
