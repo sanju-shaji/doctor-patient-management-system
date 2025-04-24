@@ -220,6 +220,6 @@ public class GlobalExceptionHandler {
                 .success(false)
                 .errors(List.of(doctorAlreadyUnassignedException.getMessage()))
                 .build();
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
     }
 }
