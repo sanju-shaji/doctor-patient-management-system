@@ -12,7 +12,10 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -49,7 +52,7 @@ class PatientDeletionServiceTest {
 
     @Mock
     private MessageUtil messageUtil;
-    
+
     @InjectMocks
     private PatientDeletionService patientDeletionService;
 
