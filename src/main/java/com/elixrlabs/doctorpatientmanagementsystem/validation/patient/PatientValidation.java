@@ -54,7 +54,7 @@ public class PatientValidation {
         if (StringUtils.isBlank(id)) {
             throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.BLANK_UUID.getKey()));
         }
-        if(!UUID_PATTERN.matcher(id).matches()){
+        if (!UUID_PATTERN.matcher(id).matches()) {
             throw new InvalidUuidException(messageUtil.getMessage(MessageKeyEnum.INVALID_UUID_FORMAT.getKey()));
         }
     }
@@ -71,14 +71,18 @@ public class PatientValidation {
         List<String> errors = new ArrayList<>();
 
         if (StringUtils.isBlank(patientDto.getFirstName())) {
-            errors.add(MessageKeyEnum.PATIENT_FIRSTNAME_ERROR.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_FIRSTNAME_ERROR.getKey());
+            errors.add(message);
         } else if (!NAME_PATTERN.matcher(patientDto.getFirstName()).matches()) {
-            errors.add(MessageKeyEnum.PATIENT_FIRSTNAME_PATTERN_ERROR.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_FIRSTNAME_PATTERN_ERROR.getKey());
+            errors.add(message);
         }
         if (StringUtils.isBlank(patientDto.getLastName())) {
-            errors.add(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey());
+            errors.add(message);
         } else if (!NAME_PATTERN.matcher(patientDto.getLastName()).matches()) {
-            errors.add(MessageKeyEnum.PATIENT_LASTNAME_PATTERN_ERROR.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey());
+            errors.add(message);
         }
         return errors;
     }
