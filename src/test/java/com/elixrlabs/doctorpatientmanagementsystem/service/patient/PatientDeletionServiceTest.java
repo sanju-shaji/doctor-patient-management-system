@@ -12,9 +12,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -22,11 +20,11 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.verify;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -38,7 +36,8 @@ import java.util.UUID;
 /**
  * Test class for testing the PatientDeletion service Class
  */
-public class PatientDeletionServiceTest {
+@ExtendWith(MockitoExtension.class)
+class PatientDeletionServiceTest {
     @Mock
     private PatientRepository patientRepository;
     @Mock
@@ -50,11 +49,6 @@ public class PatientDeletionServiceTest {
     @InjectMocks
     private PatientDeletionService patientDeletionService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     /**
      * Test Method for testing the happy path
      * HTTP Status code-200
@@ -62,13 +56,17 @@ public class PatientDeletionServiceTest {
     @Test
     void testDeletePatientById_Success() throws Exception {
         String patientId = UUID.randomUUID().toString();
-        PatientModel mockPatient = new PatientModel();
-        when(patientRepository.findById(UUID.fromString(patientId))).thenReturn(Optional.of(mockPatient));
+        PatientModel patient = new PatientModel();
+        patient.setId(UUID.fromString(patientId));
+        patient.setFirstName("kevin");
+        patient.setLastName("joseph");
+        when(patientRepository.findById(UUID.fromString(patientId))).thenReturn(Optional.of(patient));
         when(doctorPatientAssignmentRepository.findByPatientId(UUID.fromString(patientId))).thenReturn(Collections.emptyList());
         when(messageUtil.getMessage(MessageKeyEnum.PATIENT_DELETED_SUCCESSFULLY.getKey())).thenReturn(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY);
         ResponseEntity<BaseResponse> response = patientDeletionService.deletePatientById(patientId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().getMessages().contains(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY));
+        assertNull(response.getBody().getData());
         verify(patientRepository, times(1)).deleteById(UUID.fromString(patientId));
     }
 
@@ -79,7 +77,7 @@ public class PatientDeletionServiceTest {
     @Test
     void testDeletePatientById_PatientNotFound() throws Exception {
         String patientId = UUID.randomUUID().toString();
-        String expectedMessage = TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID + patientId;
+        String expectedMessage = new StringBuilder().append(TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID).append(patientId).toString();
         doNothing().when(patientValidation).validatePatientId(anyString());
         when(patientRepository.findById(UUID.fromString(patientId))).thenReturn(Optional.empty());
         when(messageUtil.getMessage(eq(MessageKeyEnum.NO_PATIENT_FOUND.getKey()), eq(patientId))).thenReturn(expectedMessage);
@@ -99,7 +97,7 @@ public class PatientDeletionServiceTest {
     void testDeletePatientById_PatientAlreadyAssigned() throws Exception {
         String patientId = UUID.randomUUID().toString();
         PatientModel mockPatient = new PatientModel();
-        String expectedMessage = TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID + patientId;
+        String expectedMessage = new StringBuilder().append(TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID).append(patientId).toString();
         when(patientRepository.findById(UUID.fromString(patientId))).thenReturn(Optional.of(mockPatient));
         when(doctorPatientAssignmentRepository.findByPatientId(UUID.fromString(patientId))).thenReturn(List.of(new DoctorPatientAssignmentModel()));
         when(messageUtil.getMessage(MessageKeyEnum.PATIENT_ASSIGNED_TO_DOCTOR.getKey())).thenReturn(expectedMessage);

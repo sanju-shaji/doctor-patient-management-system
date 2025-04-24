@@ -1,27 +1,32 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientDeletionService;
+import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 
+@ExtendWith(MockitoExtension.class)
 class PatientDeletionControllerTest {
 
+    TestDataBuilder testDataBuilder;
     @Mock
     private PatientDeletionService patientDeletionService;
     @InjectMocks
@@ -29,7 +34,7 @@ class PatientDeletionControllerTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        testDataBuilder = new TestDataBuilder();
     }
 
     /**
@@ -40,12 +45,17 @@ class PatientDeletionControllerTest {
     void testDeletePatientById_Success() throws Exception {
         UUID patientId = UUID.randomUUID();
         String patientIdString = patientId.toString();
-        BaseResponse mockResponse = new BaseResponse();
-        mockResponse.setMessages(List.of(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY));
-        ResponseEntity<BaseResponse> expectedResponse = new ResponseEntity<>(mockResponse, HttpStatus.OK);
-        when(patientDeletionService.deletePatientById(patientIdString)).thenReturn(expectedResponse);
+        String firstName = "kevin";
+        String lastName = "joseph";
+        PatientResponse patientResponse = testDataBuilder.patientResponseBuilder(patientId, firstName, lastName);
+        when(patientDeletionService.deletePatientById(patientIdString)).thenReturn(ResponseEntity.ok(patientResponse));
         ResponseEntity<BaseResponse> response = patientDeletionController.ResponseDto(patientIdString);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(response.getBody().isSuccess());
+        assertEquals(List.of(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY), response.getBody().getMessages());
+        PatientResponse patientResponse1 = (PatientResponse) response.getBody();
+        PatientDto patientDto = (PatientDto) patientResponse1.getData();
+        assertEquals(patientId, patientDto.getId());
         verify(patientDeletionService, times(1)).deletePatientById(patientIdString);
     }
 
@@ -53,13 +63,12 @@ class PatientDeletionControllerTest {
     void testDeletePatientById_DataNotFoundException() throws Exception {
         UUID patientId = UUID.randomUUID();
         String patientIdString = patientId.toString();
-        String errorMessage = TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID + patientIdString;
-        when(patientDeletionService.deletePatientById(patientIdString)).thenThrow(new DataNotFoundException(errorMessage));
+        when(patientDeletionService.deletePatientById(patientIdString)).thenThrow(new DataNotFoundException(TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID));
         try {
             patientDeletionController.ResponseDto(patientIdString);
-            assert false : TestApplicationConstants.EXPECTED_DATA_NOT_FOUND_EXCEPTION;
+            fail(TestApplicationConstants.EXPECTED_DATA_NOT_FOUND_EXCEPTION);
         } catch (DataNotFoundException exception) {
-            assert exception.getMessage().contains(patientIdString);
+            assertEquals(TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID, exception.getMessage());
         }
         verify(patientDeletionService, times(1)).deletePatientById(patientIdString);
     }

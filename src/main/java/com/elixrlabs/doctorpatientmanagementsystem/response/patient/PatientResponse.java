@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.response.patient;
 
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,5 @@ import java.util.List;
 public class PatientResponse extends BaseResponse {
     private Object data;
     private List<String> patients;
+    private PatientDto patientDto;
 }
