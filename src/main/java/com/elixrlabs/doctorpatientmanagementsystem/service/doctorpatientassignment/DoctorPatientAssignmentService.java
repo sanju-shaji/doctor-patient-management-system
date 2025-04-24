@@ -50,10 +50,12 @@ public class DoctorPatientAssignmentService {
      * @return ResponseEntity in which the desired data is set for response
      */
 
-    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) throws Exception {
-        doctorPatientAssignmentValidator.validateAssignmentDto(dto);
-        doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(UUID.fromString(dto.getDoctorId()), UUID.fromString(dto.getPatientId()));
-        DoctorPatientAssignmentModel doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID.fromString(dto.getDoctorId()), UUID.fromString(dto.getPatientId()));
+    public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto doctorPatientAssignment) throws Exception {
+        doctorPatientAssignmentValidator.validateAssignmentDto(doctorPatientAssignment);
+        UUID doctorId = UUID.fromString(doctorPatientAssignment.getDoctorId());
+        UUID patientId = UUID.fromString(doctorPatientAssignment.getPatientId());
+        doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(doctorId, patientId);
+        DoctorPatientAssignmentModel doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID.fromString(doctorPatientAssignment.getDoctorId()), UUID.fromString(doctorPatientAssignment.getPatientId()));
         doctorPatientAssignments.setUnAssigned(true);
         doctorPatientAssignmentRepository.save(doctorPatientAssignments);
         String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT.getKey());

@@ -12,7 +12,7 @@ public enum MessageKeyEnum {
     DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT("duplication.doctor.patient.assignment"),
     DELETE_DOCTOR_SUCCESSFULLY("doctor.deleted.successfully"),
     DEPARTMENT_NAME_PATTERN_ERROR("department.name.pattern.error"),
-    DOCTOR_ALREADY_UNASSIGNED("doctor.already.unassigned"),
+    DOCTOR_ALREADY_UNASSIGNED("doctor.unassigned"),
     DOCTOR_NOT_ASSIGNED("doctor.not.assigned"),
     DOCTOR_NOT_ASSIGNED_TO_PATIENT("doctor.not.assigned.to.patient"),
     DOCTOR_NOT_FOUND_ERROR("doctor.not.found.error"),

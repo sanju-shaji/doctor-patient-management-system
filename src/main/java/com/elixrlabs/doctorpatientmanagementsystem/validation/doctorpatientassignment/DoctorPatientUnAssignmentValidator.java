@@ -6,7 +6,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DoctorAlread
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,11 +14,14 @@ import java.util.UUID;
 /**
  * Validator class for handling validations related to doctor-patient UnAssignment operations
  */
-@RequiredArgsConstructor
 @Component
 public class DoctorPatientUnAssignmentValidator {
-    public final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
+    private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
     private final MessageUtil messageUtil;
+    public DoctorPatientUnAssignmentValidator(DoctorPatientAssignmentRepository doctorPatientAssignmentRepository, MessageUtil messageUtil){
+        this.doctorPatientAssignmentRepository=doctorPatientAssignmentRepository;
+        this.messageUtil=messageUtil;
+    }
 
     /**
      * Validates whether the given doctor and patient combination is valid and not already unassigned
