@@ -11,5 +11,4 @@ public class TestApplicationConstants {
     public static final String MOCK_EXCEPTION_MESSAGE = "Exception Message";
     public static final String UUID = "e562f728-1911-4ac5-91f0-de67772b2384";
     public static final String BLANK_FIRST_NAME = " ";
-    public static final String EXCEPTION_MESSAGE = " Mock exception message";
 }

@@ -5,7 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientCreationService;
-import com.elixrlabs.doctorpatientmanagementsystem.util.patient.TestDataBuilder;
+import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,16 +62,16 @@ public class PatientCreationControllerTest {
     @Test
     void testPatientCreationController_invalidInputs() throws Exception {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
-        Mockito.when(patientCreationService.createPatient(patient)).thenThrow(new InvalidUserInputException(TestApplicationConstants.EXCEPTION_MESSAGE));
+        Mockito.when(patientCreationService.createPatient(patient)).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         try {
             ResponseEntity<PatientResponse> doctorCreationResponse = patientCreationController.createPatient(patient);
             Assertions.assertNotNull(doctorCreationResponse.getBody());
             Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), doctorCreationResponse.getStatusCode().value());
             Assertions.assertFalse(doctorCreationResponse.getBody().isSuccess());
-            Assertions.assertEquals(TestApplicationConstants.EXCEPTION_MESSAGE, doctorCreationResponse.getBody().getErrors().get(0));
+            Assertions.assertEquals(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE, doctorCreationResponse.getBody().getErrors().get(0));
             Mockito.verify(patientCreationService, Mockito.times(1)).createPatient(patient);
         } catch (InvalidUserInputException invalidUserInputException) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PatientResponse.builder().success(false).errors(List.of(TestApplicationConstants.EXCEPTION_MESSAGE)));
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PatientResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)));
         }
     }
 }

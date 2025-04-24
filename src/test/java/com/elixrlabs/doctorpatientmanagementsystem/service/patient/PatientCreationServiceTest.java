@@ -1,13 +1,12 @@
 package com.elixrlabs.doctorpatientmanagementsystem.service.patient;
 
-import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.util.patient.TestDataBuilder;
+import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,12 +68,12 @@ public class PatientCreationServiceTest {
     void testPatientCreationService_invalidInputs() throws InvalidUserInputException {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
         patient.setFirstName(TestApplicationConstants.BLANK_FIRST_NAME);
-        Mockito.doThrow(new InvalidUserInputException(TestApplicationConstants.EXCEPTION_MESSAGE)).when(patientValidation).validatePatient(patient);
+        Mockito.doThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).when(patientValidation).validatePatient(patient);
         Assertions.assertThrows(InvalidUserInputException.class, () -> {
             ResponseEntity<PatientResponse> patientCreationResponse = patientCreationService.createPatient(patient);
             Assertions.assertNotNull(patientCreationResponse);
             Assertions.assertEquals(HttpStatus.BAD_REQUEST, patientCreationResponse.getStatusCode());
-            Assertions.assertEquals(TestApplicationConstants.EXCEPTION_MESSAGE, patientCreationResponse.getBody().getErrors().get(0));
+            Assertions.assertEquals(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE, patientCreationResponse.getBody().getErrors().get(0));
             Assertions.assertFalse(patientCreationResponse.getBody().isSuccess());
         });
         Mockito.verify(patientValidation, Mockito.times(1)).validatePatient(patient);
