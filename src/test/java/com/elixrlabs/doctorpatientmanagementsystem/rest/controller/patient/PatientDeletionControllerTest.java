@@ -29,6 +29,7 @@ class PatientDeletionControllerTest {
     TestDataBuilder testDataBuilder;
     @Mock
     private PatientDeletionService patientDeletionService;
+
     @InjectMocks
     private PatientDeletionController patientDeletionController;
 
