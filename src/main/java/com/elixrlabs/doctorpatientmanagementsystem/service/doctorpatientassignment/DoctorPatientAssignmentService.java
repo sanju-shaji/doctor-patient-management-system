@@ -55,7 +55,7 @@ public class DoctorPatientAssignmentService {
         UUID doctorId = UUID.fromString(doctorPatientAssignment.getDoctorId());
         UUID patientId = UUID.fromString(doctorPatientAssignment.getPatientId());
         doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(doctorId, patientId);
-        DoctorPatientAssignmentModel doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID.fromString(doctorPatientAssignment.getDoctorId()), UUID.fromString(doctorPatientAssignment.getPatientId()));
+        DoctorPatientAssignmentModel doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(doctorId, patientId);
         doctorPatientAssignments.setUnAssigned(true);
         doctorPatientAssignmentRepository.save(doctorPatientAssignments);
         String message = messageUtil.getMessage(MessageKeyEnum.DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT.getKey());
