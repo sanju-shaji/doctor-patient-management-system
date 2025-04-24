@@ -16,4 +16,8 @@ public interface PatientRepository extends MongoRepository<PatientModel, UUID>, 
     List<PatientModel> findByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(String firstName, String lastName);
 
     List<PatientModel> findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(String firstName, String lastName);
+
+    boolean existsByFirstNameIgnoreCase(String firstName);
+
+    boolean existsByLastNameIgnoreCase(String lastName);
 }

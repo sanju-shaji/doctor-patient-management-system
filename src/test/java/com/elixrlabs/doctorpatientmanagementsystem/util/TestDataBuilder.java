@@ -33,11 +33,12 @@ public class TestDataBuilder {
      * @return doctor entity
      */
     public DoctorEntity doctorEntityBuilder() {
+        DoctorDto doctorDto=doctorDtoBuilder();
         return DoctorEntity.builder()
                 .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(doctorDtoBuilder().getFirstName())
-                .lastName(doctorDtoBuilder().getLastName())
-                .department(doctorDtoBuilder().getDepartment())
+                .firstName(doctorDto.getFirstName())
+                .lastName(doctorDto.getLastName())
+                .department(doctorDto.getDepartment())
                 .build();
     }
 
@@ -47,12 +48,25 @@ public class TestDataBuilder {
      * @return doctor response object
      */
     public DoctorResponse doctorResponseBuilder() {
+        DoctorEntity doctorEntity= doctorEntityBuilder();
         return DoctorResponse.builder()
-                .id(doctorEntityBuilder().getId())
-                .firstName(doctorEntityBuilder().getFirstName())
-                .lastName(doctorEntityBuilder().getLastName())
-                .department(doctorEntityBuilder().getDepartment())
+                .id(doctorEntity.getId())
+                .firstName(doctorEntity.getFirstName())
+                .lastName(doctorEntity.getLastName())
+                .department(doctorEntity.getDepartment())
                 .success(true)
+                .build();
+    }
+
+    /**
+     * This method initializes invalid doctor response object so that it can be reused for doctor module testing
+     *
+     * @return doctor response object
+     */
+    public DoctorResponse invalidDoctorResponseBuilder() {
+        return DoctorResponse.builder()
+                .success(false)
+                .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
                 .build();
     }
 

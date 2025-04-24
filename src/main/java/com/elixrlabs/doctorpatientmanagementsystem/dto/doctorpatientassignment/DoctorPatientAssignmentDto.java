@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * DTO to transfer data of POST doctors api from controller to service layer
@@ -18,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @SuperBuilder
 public class DoctorPatientAssignmentDto {
-    private UUID doctorId;
-    private UUID patientId;
+    private String doctorId;
+    private String patientId;
     private Date dateOfAdmission;
 }
