@@ -34,14 +34,14 @@ public class PatientValidation {
      */
     public void validatePatient(PatientDto patient) throws InvalidUserInputException {
         if (StringUtils.isBlank(patient.getFirstName())) {
-            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_FIRSTNAME_ERROR.getKey());
+            throw new InvalidUserInputException(messageUtil.getMessage(MessageKeyEnum.PATIENT_FIRSTNAME_ERROR.getKey()));
         } else if (!NAME_PATTERN.matcher(patient.getFirstName()).matches()) {
-            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_FIRSTNAME_PATTERN_ERROR.getKey());
+            throw new InvalidUserInputException(messageUtil.getMessage(MessageKeyEnum.PATIENT_FIRSTNAME_PATTERN_ERROR.getKey()));
         }
         if (StringUtils.isBlank(patient.getLastName())) {
-            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey());
+            throw new InvalidUserInputException(messageUtil.getMessage(MessageKeyEnum.PATIENT_LASTNAME_ERROR.getKey()));
         } else if (!NAME_PATTERN.matcher(patient.getLastName()).matches()) {
-            throw new InvalidUserInputException(MessageKeyEnum.PATIENT_LASTNAME_PATTERN_ERROR.getKey());
+            throw new InvalidUserInputException(messageUtil.getMessage(MessageKeyEnum.PATIENT_LASTNAME_PATTERN_ERROR.getKey()));
         }
     }
 
