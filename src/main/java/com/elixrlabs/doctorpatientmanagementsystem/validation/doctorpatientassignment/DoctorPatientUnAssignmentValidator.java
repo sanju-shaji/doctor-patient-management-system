@@ -37,7 +37,7 @@ public class DoctorPatientUnAssignmentValidator {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_PATIENT_COMBINATION_NOT_FOUND.getKey()));
         }
         if (assignments.get().isUnAssigned()) {
-            throw new DoctorAlreadyUnassignedException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_ALREADY_UNASSIGNED.getKey(), patientId));
+            throw new DoctorAlreadyUnassignedException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_UNASSIGNED.getKey(), patientId));
         }
     }
 }
