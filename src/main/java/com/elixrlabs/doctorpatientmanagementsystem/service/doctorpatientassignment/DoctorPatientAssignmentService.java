@@ -51,7 +51,6 @@ public class DoctorPatientAssignmentService {
      */
 
     public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto doctorPatientAssignment) throws Exception {
-        //doctorPatientAssignmentValidator.validateAssignmentDto(doctorPatientAssignment);
         UUID doctorId = UUID.fromString(doctorPatientAssignment.getDoctorId());
         UUID patientId = UUID.fromString(doctorPatientAssignment.getPatientId());
         doctorPatientUnAssignmentValidator.validateDoctorPatientCombination(doctorId, patientId);
