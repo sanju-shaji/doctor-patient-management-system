@@ -2,76 +2,94 @@ package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.GlobalExceptionHandler;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientCreationService;
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
-import org.junit.jupiter.api.Assertions;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
+
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit test class for PatientCreationController
  */
 @ExtendWith(MockitoExtension.class)
 public class PatientCreationControllerTest {
+
+    private MockMvc mockMvc;
     @Mock
-    PatientCreationService patientCreationService;
-    @InjectMocks
-    PatientCreationController patientCreationController;
-    TestDataBuilder testDataBuilder;
+    private PatientCreationService patientCreationService;
+    @Mock
+    private MessageUtil messageUtil;
+    private TestDataBuilder testDataBuilder;
+    private ObjectMapper objectMapper;
 
     /**
      * Initializes the TestDataBuilder before each test case
+     * sets up MockMvc ith standaloneSetup
+     * Registers the GlobalExceptionHandler to test exception handling
      * TestDataBuilder is used to provide test data for DTOs and Responses
      */
     @BeforeEach
     void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(new PatientCreationController(patientCreationService))
+                .setControllerAdvice(new GlobalExceptionHandler(messageUtil))
+                .build();
         testDataBuilder = new TestDataBuilder();
+        objectMapper = new ObjectMapper();
     }
 
     /**
      * Test case for successful patient creation through the controller
-     * Validates that the Response body and status codes are correct and service method is invoked exactly once
+     * Sends valid JSON request
+     * Expects 200 OK response
+     * Checks if the response body matches expected data
      */
     @Test
-    void testPatientCreationController_Success() throws Exception {
+    public void testPatientCreationController_Success() throws Exception {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
         PatientResponse expectedPatientResponse = testDataBuilder.patientResponseBuilder();
-        Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenReturn(ResponseEntity.ok().body(expectedPatientResponse));
-        ResponseEntity<PatientResponse> patientCreationResponse = patientCreationController.createPatient(patient);
-        Assertions.assertEquals(expectedPatientResponse, patientCreationResponse.getBody());
-        Assertions.assertNotNull(patientCreationResponse.getBody());
-        Assertions.assertTrue(expectedPatientResponse.isSuccess());
-        Assertions.assertEquals(HttpStatus.OK, patientCreationResponse.getStatusCode());
-        Mockito.verify(patientCreationService, Mockito.times(1)).createPatient(patient);
+        Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenReturn(ResponseEntity.ok(expectedPatientResponse));
+        mockMvc.perform(post("/patients")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(patient)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id").value(patient.getId().toString()))
+                .andExpect(jsonPath("$.data.firstName").value(patient.getFirstName()))
+                .andExpect(jsonPath("$.data.lastName").value(patient.getLastName()));
     }
 
     /**
-     * Test case for invalid input scenario in patient creation
+     * Test case for negative scenario
+     * Expects 400 bad request
+     * verifies error message from GlobalExceptionHandler
      */
     @Test
-    void testPatientCreationController_invalidInputs() throws Exception {
+    public void testPatientCreationController_Invalid() throws Exception {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
-        Mockito.when(patientCreationService.createPatient(patient)).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        try {
-            ResponseEntity<PatientResponse> patientCreationResponse = patientCreationController.createPatient(patient);
-            Assertions.assertNotNull(patientCreationResponse.getBody());
-            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), patientCreationResponse.getStatusCode().value());
-            Assertions.assertFalse(patientCreationResponse.getBody().isSuccess());
-            Assertions.assertEquals(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE, patientCreationResponse.getBody().getErrors().get(0));
-            Mockito.verify(patientCreationService, Mockito.times(1)).createPatient(patient);
-        } catch (InvalidUserInputException invalidUserInputException) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PatientResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)));
-        }
+        Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        mockMvc.perform(post("/patients")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(patient)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.errors").value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
     }
 }
