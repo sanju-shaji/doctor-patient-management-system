@@ -21,9 +21,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
+/**
+ * This class responsible for handling modifications to Patient entities,
+ * specifically applying JSON Patch operations to partially update patient data.
+ */
 @Service
 public class PatientModificationService {
+
     private final PatientRepository patientRepository;
     private final ObjectMapper objectMapper;
     private final PatientValidation patientValidation;
@@ -32,7 +36,8 @@ public class PatientModificationService {
     public PatientModificationService(PatientRepository patientRepository,
                                       ObjectMapper objectMapper,
                                       PatientValidation patientValidation,
-                                      MessageUtil messageUtil) {
+                                      MessageUtil messageUtil
+    ) {
         this.patientRepository = patientRepository;
         this.objectMapper = objectMapper;
         this.patientValidation = patientValidation;
@@ -47,7 +52,7 @@ public class PatientModificationService {
             String message = messageUtil.getMessage(MessageKeyEnum.NO_PATIENT_FOUND.getKey(), patientId);
             throw new DataNotFoundException(message);
         }
-        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil, patientRepository);
+        JsonPatchValidator jsonPatchValidator = new JsonPatchValidator(messageUtil);
         jsonPatchValidator.validateJsonOperations(patch);
         PatientModel patientModel = patientModelOptional.get();
         PatientDto patientDto = objectMapper.convertValue(patientModel, PatientDto.class);
@@ -60,6 +65,12 @@ public class PatientModificationService {
         }
         PatientModel patchedModel = objectMapper.convertValue(patchedDto, PatientModel.class);
         patchedModel.setId(patchedModel.getId());
+        if (patchedModel.getFirstName().equalsIgnoreCase(patientModel.getFirstName())
+                && patchedModel.getLastName().equalsIgnoreCase(patientModel.getLastName())) {
+            patchPatientResponse.setSuccess(true);
+            patchPatientResponse.setPatient(new PatientDto(patientModel));
+            return new ResponseEntity<>(patchPatientResponse, HttpStatus.OK);
+        }
         PatientModel savedPatient = patientRepository.save(patchedModel);
         PatientDto responseDto = PatientDto.builder()
                 .id(savedPatient.getId())
