@@ -26,7 +26,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 
 /**
  * Unit tests for DoctorRetrievalService class to validate doctor retrieval functionality.
@@ -112,8 +116,8 @@ class DoctorRetrievalServiceTest {
      */
     @Test
     void testRetrieveDoctorByName_withInValidDoctorName_returnsBadRequestErrorResponse() {
-        Mockito.when(doctorValidation.validateDoctorName(TestApplicationConstants.BLANK_NAME)).thenReturn(true);
-        ResponseEntity<DoctorListResponse> doctorListResponse = doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.BLANK_NAME);
+        Mockito.when(doctorValidation.validateDoctorName(TestApplicationConstants.EMPTY_QUERY_STRING)).thenReturn(true);
+        ResponseEntity<DoctorListResponse> doctorListResponse = doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.EMPTY_QUERY_STRING);
         assertNotNull(doctorListResponse.getBody());
         assertEquals(HttpStatus.BAD_REQUEST, doctorListResponse.getStatusCode());
         assertEquals(1, doctorListResponse.getBody().getErrors().size());
