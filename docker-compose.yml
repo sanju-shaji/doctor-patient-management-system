@@ -13,4 +13,3 @@ services:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/trainingPoc
     depends_on:
       - mongo
-
