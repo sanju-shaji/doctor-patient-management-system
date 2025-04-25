@@ -1,9 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.patient;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFoundException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.EmptyUuidException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientDeletionService;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +23,7 @@ public class PatientDeletionController {
     }
 
     @DeleteMapping(ApiConstants.PATIENT_ID)
-    public ResponseEntity<BaseResponse> ResponseDto(@PathVariable String patientId) throws Exception {
+    public ResponseEntity<BaseResponse> deletePatientController(@PathVariable String patientId) throws Exception {
         return patientDeletionResourceService.deletePatientById(patientId);
     }
 }
