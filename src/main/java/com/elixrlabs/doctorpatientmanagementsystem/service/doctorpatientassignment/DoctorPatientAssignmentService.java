@@ -10,7 +10,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignm
 import com.elixrlabs.doctorpatientmanagementsystem.util.ResponseBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassignment.DoctorPatientAssignmentValidator;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassignment.DoctorPatientUnAssignmentValidator;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import java.util.UUID;
 /**
  * Service Class for creating doctor-patient-assignment
  */
-@RequiredArgsConstructor
 @Service
 public class DoctorPatientAssignmentService {
     private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
@@ -29,6 +27,14 @@ public class DoctorPatientAssignmentService {
     private final DoctorPatientUnAssignmentValidator doctorPatientUnAssignmentValidator;
     private final DoctorPatientAssignmentValidator doctorPatientAssignmentValidator;
     private final ResponseBuilder responseBuilder;
+
+    public DoctorPatientAssignmentService(DoctorPatientAssignmentRepository doctorPatientAssignmentRepository, MessageUtil messageUtil, DoctorPatientUnAssignmentValidator doctorPatientUnAssignmentValidator, DoctorPatientAssignmentValidator doctorPatientAssignmentValidator, ResponseBuilder responseBuilder) {
+        this.doctorPatientAssignmentRepository = doctorPatientAssignmentRepository;
+        this.messageUtil = messageUtil;
+        this.doctorPatientUnAssignmentValidator = doctorPatientUnAssignmentValidator;
+        this.doctorPatientAssignmentValidator = doctorPatientAssignmentValidator;
+        this.responseBuilder = responseBuilder;
+    }
 
     /**
      * Method which contains the business logic to Post the assignments data to database
