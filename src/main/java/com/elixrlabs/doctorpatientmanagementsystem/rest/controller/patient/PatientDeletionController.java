@@ -23,7 +23,7 @@ public class PatientDeletionController {
     }
 
     @DeleteMapping(ApiConstants.PATIENT_ID)
-    public ResponseEntity<BaseResponse> deletePatientController(@PathVariable String patientId) throws Exception {
+    public ResponseEntity<BaseResponse> deletePatientById(@PathVariable String patientId) throws Exception {
         return patientDeletionResourceService.deletePatientById(patientId);
     }
 }
