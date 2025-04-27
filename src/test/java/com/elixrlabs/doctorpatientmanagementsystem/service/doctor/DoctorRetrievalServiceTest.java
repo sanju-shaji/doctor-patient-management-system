@@ -73,13 +73,13 @@ class DoctorRetrievalServiceTest {
         DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
         Mockito.when(doctorValidation.isInValidUUID(Mockito.anyString())).thenReturn(true);
         try {
-            ResponseEntity<DoctorResponse> doctorData = doctorRetrievalService.getDoctorsById(TestApplicationConstants.INVALID_UUID);
+            doctorRetrievalService.getDoctorsById(TestApplicationConstants.INVALID_UUID);
+        } catch (InvalidUuidException invalidUuidException) {
+            ResponseEntity<DoctorResponse> doctorData = ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
             assertEquals(HttpStatus.BAD_REQUEST.value(), doctorData.getStatusCode().value());
             assertEquals(expectedResponse, doctorData.getBody());
             Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
             Mockito.verify(doctorRepository, Mockito.never()).findById(Mockito.any(UUID.class));
-        } catch (InvalidUuidException invalidUuidException) {
-            ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
         }
     }
 
@@ -95,13 +95,13 @@ class DoctorRetrievalServiceTest {
         Mockito.when(doctorValidation.isInValidUUID(Mockito.anyString())).thenReturn(false);
         Mockito.when(doctorRepository.findById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
         try {
-            ResponseEntity<DoctorResponse> doctorData = doctorRetrievalService.getDoctorsById(UUID.randomUUID().toString());
+            doctorRetrievalService.getDoctorsById(UUID.randomUUID().toString());
+        } catch (DataNotFoundException dataNotFoundException) {
+            ResponseEntity<DoctorResponse> doctorData = ResponseEntity.status(HttpStatus.NOT_FOUND).body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
             assertEquals(HttpStatus.NOT_FOUND.value(), doctorData.getStatusCode().value());
             assertEquals(expectedResponse, doctorData.getBody());
             Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
-            Mockito.verify(doctorRepository, Mockito.never()).findById(Mockito.any(UUID.class));
-        } catch (DataNotFoundException dataNotFoundException) {
-            ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
+            Mockito.verify(doctorRepository, Mockito.times(1)).findById(Mockito.any(UUID.class));
         }
     }
 }

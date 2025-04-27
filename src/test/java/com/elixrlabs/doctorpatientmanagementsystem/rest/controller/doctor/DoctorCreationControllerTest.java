@@ -2,10 +2,13 @@ package com.elixrlabs.doctorpatientmanagementsystem.rest.controller.doctor;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.GlobalExceptionHandler;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserInputException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorCreationService;
+import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,27 +16,34 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class DoctorCreationControllerTest {
     @Mock
     DoctorCreationService doctorCreationService;
+    @Mock
+    MessageUtil messageUtil;
     @InjectMocks
     DoctorCreationController doctorCreationController;
-    TestDataBuilder testDataBuilder;
+    private TestDataBuilder testDataBuilder;
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(doctorCreationController)
+                .setControllerAdvice(new GlobalExceptionHandler(messageUtil))
+                .build();
         testDataBuilder = new TestDataBuilder();
+        objectMapper = new ObjectMapper();
     }
 
     /**
@@ -43,17 +53,15 @@ class DoctorCreationControllerTest {
      * @throws Exception - throws exception if user provide invalid inputs
      */
     @Test
-    void testCreateDoctorController_validInputs() throws Exception {
+    public void testCreateDoctorController_validInputs() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
-        DoctorResponse doctorResponse = testDataBuilder.doctorResponseBuilder();
         DoctorResponse expectedResponse = testDataBuilder.doctorResponseBuilder();
-        Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenReturn(ResponseEntity.ok().body(doctorResponse));
-        ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationController.createDoctor(doctorDto);
-        assertNotNull(doctorCreationResponse.getBody());
-        assertEquals(HttpStatus.OK.value(), doctorCreationResponse.getStatusCode().value());
-        assertTrue(doctorCreationResponse.getBody().isSuccess());
-        assertEquals(expectedResponse, doctorCreationResponse.getBody());
-        Mockito.verify(doctorCreationService, Mockito.times(1)).createDoctor(doctorDto);
+        Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenReturn(ResponseEntity.ok(expectedResponse));
+        mockMvc.perform(post(TestApplicationConstants.DOCTORS_END_POINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(doctorDto)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
     }
 
     /**
@@ -65,16 +73,12 @@ class DoctorCreationControllerTest {
     @Test
     void estCreateDoctorController_inValidInputs() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
+        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
         Mockito.when(doctorCreationService.createDoctor(doctorDto)).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        try {
-            ResponseEntity<DoctorResponse> doctorCreationResponse = doctorCreationController.createDoctor(doctorDto);
-            assertNotNull(doctorCreationResponse.getBody());
-            assertEquals(HttpStatus.BAD_REQUEST.value(), doctorCreationResponse.getStatusCode().value());
-            assertFalse(doctorCreationResponse.getBody().isSuccess());
-            assertEquals(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE, doctorCreationResponse.getBody().getErrors().get(0));
-            Mockito.verify(doctorCreationService, Mockito.times(1)).createDoctor(doctorDto);
-        } catch (InvalidUserInputException invalidUserInputException) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)));
-        }
+        mockMvc.perform(post(TestApplicationConstants.DOCTORS_END_POINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(doctorDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
     }
 }
