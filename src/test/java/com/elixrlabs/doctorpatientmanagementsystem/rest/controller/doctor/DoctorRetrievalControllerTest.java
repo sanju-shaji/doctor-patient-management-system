@@ -5,6 +5,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFound
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.GlobalExceptionHandler;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUuidException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.doctor.DoctorRetrievalService;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
@@ -45,6 +46,7 @@ class DoctorRetrievalControllerTest {
         testDataBuilder = new TestDataBuilder();
         objectMapper = new ObjectMapper();
     }
+// Test Cases for Get Doctors by id
 
     /**
      * Method to testing Happy Path of getDoctorById method of DoctorRetrievalController
@@ -90,6 +92,52 @@ class DoctorRetrievalControllerTest {
         Mockito.when(doctorRetrievalService.getDoctorsById(Mockito.anyString())).thenThrow(new DataNotFoundException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_ID, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+    }
+// Test Cases for Get assigned doctors by patient id.
+
+    /**
+     * Method to testing Happy Path of getAssignedDoctorByPatientId method of DoctorRetrievalController
+     * HTTP Status Code-200
+     *
+     * @throws Exception - throws exception if user provide invalid inputs
+     */
+    @Test
+    void getAssignedDoctorsList_validInputs() throws Exception {
+        DoctorPatientAssignmentResponse expectedResponse = testDataBuilder.assignmentResponseBuilder();
+        Mockito.when(doctorRetrievalService.getDoctorsWithPatient(Mockito.anyString())).thenReturn(ResponseEntity.ok().body(expectedResponse));
+        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, expectedResponse.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+    }
+
+    /**
+     * Method to test invalid user input for getAssignedDoctorByPatientId method of DoctorRetrieval Controller class
+     * HTTP Status Code-400
+     *
+     * @throws Exception if invalid user provide invalid uuid
+     */
+    @Test
+    void getAssignedDoctorsList_invalidUUID() throws Exception {
+        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+        Mockito.when(doctorRetrievalService.getDoctorsWithPatient(Mockito.anyString())).thenThrow(new InvalidUuidException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, TestApplicationConstants.UUID))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+    }
+
+    /**
+     * Method to test if no user exist for the give patient id
+     * HTTP Status Code-404
+     *
+     * @throws Exception if no user is present in db
+     */
+    @Test
+    void getAssignedDoctorsList_userNotFound() throws Exception {
+        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+        Mockito.when(doctorRetrievalService.getDoctorsWithPatient(Mockito.anyString())).thenThrow(new DataNotFoundException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, TestApplicationConstants.UUID))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
     }
