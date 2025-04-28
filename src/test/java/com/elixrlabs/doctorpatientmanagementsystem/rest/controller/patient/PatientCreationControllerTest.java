@@ -23,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Unit test class for PatientCreationController
@@ -70,10 +69,7 @@ public class PatientCreationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(patient)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.id").value(patient.getId().toString()))
-                .andExpect(jsonPath("$.data.firstName").value(patient.getFirstName()))
-                .andExpect(jsonPath("$.data.lastName").value(patient.getLastName()));
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
     }
 
     /**
@@ -84,12 +80,12 @@ public class PatientCreationControllerTest {
     @Test
     public void testPatientCreationController_Invalid() throws Exception {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
+        PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
         Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         mockMvc.perform(post(TestApplicationConstants.POST_PATIENTS_END_POINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(patient)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.errors").value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
     }
 }

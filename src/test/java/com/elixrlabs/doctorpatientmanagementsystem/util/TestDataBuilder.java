@@ -107,4 +107,15 @@ public class TestDataBuilder {
                 .data(patientDtoBuilder())
                 .build();
     }
+    /**
+     * This method initializes invalid patient response object so that it can be reused for patient module testing
+     *
+     * @return patient response object
+     */
+    public PatientResponse invalidPatientResponseBuilder(){
+        return PatientResponse.builder()
+                .success(false)
+                .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
+                .build();
+    }
 }
