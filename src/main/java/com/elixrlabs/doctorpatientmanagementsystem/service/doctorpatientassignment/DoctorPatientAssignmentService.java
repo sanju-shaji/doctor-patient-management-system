@@ -41,13 +41,6 @@ public class DoctorPatientAssignmentService {
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = new DoctorPatientAssignmentModel(assignmentDto);
         Optional<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssigned(UUID.fromString(assignmentDto.getDoctorId()), UUID.fromString(assignmentDto.getPatientId()),false);
         if (doctorPatientAssignments.isPresent()) {
-            if (doctorPatientAssignments.get().isUnAssigned()) {
-                Date date = Date.from(Instant.now());
-                doctorPatientAssignmentModel.setUnAssigned(false);
-                doctorPatientAssignmentModel.setDateOfAdmission(date);
-                DoctorPatientAssignmentModel savedAssignmentData = doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
-                return responseBuilder.buildSuccessAssignDoctorToPatient(savedAssignmentData);
-            }
             throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT.getKey()));
         }
         DoctorPatientAssignmentModel savedAssignmentData = doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
