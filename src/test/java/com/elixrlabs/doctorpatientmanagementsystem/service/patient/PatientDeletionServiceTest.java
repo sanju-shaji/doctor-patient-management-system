@@ -52,7 +52,7 @@ public class PatientDeletionServiceTest {
      * HTTP Status code-200
      */
     @Test
-    void testDeletePatientById_Success() throws Exception {
+    public void testDeletePatientById_Success() throws Exception {
         String patientId = UUID.randomUUID().toString();
         PatientModel patient = new PatientModel();
         patient.setId(UUID.fromString(patientId));
@@ -71,7 +71,7 @@ public class PatientDeletionServiceTest {
      * HTTP Status code-404
      */
     @Test
-    void testDeletePatientById_PatientNotFound() throws Exception {
+    public void testDeletePatientById_PatientNotFound() throws Exception {
         String patientId = UUID.randomUUID().toString();
         String expectedMessage = new StringBuilder().append(TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID).append(patientId).toString();
         Mockito.doNothing().when(patientValidation).validatePatientId(Mockito.anyString());
@@ -87,10 +87,10 @@ public class PatientDeletionServiceTest {
 
     /**
      * Test method for testing the validateDoctorDetails method of Doctor Validation
-     * HTTP Status code-409
+     * HTTP Status code-400
      */
     @Test
-    void testDeletePatientById_PatientAlreadyAssigned() throws Exception {
+    public void testDeletePatientById_PatientAlreadyAssigned() throws Exception {
         String patientId = UUID.randomUUID().toString();
         PatientModel mockPatient = new PatientModel();
         String expectedMessage = new StringBuilder().append(TestApplicationConstants.NO_PATIENT_FOUND_WITH_ID).append(patientId).toString();
