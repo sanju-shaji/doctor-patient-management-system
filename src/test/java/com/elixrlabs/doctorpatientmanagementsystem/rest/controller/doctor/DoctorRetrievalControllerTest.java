@@ -19,10 +19,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,10 +57,11 @@ class DoctorRetrievalControllerTest {
     void getDoctorByID_validInput() throws Exception {
         DoctorResponse expectedResponse = testDataBuilder.doctorResponseBuilder();
         Mockito.when(doctorRetrievalService.getDoctorsById(Mockito.anyString())).thenReturn(ResponseEntity.ok().body(expectedResponse));
-        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_ID, TestApplicationConstants.UUID)
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_ID, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+                .andExpect(status().isOk());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 
     /**
@@ -72,10 +74,11 @@ class DoctorRetrievalControllerTest {
     void getDoctorByID_invalidUUID() throws Exception {
         DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
         Mockito.when(doctorRetrievalService.getDoctorsById(Mockito.anyString())).thenThrow(new InvalidUuidException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_ID, TestApplicationConstants.UUID)
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_ID, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+                .andExpect(status().isBadRequest());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 
     /**
@@ -88,9 +91,10 @@ class DoctorRetrievalControllerTest {
     void getDoctorByID_userNotFound() throws Exception {
         DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
         Mockito.when(doctorRetrievalService.getDoctorsById(Mockito.anyString())).thenThrow(new DataNotFoundException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_ID, TestApplicationConstants.UUID)
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_ID, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+                .andExpect(status().isNotFound());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 }
