@@ -66,7 +66,7 @@ public class PatientCreationControllerTest {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
         PatientResponse expectedPatientResponse = testDataBuilder.patientResponseBuilder();
         Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenReturn(ResponseEntity.ok(expectedPatientResponse));
-        mockMvc.perform(post("/patients")
+        mockMvc.perform(post(TestApplicationConstants.POST_PATIENTS_END_POINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(patient)))
                 .andExpect(status().isOk())
@@ -85,7 +85,7 @@ public class PatientCreationControllerTest {
     public void testPatientCreationController_Invalid() throws Exception {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
         Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(post("/patients")
+        mockMvc.perform(post(TestApplicationConstants.POST_PATIENTS_END_POINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(patient)))
                 .andExpect(status().isBadRequest())
