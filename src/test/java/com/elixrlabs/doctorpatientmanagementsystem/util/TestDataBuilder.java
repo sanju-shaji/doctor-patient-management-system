@@ -4,12 +4,16 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationCons
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
+import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -114,4 +118,33 @@ public class TestDataBuilder {
         doctorListResponse.setErrors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         return ResponseEntity.status(statusCode).body(doctorListResponse);
     }
+    public List<DoctorPatientAssignmentModel> doctorPatientAssignmentModelBuilder(){
+        List<DoctorPatientAssignmentModel> response =new ArrayList<>();
+        DoctorPatientAssignmentModel doctorPatientAssignmentModel=DoctorPatientAssignmentModel.builder()
+                .id(UUID.randomUUID())
+                .doctorId(doctorEntityBuilder().getId())
+                .patientId(UUID.randomUUID())
+                .dateOfAdmission(Date.from(Instant.now()))
+                .isUnAssigned(false)
+                .build();
+        response.add(doctorPatientAssignmentModel);
+        return response;
+    }
+
+    public ResponseEntity<BaseResponse> buildSuccessDeleteResponse(List<String> messages) {
+        BaseResponse baseResponse = BaseResponse.builder()
+                .success(true)
+                .messages(messages)
+                .build();
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+    public ResponseEntity<BaseResponse> buildFailureDeleteResponse(List<String> errors) {
+        BaseResponse baseResponse = BaseResponse.builder()
+                .success(false)
+                .errors(errors)
+                .build();
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+
 }
