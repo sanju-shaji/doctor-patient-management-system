@@ -1,6 +1,5 @@
 package com.elixrlabs.doctorpatientmanagementsystem.constants;
 
-
 /**
  * Class to store the constants used in test package
  */
