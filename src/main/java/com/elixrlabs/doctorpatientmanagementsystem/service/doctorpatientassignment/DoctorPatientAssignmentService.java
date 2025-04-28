@@ -39,11 +39,10 @@ public class DoctorPatientAssignmentService {
     public ResponseEntity<PostResponse> createDoctorPatientAssignment(DoctorPatientAssignmentDto assignmentDto) {
         doctorPatientAssignmentValidator.validateAssignmentDto(assignmentDto);
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = new DoctorPatientAssignmentModel(assignmentDto);
-        Optional<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientId(UUID.fromString(assignmentDto.getDoctorId()), UUID.fromString(assignmentDto.getPatientId()));
+        Optional<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssigned(UUID.fromString(assignmentDto.getDoctorId()), UUID.fromString(assignmentDto.getPatientId()),false);
         if (doctorPatientAssignments.isPresent()) {
             if (doctorPatientAssignments.get().isUnAssigned()) {
                 Date date = Date.from(Instant.now());
-                doctorPatientAssignmentModel.setId(doctorPatientAssignments.get().getId());
                 doctorPatientAssignmentModel.setUnAssigned(false);
                 doctorPatientAssignmentModel.setDateOfAdmission(date);
                 DoctorPatientAssignmentModel savedAssignmentData = doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
