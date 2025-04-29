@@ -5,8 +5,11 @@ import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.DataNotFound
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.GlobalExceptionHandler;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.patient.PatientDeletionService;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +30,12 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class PatientDeletionControllerTest {
+    private TestDataBuilder testDataBuilder;
 
     private MockMvc mockMvc;
     @Mock
     private PatientDeletionService patientDeletionService;
+    private ObjectMapper objectMapper;
 
     @Mock
     private MessageUtil messageUtil;
@@ -38,6 +43,8 @@ class PatientDeletionControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(new PatientDeletionController(patientDeletionService)).setControllerAdvice(new GlobalExceptionHandler(messageUtil)).build();
+        testDataBuilder = new TestDataBuilder();
+        objectMapper = new ObjectMapper();
     }
 
     /**
@@ -51,10 +58,10 @@ class PatientDeletionControllerTest {
         baseResponse.setMessages(List.of(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY));
         ResponseEntity<BaseResponse> responseEntity = new ResponseEntity<>(baseResponse, HttpStatus.OK);
         Mockito.when(patientDeletionService.deletePatientById(ArgumentMatchers.anyString())).thenReturn(responseEntity);
-        mockMvc.perform(MockMvcRequestBuilders.delete("/patient/{patientId}", TestApplicationConstants.UUID).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.delete(TestApplicationConstants.PATIENT_ENDPOINT, TestApplicationConstants.UUID).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0]").value(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY));
+                .andExpect(MockMvcResultMatchers.jsonPath(TestApplicationConstants.JSON_KEY_SUCCESS).value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath(TestApplicationConstants.JSON_PATH_MESSAGES_FIRST).value(TestApplicationConstants.PATIENT_DELETED_SUCCESSFULLY));
     }
 
     /**
@@ -62,14 +69,14 @@ class PatientDeletionControllerTest {
      */
     @Test
     public void testDeletePatientController_PatientNotFound() throws Exception {
+        PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
         Mockito.when(patientDeletionService.deletePatientById(ArgumentMatchers.anyString()))
                 .thenThrow(new DataNotFoundException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/patient/{patientId}", TestApplicationConstants.UUID)
+        mockMvc.perform(MockMvcRequestBuilders.delete(TestApplicationConstants.PATIENT_ENDPOINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(false))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errors").value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
     }
 
     /**
@@ -77,13 +84,13 @@ class PatientDeletionControllerTest {
      */
     @Test
     public void testDeletePatientController_PatientAlreadyAssigned() throws Exception {
+        PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
         Mockito.when(patientDeletionService.deletePatientById(ArgumentMatchers.anyString()))
                 .thenThrow(new PatientAlreadyAssignedException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/patient/{patientId}", TestApplicationConstants.UUID)
+        mockMvc.perform(MockMvcRequestBuilders.delete(TestApplicationConstants.PATIENT_ENDPOINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(false))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errors").value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
     }
 }
