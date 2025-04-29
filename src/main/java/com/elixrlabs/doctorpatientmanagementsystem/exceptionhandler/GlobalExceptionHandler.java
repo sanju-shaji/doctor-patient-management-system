@@ -201,7 +201,7 @@ public class GlobalExceptionHandler {
                 .success(false)
                 .errors(invalidAssignmentDataException.getErrors())
                 .build();
-        return new ResponseEntity<>(baseResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UuidValidationException.class)
