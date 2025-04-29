@@ -16,6 +16,8 @@ public enum MessageKeyEnum {
     DOCTOR_NOT_ASSIGNED_TO_PATIENT("doctor.not.assigned.to.patient"),
     DOCTOR_NOT_FOUND_ERROR("doctor.not.found.error"),
     DOCTOR_SUCCESSFULLY_UNASSIGNED_FROM_PATIENT("doctor.successfully.unassigned.from.patient"),
+    DUPLICATE_FIRST_NAME("error.duplicate.firstName"),
+    DUPLICATE_LAST_NAME("error.duplicate.lastName"),
     EMPTY_DEPARTMENT_NAME("empty.department.name"),
     EMPTY_FIRSTNAME("empty.first.name"),
     EMPTY_LASTNAME("empty.lastname"),
