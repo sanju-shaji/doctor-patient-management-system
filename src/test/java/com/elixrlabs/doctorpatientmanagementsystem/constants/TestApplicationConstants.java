@@ -6,11 +6,13 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
 public class TestApplicationConstants {
     public static final String APPLICATION_JSON = "application/json";
     public static final String DEPARTMENT_NAME = "departmentName";
+    public static final String DATA_NOT_FOUND_EXCEPTION_NOT_THROWN_MESSAGE = "Expected DataNotFoundException was not thrown";
     public static final String DOCTOR_ENDPOINT = "/doctors";
     public static final String DOCTOR_DELETE_ENDPOINT = "/doctor/{doctorId}";
     public static final String DOCTORS_NOT_FOUND = "No Doctors found :'firstName'";
     public static final String EMPTY_QUERY_STRING = " ";
     public static final String EMPTY_NAME_QUERY_PARAM = "Query parameter 'name' cannot be empty. Please provide either a first name or a last name to filter";
+    public static final String EXCEPTION_NOT_THROWN_MESSAGE = "Expected InvalidAssignmentDataException was not thrown";
     public static final String FIRST_NAME = "firstName";
     public static final String JSON_KEY_ERRORS = "$.errors";
     public static final String JSON_KEY_SUCCESS = "$.success";

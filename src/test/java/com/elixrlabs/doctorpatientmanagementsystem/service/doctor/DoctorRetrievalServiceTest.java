@@ -87,6 +87,7 @@ class DoctorRetrievalServiceTest {
         assertNotNull(actualResponse.getBody());
         assertTrue(actualResponse.getBody().isSuccess());
         assertEquals(expectedDoctorDtoList, actualResponse.getBody().getDoctors());
+        Mockito.verify(doctorRepository, Mockito.times(1)).findByName(Mockito.anyString());
     }
 
     /**
@@ -123,6 +124,7 @@ class DoctorRetrievalServiceTest {
         assertEquals(1, doctorListResponse.getBody().getErrors().size());
         assertFalse(doctorListResponse.getBody().isSuccess());
         assertEquals(TestApplicationConstants.EMPTY_NAME_QUERY_PARAM, doctorListResponse.getBody().getErrors().get(0));
+        Mockito.verify(doctorValidation, Mockito.times(1)).validateDoctorName(Mockito.anyString());
     }
 
     /**
@@ -161,5 +163,6 @@ class DoctorRetrievalServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, doctorListResponse.getStatusCode());
         assertEquals(1, doctorListResponse.getBody().getErrors().size());
         assertEquals(TestApplicationConstants.DOCTORS_NOT_FOUND, doctorListResponse.getBody().getErrors().get(0));
+        Mockito.verify(doctorRepository, Mockito.times(1)).findByName(Mockito.anyString());
     }
 }

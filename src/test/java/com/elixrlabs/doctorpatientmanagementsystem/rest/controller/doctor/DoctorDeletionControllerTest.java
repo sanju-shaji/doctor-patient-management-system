@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -50,7 +51,7 @@ class DoctorDeletionControllerTest {
      * Test deleteDoctorById with valid UUID and verify success response.
      */
     @Test
-    void test_deleteDoctorById_withValidId_returnSuccessResponse() throws Exception {
+    void test_deleteDoctorById_withValidId_return200StatusAndSuccessResponse() throws Exception {
         ResponseEntity<BaseResponse> successResponse =
                 testDataBuilder.buildSuccessDeleteResponse(Collections.singletonList(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         when(doctorDeletionService.deleteDoctorById(TestApplicationConstants.UUID))
@@ -65,12 +66,13 @@ class DoctorDeletionControllerTest {
      * Test deleteDoctorById with empty ID and verify failure response.
      */
     @Test
-    void test_deleteDoctorById_withEmptyId_returnFailureResponse() throws Exception {
+    void test_deleteDoctorById_withEmptyId_returns400StatusAndFailureResponse() throws Exception {
         ResponseEntity<BaseResponse> failureResponse =
-                testDataBuilder.buildFailureDeleteResponse(Collections.singletonList(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+                testDataBuilder.buildFailureDeleteResponse(Collections.singletonList(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE), HttpStatus.BAD_REQUEST);
         when(doctorDeletionService.deleteDoctorById(TestApplicationConstants.EMPTY_QUERY_STRING))
                 .thenReturn(failureResponse);
         mockMvc.perform(delete(TestApplicationConstants.DOCTOR_DELETE_ENDPOINT, TestApplicationConstants.EMPTY_QUERY_STRING))
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(TestApplicationConstants.JSON_KEY_SUCCESS).value(false))
                 .andExpect(jsonPath(TestApplicationConstants.JSON_PATH_ERRORS_FIRST).value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
     }
@@ -79,12 +81,28 @@ class DoctorDeletionControllerTest {
      * Test deleteDoctorById with non-existing UUID and verify not found failure response.
      */
     @Test
-    void test_deleteDoctorById_withNonExistingId_returnFailureResponse() throws Exception {
+    void test_retrieveDoctorByName_withBlankName_returns404StatusAndBadRequest() throws Exception {
         ResponseEntity<BaseResponse> failureResponse =
-                testDataBuilder.buildFailureDeleteResponse(Collections.singletonList(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+                testDataBuilder.buildFailureDeleteResponse(Collections.singletonList(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE), HttpStatus.NOT_FOUND);
         when(doctorDeletionService.deleteDoctorById(TestApplicationConstants.UUID))
                 .thenReturn(failureResponse);
         mockMvc.perform(delete(TestApplicationConstants.DOCTOR_DELETE_ENDPOINT, TestApplicationConstants.UUID))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath(TestApplicationConstants.JSON_KEY_SUCCESS).value(false))
+                .andExpect(jsonPath(TestApplicationConstants.JSON_PATH_ERRORS_FIRST).value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+    }
+
+    /**
+     * Tests that delete a doctor by doctorId returns 500 Internal Server Error when a server-side failure occurs.
+     */
+    @Test
+    void test_retrieveDoctorByName__whenServerErrorOccurs_returns500StatusAndError() throws Exception {
+        ResponseEntity<BaseResponse> failureResponse =
+                testDataBuilder.buildFailureDeleteResponse(Collections.singletonList(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE), HttpStatus.INTERNAL_SERVER_ERROR);
+        when(doctorDeletionService.deleteDoctorById(TestApplicationConstants.UUID))
+                .thenReturn(failureResponse);
+        mockMvc.perform(delete(TestApplicationConstants.DOCTOR_DELETE_ENDPOINT, TestApplicationConstants.UUID))
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath(TestApplicationConstants.JSON_KEY_SUCCESS).value(false))
                 .andExpect(jsonPath(TestApplicationConstants.JSON_PATH_ERRORS_FIRST).value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
     }

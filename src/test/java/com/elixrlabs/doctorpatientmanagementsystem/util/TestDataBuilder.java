@@ -138,12 +138,12 @@ public class TestDataBuilder {
                 .build();
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
-    public ResponseEntity<BaseResponse> buildFailureDeleteResponse(List<String> errors) {
+    public ResponseEntity<BaseResponse> buildFailureDeleteResponse(List<String> errors,HttpStatus statusCode) {
         BaseResponse baseResponse = BaseResponse.builder()
                 .success(false)
                 .errors(errors)
                 .build();
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+        return new ResponseEntity<>(baseResponse, statusCode);
     }
 
 

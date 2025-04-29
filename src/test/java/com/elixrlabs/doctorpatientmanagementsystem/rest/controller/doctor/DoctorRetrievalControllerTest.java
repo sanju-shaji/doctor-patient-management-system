@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -42,8 +41,6 @@ class DoctorRetrievalControllerTest {
     @Mock
     private MessageUtil messageUtil;
     private ObjectMapper objectMapper;
-    @InjectMocks
-    private DoctorRetrievalController doctorRetrievalController;
     private TestDataBuilder testDataBuilder;
 
     @BeforeEach
@@ -56,7 +53,7 @@ class DoctorRetrievalControllerTest {
     }
 
     @Test
-    void test_retrieveDoctorByName_withValidName_returnDoctorListResponse() throws Exception {
+    void test_retrieveDoctorByName_withValidName_returns200StatusAndDoctorListResponse() throws Exception {
         ResponseEntity<DoctorListResponse> expectedResponse = testDataBuilder.buildDoctorListSuccessResponse(testDataBuilder.doctorDtoListBuilder());
         when(doctorRetrievalService.retrieveDoctorByName(ApplicationConstants.FIRST_NAME)).thenReturn(expectedResponse);
         ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.DOCTOR_ENDPOINT)
@@ -73,7 +70,7 @@ class DoctorRetrievalControllerTest {
      * Tests response when an invalid (blank) name is passed as input.
      */
     @Test
-    void test_retrieveDoctorByName_withBlankName_returnsBadRequest() throws Exception {
+    void test_retrieveDoctorByName_withBlankName_returns400StatusAndBadRequest() throws Exception {
         when(doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.EMPTY_QUERY_STRING)).thenReturn(testDataBuilder.buildDoctorListErrorResponse(HttpStatus.BAD_REQUEST));
         mockMvc.perform(get(TestApplicationConstants.DOCTOR_ENDPOINT)
                         .param(TestApplicationConstants.QUERY_PARAM_NAME, TestApplicationConstants.EMPTY_QUERY_STRING))
@@ -86,11 +83,24 @@ class DoctorRetrievalControllerTest {
      * Tests response when a valid name is passed but no doctor is found.
      */
     @Test
-    void test_retrieveDoctorByName_withValidNameButNoMatch_returnsNotFound() throws Exception {
+    void test_retrieveDoctorByName_withValidNameButNoMatch_returns404StatusAndNotFound() throws Exception {
         when(doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.FIRST_NAME)).thenReturn(testDataBuilder.buildDoctorListErrorResponse(HttpStatus.NOT_FOUND));
         mockMvc.perform(get(TestApplicationConstants.DOCTOR_ENDPOINT)
                         .param(TestApplicationConstants.QUERY_PARAM_NAME, TestApplicationConstants.FIRST_NAME))
                 .andExpect(status().isNotFound())
+                .andExpect(jsonPath(TestApplicationConstants.JSON_KEY_SUCCESS).value(false))
+                .andExpect(jsonPath(TestApplicationConstants.JSON_KEY_ERRORS).value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+    }
+
+    /**
+     * Tests that retrieving a doctor by name returns 500 Internal Server Error when a server-side failure occurs.
+     */
+    @Test
+    void test_retrieveDoctorByName_whenServerErrorOccurs_returns500StatusAndError() throws Exception {
+        when(doctorRetrievalService.retrieveDoctorByName(TestApplicationConstants.FIRST_NAME)).thenReturn(testDataBuilder.buildDoctorListErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR));
+        mockMvc.perform(get(TestApplicationConstants.DOCTOR_ENDPOINT)
+                        .param(TestApplicationConstants.QUERY_PARAM_NAME, TestApplicationConstants.FIRST_NAME))
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath(TestApplicationConstants.JSON_KEY_SUCCESS).value(false))
                 .andExpect(jsonPath(TestApplicationConstants.JSON_KEY_ERRORS).value(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
     }

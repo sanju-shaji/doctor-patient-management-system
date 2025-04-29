@@ -14,6 +14,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.ResponseBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,6 +76,8 @@ class DoctorDeletionServiceTest {
         assertEquals(HttpStatus.OK, deleteResponse.getStatusCode());
         assertTrue(deleteResponse.getBody().isSuccess());
         assertEquals(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE), deleteResponse.getBody().getMessages());
+        Mockito.verify(doctorRepository, Mockito.times(1)).findById(Mockito.any(UUID.class));
+        Mockito.verify(doctorPatientAssignmentRepository, Mockito.times(1)).findByDoctorId(Mockito.any(UUID.class));
     }
 
     /**
@@ -86,6 +89,7 @@ class DoctorDeletionServiceTest {
         Mockito.doThrow(new InvalidAssignmentDataException(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))).when(doctorValidation).validateDoctorId(TestApplicationConstants.EMPTY_QUERY_STRING);
         try {
             doctorDeletionService.deleteDoctorById(TestApplicationConstants.EMPTY_QUERY_STRING);
+            Assertions.fail(TestApplicationConstants.EXCEPTION_NOT_THROWN_MESSAGE);
         } catch (InvalidAssignmentDataException invalidAssignmentDataException) {
             ResponseEntity<DoctorResponse> deleteResponse = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(expectedResponse);
             assertEquals(HttpStatus.BAD_REQUEST.value(), deleteResponse.getStatusCode().value());
@@ -102,10 +106,12 @@ class DoctorDeletionServiceTest {
         Mockito.when(doctorRepository.findById(UUID.fromString(TestApplicationConstants.UUID))).thenReturn(Optional.empty());
         try {
             doctorDeletionService.deleteDoctorById(TestApplicationConstants.UUID);
+            Assertions.fail(TestApplicationConstants.DATA_NOT_FOUND_EXCEPTION_NOT_THROWN_MESSAGE);
         } catch (DataNotFoundException dataNotFoundException) {
             ResponseEntity<DoctorResponse> deleteResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(expectedResponse);
             assertEquals(HttpStatus.NOT_FOUND, deleteResponse.getStatusCode());
             assertEquals(expectedResponse, deleteResponse.getBody());
+            Mockito.verify(doctorRepository, Mockito.times(1)).findById(Mockito.any(UUID.class));
         }
     }
 }
