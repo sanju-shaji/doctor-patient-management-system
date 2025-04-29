@@ -96,7 +96,7 @@ class DoctorDeletionControllerTest {
      * Tests that delete a doctor by doctorId returns 500 Internal Server Error when a server-side failure occurs.
      */
     @Test
-    void test_retrieveDoctorByName__whenServerErrorOccurs_returns500StatusAndError() throws Exception {
+    void test_retrieveDoctorByName_whenServerErrorOccurs_returns500StatusAndError() throws Exception {
         ResponseEntity<BaseResponse> failureResponse =
                 testDataBuilder.buildFailureDeleteResponse(Collections.singletonList(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE), HttpStatus.INTERNAL_SERVER_ERROR);
         when(doctorDeletionService.deleteDoctorById(TestApplicationConstants.UUID))

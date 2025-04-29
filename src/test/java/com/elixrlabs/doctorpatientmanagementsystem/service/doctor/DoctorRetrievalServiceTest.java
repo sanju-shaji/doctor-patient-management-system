@@ -107,6 +107,7 @@ class DoctorRetrievalServiceTest {
             assertEquals(expectedResponse, doctorData.getBody());
             Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
             Mockito.verify(doctorRepository, Mockito.never()).findById(Mockito.any(UUID.class));
+            Mockito.verify(messageUtil , Mockito.times(1)).getMessage(Mockito.anyString());
         } catch (InvalidUuidException invalidUuidException) {
             ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
         }
