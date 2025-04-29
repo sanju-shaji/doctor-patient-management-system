@@ -2,6 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.service.doctorpatientassignm
 
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorPatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
+import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
@@ -13,6 +14,8 @@ import com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassig
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,10 +45,13 @@ public class DoctorPatientAssignmentService {
      * @param assignmentDto-contains the data which is to be posted to the database
      * @return ResponseEntity in which the desired data is set for response
      */
-
     public ResponseEntity<PostResponse> createDoctorPatientAssignment(DoctorPatientAssignmentDto assignmentDto) {
         doctorPatientAssignmentValidator.validateAssignmentDto(assignmentDto);
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = new DoctorPatientAssignmentModel(assignmentDto);
+        Optional<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssigned(UUID.fromString(assignmentDto.getDoctorId()), UUID.fromString(assignmentDto.getPatientId()), false);
+        if (doctorPatientAssignments.isPresent()) {
+            throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT.getKey()));
+        }
         DoctorPatientAssignmentModel savedAssignmentData = doctorPatientAssignmentRepository.save(doctorPatientAssignmentModel);
         return responseBuilder.buildSuccessAssignDoctorToPatient(savedAssignmentData);
     }

@@ -19,5 +19,6 @@ public interface DoctorPatientAssignmentRepository extends MongoRepository<Docto
 
     DoctorPatientAssignmentModel findByDoctorIdAndPatientIdAndIsUnAssignedFalse(UUID doctorId, UUID patientId);
 
+   Optional<DoctorPatientAssignmentModel>findByDoctorIdAndPatientIdAndIsUnAssigned(UUID doctorId, UUID patientId,boolean isUnassigned);
     Optional<DoctorPatientAssignmentModel> findByDoctorIdAndPatientId(UUID doctorId, UUID patientId);
 }

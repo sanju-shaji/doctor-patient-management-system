@@ -149,7 +149,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PatientAlreadyAssignedException.class)
     public ResponseEntity<BaseResponse> handlePatientAlreadyAssigned(PatientAlreadyAssignedException patientAlreadyAssignedException) {
         BaseResponse baseResponse = BaseResponse.builder().success(false).errors(List.of(patientAlreadyAssignedException.getMessage())).build();
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(baseResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
     }
 
     @ExceptionHandler(JsonPatchProcessingException.class)
@@ -202,7 +202,7 @@ public class GlobalExceptionHandler {
                 .success(false)
                 .errors(invalidAssignmentDataException.getErrors())
                 .build();
-        return new ResponseEntity<>(baseResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UuidValidationException.class)

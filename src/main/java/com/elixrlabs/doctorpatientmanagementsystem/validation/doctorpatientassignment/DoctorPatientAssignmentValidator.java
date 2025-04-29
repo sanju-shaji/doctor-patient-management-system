@@ -3,7 +3,6 @@ package com.elixrlabs.doctorpatientmanagementsystem.validation.doctorpatientassi
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.DoctorPatientAssignmentDto;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidAssignmentDataException;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.PatientAlreadyAssignedException;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.doctorpatientassignment.DoctorPatientAssignmentRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
@@ -21,14 +20,12 @@ public class DoctorPatientAssignmentValidator {
     private final DoctorRepository doctorRepository;
     private final MessageUtil messageUtil;
     private final PatientRepository patientRepository;
-    private final DoctorPatientAssignmentRepository doctorPatientAssignmentRepository;
 
     public DoctorPatientAssignmentValidator(DoctorValidation doctorValidation, DoctorRepository doctorRepository, MessageUtil messageUtil, PatientRepository patientRepository, DoctorPatientAssignmentRepository doctorPatientAssignmentRepository) {
         this.doctorValidation = doctorValidation;
         this.doctorRepository = doctorRepository;
         this.messageUtil = messageUtil;
         this.patientRepository = patientRepository;
-        this.doctorPatientAssignmentRepository = doctorPatientAssignmentRepository;
     }
 
     public void validateAssignmentDto(DoctorPatientAssignmentDto assignmentDto) {
@@ -46,9 +43,6 @@ public class DoctorPatientAssignmentValidator {
         }
         if (!errors.isEmpty()) {
             throw new InvalidAssignmentDataException(errors);
-        }
-        if (doctorPatientAssignmentRepository.findByDoctorIdAndPatientId(doctorId, patientId).isPresent()) {
-            throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT.getKey()));
         }
     }
 }
