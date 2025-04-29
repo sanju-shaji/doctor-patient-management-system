@@ -6,6 +6,9 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
 public class TestApplicationConstants {
     public static final String DEPARTMENT_NAME = "departmentName";
     public static final String DOCTORS_END_POINT = "/doctors";
+    public static final String EXPECTED_DATA_NOT_FOUND_EXCEPTION = "Expected DataNotFoundException,but not thrown";
+    public static final String EXPECTED_INVALID_USER_INPUT_EXCEPTION = "Expected InvalidUserInputException,but not thrown";
+    public static final String EXPECTED_INVALID_UUID_EXCEPTION = "Expected InvalidUuidException,but not thrown";
     public static final String FIRST_NAME = "firstName";
     public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
     public static final String INVALID_UUID = "12345";
