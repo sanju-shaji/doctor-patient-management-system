@@ -15,8 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.*;
+import java.util.Optional;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Service Class for creating doctor-patient-assignment
@@ -35,11 +36,10 @@ public class DoctorPatientAssignmentService {
      * @param assignmentDto-contains the data which is to be posted to the database
      * @return ResponseEntity in which the desired data is set for response
      */
-
     public ResponseEntity<PostResponse> createDoctorPatientAssignment(DoctorPatientAssignmentDto assignmentDto) {
         doctorPatientAssignmentValidator.validateAssignmentDto(assignmentDto);
         DoctorPatientAssignmentModel doctorPatientAssignmentModel = new DoctorPatientAssignmentModel(assignmentDto);
-        Optional<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssigned(UUID.fromString(assignmentDto.getDoctorId()), UUID.fromString(assignmentDto.getPatientId()),false);
+        Optional<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssigned(UUID.fromString(assignmentDto.getDoctorId()), UUID.fromString(assignmentDto.getPatientId()), false);
         if (doctorPatientAssignments.isPresent()) {
             throw new PatientAlreadyAssignedException(messageUtil.getMessage(MessageKeyEnum.DUPLICATE_DOCTOR_PATIENT_ASSIGNMENT.getKey()));
         }
@@ -52,7 +52,6 @@ public class DoctorPatientAssignmentService {
      *
      * @return ResponseEntity in which the desired data is set for response
      */
-
     public ResponseEntity<BaseResponse> unAssignDoctorFromPatient(DoctorPatientAssignmentDto dto) {
         List<DoctorPatientAssignmentModel> doctorPatientAssignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssignedFalse(dto.getDoctorId(), dto.getPatientId());
         if (doctorPatientAssignments.isEmpty()) {
