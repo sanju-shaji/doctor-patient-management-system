@@ -8,6 +8,9 @@ import java.util.Date;
 public class TestApplicationConstants {
     public static final String DEPARTMENT_NAME = "departmentName";
     public static final String DOCTORS_END_POINT = "/doctors";
+    public static final String EXPECTED_DATA_NOT_FOUND_EXCEPTION = "Expected DataNotFoundException,but not thrown";
+    public static final String EXPECTED_EMPTY_UUID_EXCEPTION = "Expected EmptyUuidException,but not thrown";
+    public static final String EXPECTED_INVALID_UUID_EXCEPTION = "Expected InvalidUuidException,but not thrown";
     public static final String FIRST_NAME = "firstName";
     public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
     public static final String GET_DOCTOR_BY_PATIENT_ID = "/assignedDoctorsByPatientId";

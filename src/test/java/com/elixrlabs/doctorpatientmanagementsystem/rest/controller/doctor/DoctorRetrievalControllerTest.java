@@ -20,8 +20,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -104,12 +108,14 @@ class DoctorRetrievalControllerTest {
      * @throws Exception - throws exception if user provide invalid inputs
      */
     @Test
-    void getAssignedDoctorsList_validInputs() throws Exception {
+    void getAssignedDoctorsList_validInputs_returns200StatusAndReturnsDoctorPatientAssignmentResponse() throws Exception {
         DoctorPatientAssignmentResponse expectedResponse = testDataBuilder.assignmentResponseBuilder();
         Mockito.when(doctorRetrievalService.getDoctorsWithPatient(Mockito.anyString())).thenReturn(ResponseEntity.ok().body(expectedResponse));
-        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, expectedResponse.getId().toString()))
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, expectedResponse.getId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 
     /**
@@ -119,26 +125,45 @@ class DoctorRetrievalControllerTest {
      * @throws Exception if invalid user provide invalid uuid
      */
     @Test
-    void getAssignedDoctorsList_invalidUUID() throws Exception {
-        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+    void getAssignedDoctorsList_invalidUUID_returns400StatusAndInvalidDoctorResponse() throws Exception {
+        String expectedResponse = objectMapper.writeValueAsString(testDataBuilder.invalidDoctorResponseBuilder());
         Mockito.when(doctorRetrievalService.getDoctorsWithPatient(Mockito.anyString())).thenThrow(new InvalidUuidException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, TestApplicationConstants.UUID))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, TestApplicationConstants.UUID))
+                .andExpect(status().isBadRequest());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(expectedResponse, actualResponse);
     }
 
     /**
-     * Method to test if no user exist for the give patient id
+     * Method to test if no user exist for the give patient id or no doctors are assigned to the patient
      * HTTP Status Code-404
      *
      * @throws Exception if no user is present in db
      */
     @Test
-    void getAssignedDoctorsList_userNotFound() throws Exception {
-        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+    void getAssignedDoctorsList_userNotFound_returns404StatusAndInvalidDoctorResponse() throws Exception {
+        String expectedResponse = objectMapper.writeValueAsString(testDataBuilder.invalidDoctorResponseBuilder());
         Mockito.when(doctorRetrievalService.getDoctorsWithPatient(Mockito.anyString())).thenThrow(new DataNotFoundException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, TestApplicationConstants.UUID))
-                .andExpect(status().isNotFound())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, TestApplicationConstants.UUID))
+                .andExpect(status().isNotFound());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    /**
+     * Method to test Internal server error for getAssignedDoctorsList method
+     * HTTP Status Code-500
+     *
+     * @throws Exception if any unhandled exception occurs
+     */
+    @Test
+    void getAssignedDoctorsList_returns500StatusAndInvalidDoctorResponse() throws Exception {
+        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+        expectedResponse.setErrors(List.of(null + TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        Mockito.when(doctorRetrievalService.getDoctorsWithPatient(Mockito.anyString())).thenThrow(new Exception(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_DOCTOR_BY_PATIENT_ID).param(TestApplicationConstants.PATIENT_ID, TestApplicationConstants.UUID))
+                .andExpect(status().isInternalServerError());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 }
