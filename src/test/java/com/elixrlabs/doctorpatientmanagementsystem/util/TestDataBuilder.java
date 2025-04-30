@@ -8,11 +8,9 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 
 import java.util.ArrayList;
@@ -77,56 +75,6 @@ public class TestDataBuilder {
      */
     public DoctorResponse invalidDoctorResponseBuilder() {
         return DoctorResponse.builder()
-                .success(false)
-                .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
-                .build();
-    }
-    /**
-     * This method initializes a patient dto object so that it can be reused for doctor module testing
-     *
-     * @return patient dto
-     */
-    public PatientDto patientDtoBuilder() {
-        return PatientDto.builder()
-                .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(TestApplicationConstants.FIRST_NAME)
-                .lastName(TestApplicationConstants.LAST_NAME)
-                .build();
-    }
-
-    /**
-     * This method initializes a patient Model object so that it can be reused for doctor module testing
-     *
-     * @return doctor entity
-     */
-    public PatientModel patientModelBuilder() {
-        PatientDto patient = patientDtoBuilder();
-        return PatientModel.builder()
-                .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(patient.getFirstName())
-                .lastName(patient.getLastName())
-                .build();
-    }
-
-    /**
-     * This method initializes a patient response object so that it can be reused for patient module testing
-     *
-     * @return patient response object
-     */
-    public PatientResponse patientResponseBuilder() {
-        PatientDto patient= patientDtoBuilder();
-        return PatientResponse.builder()
-                .success(true)
-                .data(patient)
-                .build();
-    }
-    /**
-     * This method initializes invalid patient response object so that it can be reused for patient module testing
-     *
-     * @return patient response object
-     */
-    public PatientResponse invalidPatientResponseBuilder(){
-        return PatientResponse.builder()
                 .success(false)
                 .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
                 .build();
