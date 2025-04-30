@@ -24,7 +24,6 @@ public class TestApplicationConstants {
     public static final String JSON_KEY_SUCCESS = "$.success";
     public static final String JSON_PATH_ERRORS_FIRST = "$.errors[0]";
     public static final String JSON_PATH_MESSAGES_FIRST = "$.messages[0]";
-    public static final String INVALID_UUID = "12345";
     public static final String LAST_NAME = "lastName";
     public static final String MOCK_EXCEPTION_MESSAGE = "Exception Message";
     public static final String NO_PATIENT_FOUND_WITH_ID = "No patient found with ID:";

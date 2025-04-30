@@ -60,7 +60,7 @@ class DoctorCreationControllerTest {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         DoctorResponse expectedResponse = testDataBuilder.doctorResponseBuilder();
         Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenReturn(ResponseEntity.ok(expectedResponse));
-        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTORS_END_POINT)
+        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTOR_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(doctorDto)))
                 .andExpect(status().isOk());
@@ -79,7 +79,7 @@ class DoctorCreationControllerTest {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
         Mockito.when(doctorCreationService.createDoctor(doctorDto)).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTORS_END_POINT)
+        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTOR_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(doctorDto)))
                 .andExpect(status().isBadRequest());
@@ -99,7 +99,7 @@ class DoctorCreationControllerTest {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         expectedResponse.setErrors(List.of(null + TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenThrow(new Exception(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTORS_END_POINT)
+        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTOR_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(doctorDto)))
                 .andExpect(status().isInternalServerError());
