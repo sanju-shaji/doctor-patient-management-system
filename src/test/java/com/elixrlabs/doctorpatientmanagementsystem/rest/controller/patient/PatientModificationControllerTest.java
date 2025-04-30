@@ -28,8 +28,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
 public class PatientModificationControllerTest {
+
     private TestDataBuilder testDataBuilder;
+
     private MockMvc mockMvc;
+
     @Mock
     private PatientModificationService patientModificationService;
 

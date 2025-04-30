@@ -9,6 +9,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.repository.patient.PatientRepository;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.patient.PatientValidation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class PatientModificationServiceTest {
+
+    private TestDataBuilder testDataBuilder;
+
     @Mock
     private PatientRepository patientRepository;
 
@@ -46,6 +50,7 @@ public class PatientModificationServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        testDataBuilder = new TestDataBuilder();
     }
 
     @Test
@@ -69,23 +74,14 @@ public class PatientModificationServiceTest {
         String patchString = TestApplicationConstants.PATCH_CONTENT;
         JsonPatch patch = JsonPatch.fromJson(JsonLoader.fromString(patchString));
 
-        PatientModel existingPatient = new PatientModel();
-        existingPatient.setId(UUID.fromString(patientId));
-        existingPatient.setFirstName(TestApplicationConstants.FIRST_NAME);
-        existingPatient.setLastName(TestApplicationConstants.LAST_NAME);
+        PatientModel existingPatient = testDataBuilder.patientModelBuilder();
 
-        PatientDto patchedDto = new PatientDto();
-        patchedDto.setId(UUID.fromString(patientId));
-        patchedDto.setFirstName(TestApplicationConstants.EXPECTED_FIRST_NAME);
-        patchedDto.setLastName(TestApplicationConstants.LAST_NAME);
+        PatientDto patchedDto = testDataBuilder.patchedDtoBuilder();
 
-        JsonNode patientNode = new ObjectMapper().valueToTree(patchedDto); // Direct ObjectMapper usage
+        JsonNode patientNode = new ObjectMapper().valueToTree(patchedDto);
         JsonNode patchedNode = new ObjectMapper().valueToTree(patchedDto);
 
-        PatientModel savedPatient = new PatientModel();
-        savedPatient.setId(UUID.fromString(patientId));
-        savedPatient.setFirstName(TestApplicationConstants.EXPECTED_FIRST_NAME);
-        savedPatient.setLastName(TestApplicationConstants.LAST_NAME);
+        PatientModel savedPatient = testDataBuilder.savedPatientBuilder();
 
         Mockito.when(patientRepository.findById(UUID.fromString(patientId))).thenReturn(Optional.of(existingPatient));
         Mockito.when(objectMapper.convertValue(existingPatient, PatientDto.class)).thenReturn(patchedDto);
@@ -109,15 +105,9 @@ public class PatientModificationServiceTest {
         String patchContent = TestApplicationConstants.PATCH_INVALID_CONTENT;
         JsonPatch patch = JsonPatch.fromJson(JsonLoader.fromString(patchContent));
 
-        PatientModel existingPatient = new PatientModel();
-        existingPatient.setId(UUID.fromString(patientId));
-        existingPatient.setFirstName(TestApplicationConstants.FIRST_NAME);
-        existingPatient.setLastName(TestApplicationConstants.LAST_NAME);
+        PatientModel existingPatient = testDataBuilder.patientModelBuilder();
 
-        PatientDto patchedDto = new PatientDto();
-        patchedDto.setId(UUID.fromString(patientId));
-        patchedDto.setFirstName(TestApplicationConstants.INVALID_NAME);
-        patchedDto.setLastName(TestApplicationConstants.LAST_NAME);
+        PatientDto patchedDto = testDataBuilder.invalidPatchedDtoBuilder();
 
         JsonNode patientNode = new ObjectMapper().valueToTree(patchedDto);
         JsonNode patchedNode = new ObjectMapper().valueToTree(patchedDto);

@@ -209,4 +209,28 @@ public class TestDataBuilder {
                 .patient(patientDtoBuilder())
                 .build();
     }
+
+    public PatientDto patchedDtoBuilder() {
+        return PatientDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.EXPECTED_FIRST_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
+
+    public PatientModel savedPatientBuilder() {
+        return PatientModel.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.EXPECTED_FIRST_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
+
+    public PatientDto invalidPatchedDtoBuilder() {
+        return PatientDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.INVALID_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
 }
