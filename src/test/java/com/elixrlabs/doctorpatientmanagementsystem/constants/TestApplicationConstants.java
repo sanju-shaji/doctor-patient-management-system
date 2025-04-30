@@ -5,7 +5,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
  */
 public class TestApplicationConstants {
     public static final String APPLICATION_JSON = "application/json";
-    public static final String DATA_NOT_FOUND_EXCEPTION_NOT_THROWN_MESSAGE = "Expected DataNotFoundException was not thrown";
+    public static final String DATA_NOT_FOUND_EXCEPTION_NOT_THROWN_MESSAGE = "Expected DataNotFoundException,but not thrown";
     public static final String DEPARTMENT_NAME = "departmentName";
     public static final String DOCTOR_DELETE_ENDPOINT = "/doctor/{doctorId}";
     public static final String DOCTOR_ENDPOINT = "/doctors";
@@ -15,9 +15,12 @@ public class TestApplicationConstants {
     public static final String EXCEPTION_NOT_THROWN_MESSAGE = "Expected InvalidAssignmentDataException was not thrown";
     public static final String EXPECTED_DATA_NOT_FOUND_EXCEPTION = "Expected an error when the patient with the given ID was not found";
     public static final String EXPECTED_PATIENT_ALREADY_ASSIGNED_EXCEPTION = "Expected an error because the patient is already assigned to a doctor";
+    public static final String EXPECTED_INVALID_USER_INPUT_EXCEPTION = "Expected InvalidUserInputException,but not thrown";
+    public static final String EXPECTED_INVALID_UUID_EXCEPTION = "Expected InvalidUuidException,but not thrown";
     public static final String FIRST_NAME = "firstName";
-    public static final String GET_PATIENT_BY_ID_END_POINT = "/patient/{id}";
+    public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
     public static final String INVALID_UUID = "12345";
+    public static final String GET_PATIENT_BY_ID_END_POINT = "/patient/{id}";
     public static final String JSON_KEY_ERRORS = "$.errors";
     public static final String JSON_KEY_SUCCESS = "$.success";
     public static final String JSON_PATH_ERRORS_FIRST = "$.errors[0]";
