@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.time.Instant;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -207,7 +205,12 @@ public class TestDataBuilder {
                 .build();
     }
 
-    public AssignedDoctorData assignedDoctorDataResponseBuilder(){
+    /**
+     * This method initializes a AssignedDoctorData which is used in AssignedDoctorsToPatientDto object which is used in AssignedDoctorsToPatientDto so that it can be reused for doctor module testing
+     *
+     * @return doctor entity
+     */
+    public AssignedDoctorData assignedDoctorDataResponseBuilder() {
         return AssignedDoctorData.builder()
                 .id(doctorEntityBuilder().getId())
                 .firstName(doctorEntityBuilder().getFirstName())
@@ -217,7 +220,12 @@ public class TestDataBuilder {
                 .build();
     }
 
-    public AssignedDoctorsToPatientDto assignmentsToPatientDtoBuilder(){
+    /**
+     * This method initializes a AssignedDoctorsToPatientDto object so that it can be reused for doctor module testing
+     *
+     * @return doctor entity
+     */
+    public AssignedDoctorsToPatientDto assignmentsToPatientDtoBuilder() {
         return AssignedDoctorsToPatientDto.builder()
                 .id(doctorEntityBuilder().getId().toString())
                 .firstName(doctorEntityBuilder().getFirstName())
@@ -225,7 +233,13 @@ public class TestDataBuilder {
                 .doctors(List.of(assignedDoctorDataResponseBuilder()))
                 .build();
     }
-    public DoctorPatientAssignmentResponse assignmentResponseBuilder(){
+
+    /**
+     * This method initializes a valid DoctorPatientAssignmentResponse object so that it can be reused for doctor module testing
+     *
+     * @return DoctorPatientAssignmentResponse
+     */
+    public DoctorPatientAssignmentResponse assignmentResponseBuilder() {
         return DoctorPatientAssignmentResponse.builder()
                 .id(doctorEntityBuilder().getId())
                 .firstName(doctorEntityBuilder().getFirstName())

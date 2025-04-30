@@ -1,7 +1,5 @@
 package com.elixrlabs.doctorpatientmanagementsystem.constants;
 
-import java.util.Date;
-
 /**
  * Class to store the constants used in test package
  */
@@ -19,7 +17,6 @@ public class TestApplicationConstants {
     public static final String EXPECTED_PATIENT_ALREADY_ASSIGNED_EXCEPTION = "Expected an error because the patient is already assigned to a doctor";
     public static final String EXPECTED_INVALID_USER_INPUT_EXCEPTION = "Expected InvalidUserInputException,but not thrown";
     public static final String EXPECTED_INVALID_UUID_EXCEPTION = "Expected InvalidUuidException,but not thrown";
-    public static final String DOCTORS_END_POINT = "/doctors";
     public static final String EXPECTED_EMPTY_UUID_EXCEPTION = "Expected EmptyUuidException,but not thrown";
     public static final String FIRST_NAME = "firstName";
     public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
