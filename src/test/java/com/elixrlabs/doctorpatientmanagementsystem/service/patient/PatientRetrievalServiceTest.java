@@ -59,7 +59,7 @@ public class PatientRetrievalServiceTest {
     @Test
     void testGetPatientById_success() throws Exception {
         PatientModel patientModel = testDataBuilder.patientModelBuilder();
-        PatientResponse expectedPatientResponse = testDataBuilder.patientResponseBuilder();
+        PatientResponse expectedPatientResponse = testDataBuilder.getPatientByIdResponseBuilder();
         assert patientModel != null;
         Mockito.when(patientRepository.findById(Mockito.any(UUID.class))).thenReturn(Optional.of(patientModel));
         ResponseEntity<PatientResponse> patientData = patientRetrievalService.getPatientById(patientModel.getId().toString());

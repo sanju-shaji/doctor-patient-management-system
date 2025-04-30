@@ -12,7 +12,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorRespons
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,31 +150,6 @@ public class TestDataBuilder {
                 .build();
         return new ResponseEntity<>(baseResponse, statusCode);
     }
-    /**
-     * This method initializes a patient dto object so that it can be reused for doctor module testing
-     *
-     * @return patient dto
-     */
-    public PatientDto patientDtoBuilder() {
-        return PatientDto.builder()
-                .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(TestApplicationConstants.FIRST_NAME)
-                .lastName(TestApplicationConstants.LAST_NAME)
-                .build();
-    }
-
-    /**
-     * This method initializes a patient Model object so that it can be reused for doctor module testing
-     *
-     * @return doctor entity
-     */
-    public PatientModel patientModelBuilder() {
-        return PatientModel.builder()
-                .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(patientDtoBuilder().getFirstName())
-                .lastName(patientDtoBuilder().getLastName())
-                .build();
-    }
 
     /**
      * This method initializes a patient dto object so that it can be reused for doctor module testing
@@ -204,14 +178,14 @@ public class TestDataBuilder {
     }
 
     /**
-     * This method initializes a patient response object so that it can be reused for patient module testing
+     * This method initializes a patient response object to get patient details by patientId
      *
      * @return patient response object
      */
-    public PatientResponse patientResponseBuilder() {
+    public PatientResponse getPatientByIdResponseBuilder() {
         return PatientResponse.builder()
                 .success(true)
-                .data(patientDtoBuilder())
+                .data(patientModelBuilder())
                 .build();
     }
 
@@ -221,28 +195,6 @@ public class TestDataBuilder {
      * @return patient response object
      */
     public PatientResponse invalidPatientResponseBuilder() {
-        return PatientResponse.builder()
-                .success(false)
-                .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
-                .build();
-    }
-    /**
-     * This method initializes a patient response object so that it can be reused for patient module testing
-     *
-     * @return patient response object
-     */
-    public PatientResponse patientResponseBuilder() {
-        return PatientResponse.builder()
-                .success(true)
-                .data(patientModelBuilder())
-                .build();
-    }
-    /**
-     * This method initializes invalid patient response object so that it can be reused for patient module testing
-     *
-     * @return patient response object
-     */
-    public PatientResponse invalidPatientResponseBuilder(){
         return PatientResponse.builder()
                 .success(false)
                 .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))

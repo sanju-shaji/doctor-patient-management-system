@@ -56,7 +56,7 @@ class PatientRetrievalControllerTest {
      */
     @Test
     void getPatientById_Success() throws Exception {
-        PatientResponse expectedPatientResponse = testDataBuilder.patientResponseBuilder();
+        PatientResponse expectedPatientResponse = testDataBuilder.getPatientByIdResponseBuilder();
         Mockito.when(patientRetrievalService.getPatientById(Mockito.anyString())).thenReturn(ResponseEntity.ok().body(expectedPatientResponse));
         mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
