@@ -19,10 +19,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,15 +56,16 @@ class DoctorCreationControllerTest {
      * @throws Exception - throws exception if user provide invalid inputs
      */
     @Test
-    public void testCreateDoctorController_validInputs() throws Exception {
+    public void testCreateDoctorController_withValidInputs_returns200StatusAndValidDoctorResponse() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         DoctorResponse expectedResponse = testDataBuilder.doctorResponseBuilder();
         Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenReturn(ResponseEntity.ok(expectedResponse));
-        mockMvc.perform(post(TestApplicationConstants.DOCTORS_END_POINT)
+        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTOR_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(doctorDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+                .andExpect(status().isOk());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 
     /**
@@ -71,14 +75,35 @@ class DoctorCreationControllerTest {
      * @throws Exception - invalidUserInputException is thrown by the service layer if validation fails
      */
     @Test
-    void estCreateDoctorController_inValidInputs() throws Exception {
+    void testCreateDoctorController_withInValidInputs_returns400StatusAndInvalidDoctorResponse() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
         Mockito.when(doctorCreationService.createDoctor(doctorDto)).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(post(TestApplicationConstants.DOCTORS_END_POINT)
+        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTOR_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(doctorDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+                .andExpect(status().isBadRequest());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
+    }
+
+    /**
+     * Method to test Internal server error for CreateDoctor method in controller class
+     * HTTP Status Code-500
+     *
+     * @throws Exception if any unhandled exception occurs
+     */
+    @Test
+    void testCreateDoctorController_returns500StatusAndInvalidDoctorResponse() throws Exception {
+        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+        DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
+        expectedResponse.setErrors(List.of(null + TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        Mockito.when(doctorCreationService.createDoctor(Mockito.any(DoctorDto.class))).thenThrow(new Exception(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.DOCTOR_ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(doctorDto)))
+                .andExpect(status().isInternalServerError());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 }

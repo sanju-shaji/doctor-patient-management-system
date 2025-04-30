@@ -8,6 +8,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.repository.doctor.DoctorRepos
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +47,7 @@ class DoctorCreationServiceTest {
      * @throws InvalidUserInputException - if invalid user inputs are provided by the user
      */
     @Test
-    void testCreateDoctorService_validInputs() throws InvalidUserInputException {
+    void testCreateDoctorService_withValidInputs_returns200StatusAndValidDoctorResponse() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         DoctorEntity doctorEntity = testDataBuilder.doctorEntityBuilder();
         DoctorResponse expectedResponse = testDataBuilder.doctorResponseBuilder();
@@ -66,12 +67,13 @@ class DoctorCreationServiceTest {
      * @throws InvalidUserInputException - if invalid user inputs are provided by the user
      */
     @Test
-    void testCreateDoctorService_invalidInputs() throws InvalidUserInputException {
+    void testCreateDoctorService_withInvalidInputs_returns400StatusAndInvalidDoctorResponse() throws Exception {
         DoctorDto doctorDto = testDataBuilder.doctorDtoBuilder();
         DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
         Mockito.doThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).when(doctorValidation).validateDoctorDetails(doctorDto);
         try {
             doctorCreationService.createDoctor(doctorDto);
+            Assertions.fail(TestApplicationConstants.EXPECTED_INVALID_USER_INPUT_EXCEPTION);
         } catch (InvalidUserInputException invalidUserInputException) {
             ResponseEntity<DoctorResponse> responseData = ResponseEntity.badRequest().body(expectedResponse);
             assertEquals(HttpStatus.BAD_REQUEST.value(), responseData.getStatusCode().value());
