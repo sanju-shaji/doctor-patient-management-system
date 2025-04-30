@@ -2,13 +2,16 @@ package com.elixrlabs.doctorpatientmanagementsystem.util;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
+import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,9 +121,10 @@ public class TestDataBuilder {
         doctorListResponse.setErrors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         return ResponseEntity.status(statusCode).body(doctorListResponse);
     }
-    public List<DoctorPatientAssignmentModel> doctorPatientAssignmentModelBuilder(){
-        List<DoctorPatientAssignmentModel> response =new ArrayList<>();
-        DoctorPatientAssignmentModel doctorPatientAssignmentModel=DoctorPatientAssignmentModel.builder()
+
+    public List<DoctorPatientAssignmentModel> doctorPatientAssignmentModelBuilder() {
+        List<DoctorPatientAssignmentModel> response = new ArrayList<>();
+        DoctorPatientAssignmentModel doctorPatientAssignmentModel = DoctorPatientAssignmentModel.builder()
                 .id(UUID.randomUUID())
                 .doctorId(doctorEntityBuilder().getId())
                 .patientId(UUID.randomUUID())
@@ -138,7 +142,8 @@ public class TestDataBuilder {
                 .build();
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
-    public ResponseEntity<BaseResponse> buildFailureDeleteResponse(List<String> errors,HttpStatus statusCode) {
+
+    public ResponseEntity<BaseResponse> buildFailureDeleteResponse(List<String> errors, HttpStatus statusCode) {
         BaseResponse baseResponse = BaseResponse.builder()
                 .success(false)
                 .errors(errors)
@@ -147,4 +152,53 @@ public class TestDataBuilder {
     }
 
 
+    /**
+     * This method initializes a patient dto object so that it can be reused for doctor module testing
+     *
+     * @return patient dto
+     */
+    public PatientDto patientDtoBuilder() {
+        return PatientDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.FIRST_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
+
+    /**
+     * This method initializes a patient Model object so that it can be reused for doctor module testing
+     *
+     * @return doctor entity
+     */
+    public PatientModel patientModelBuilder() {
+        return PatientModel.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(patientDtoBuilder().getFirstName())
+                .lastName(patientDtoBuilder().getLastName())
+                .build();
+    }
+
+    /**
+     * This method initializes a patient response object so that it can be reused for patient module testing
+     *
+     * @return patient response object
+     */
+    public PatientResponse patientResponseBuilder() {
+        return PatientResponse.builder()
+                .success(true)
+                .data(patientDtoBuilder())
+                .build();
+    }
+
+    /**
+     * This method initializes invalid patient response object so that it can be reused for patient module testing
+     *
+     * @return patient response object
+     */
+    public PatientResponse invalidPatientResponseBuilder() {
+        return PatientResponse.builder()
+                .success(false)
+                .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
+                .build();
+    }
 }
