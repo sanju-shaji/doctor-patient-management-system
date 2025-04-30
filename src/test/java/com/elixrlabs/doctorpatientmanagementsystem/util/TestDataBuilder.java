@@ -170,10 +170,11 @@ public class TestDataBuilder {
      * @return doctor entity
      */
     public PatientModel patientModelBuilder() {
+        PatientDto patient=patientDtoBuilder();
         return PatientModel.builder()
                 .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(patientDtoBuilder().getFirstName())
-                .lastName(patientDtoBuilder().getLastName())
+                .firstName(patient.getFirstName())
+                .lastName(patient.getLastName())
                 .build();
     }
 

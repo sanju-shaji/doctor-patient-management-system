@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,7 +68,7 @@ class PatientRetrievalControllerTest {
 
     /**
      * Test case for retrieving patient data using an invalid UUID
-     * Verifies that teh controller returns Http 400 response Bad Request and the appropriate error message
+     * Verifies that the controller, returns Http 400 response Bad Request and the appropriate error message
      */
     @Test
     void getPatientByID_invalidUUID() throws Exception {
@@ -89,6 +91,22 @@ class PatientRetrievalControllerTest {
         mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
+    }
+
+    /**
+     * Method to test Internal server error for getPatientByID method
+     *
+     * @throws Exception if any unhandled exception occurs
+     */
+    @Test
+    void getPatientByID_internalServerError() throws Exception {
+        PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
+        expectedPatientResponse.setErrors(List.of(null + TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        Mockito.when(patientRetrievalService.getPatientById(Mockito.anyString())).thenThrow(new Exception(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
     }
 }
