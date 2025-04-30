@@ -54,7 +54,7 @@ public class DoctorPatientUnAssignmentValidator {
         if (!errors.isEmpty()) {
             throw new InvalidAssignmentDataException(errors);
         }
-        Optional<DoctorPatientAssignmentModel> assignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientId(doctorId, patientId);
+        Optional<DoctorPatientAssignmentModel> assignments = doctorPatientAssignmentRepository.findByDoctorIdAndPatientIdAndIsUnAssigned(doctorId, patientId,false);
         if (assignments.isEmpty()) {
             throw new DataNotFoundException(messageUtil.getMessage(MessageKeyEnum.DOCTOR_PATIENT_COMBINATION_NOT_FOUND.getKey()));
         }
