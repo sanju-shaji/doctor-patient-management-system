@@ -4,11 +4,12 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationCons
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
+import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
@@ -199,6 +200,13 @@ public class TestDataBuilder {
         return PatientResponse.builder()
                 .success(false)
                 .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
+                .build();
+    }
+
+    public PatchPatientResponse patchPatientResponseBuilder() {
+        return PatchPatientResponse.builder()
+                .success(true)
+                .patient(patientDtoBuilder())
                 .build();
     }
 }

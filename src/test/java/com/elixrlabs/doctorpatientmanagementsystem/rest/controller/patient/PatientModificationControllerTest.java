@@ -25,9 +25,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
-import java.util.UUID;
-
 
 @ExtendWith(MockitoExtension.class)
 public class PatientModificationControllerTest {
@@ -47,12 +44,11 @@ public class PatientModificationControllerTest {
 
     /**
      * Test case for successful patient patch
+     * HTTP Status Code-200
      */
     @Test
     public void testPatchPatientById_Success() throws Exception {
-        PatchPatientResponse patchPatientResponse = PatchPatientResponse.builder().id(UUID.fromString(TestApplicationConstants.UUID))
-                .message(List.of(TestApplicationConstants.PATIENT_UPDATED_SUCCESSFULLY))
-                .build();
+        PatchPatientResponse patchPatientResponse = testDataBuilder.patchPatientResponseBuilder();
         ResponseEntity<PatchPatientResponse> responseEntity = new ResponseEntity<>(patchPatientResponse, HttpStatus.OK);
         Mockito.when(patientModificationService.applyPatch(ArgumentMatchers.anyString(), Mockito.any(JsonPatch.class)))
                 .thenReturn(responseEntity);
@@ -61,13 +57,12 @@ public class PatientModificationControllerTest {
                         .contentType(MediaType.valueOf(TestApplicationConstants.PATCH_CONTENT_TYPE))
                         .content(patchContent))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(TestApplicationConstants.UUID))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message[0]").value(TestApplicationConstants.PATIENT_UPDATED_SUCCESSFULLY));
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(patchPatientResponse)));
     }
 
     /**
      * Test case for patient not found
-     * while patching(404)
+     * HTTP Status Code-404
      */
     @Test
     public void testPatchPatientById_PatientNotFound() throws Exception {

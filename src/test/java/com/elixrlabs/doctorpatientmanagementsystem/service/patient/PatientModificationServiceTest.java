@@ -49,7 +49,7 @@ public class PatientModificationServiceTest {
     }
 
     @Test
-    void applyPatch_whenPatientNotFound_shouldThrowDataNotFoundException() throws Exception {
+    public void applyPatch_whenPatientNotFound_shouldThrowDataNotFoundException() throws Exception {
         String patientId = UUID.randomUUID().toString();
         JsonPatch patch = Mockito.mock(JsonPatch.class);
         Mockito.doNothing().when(patientValidation).validatePatientId(patientId);
@@ -64,7 +64,7 @@ public class PatientModificationServiceTest {
     }
 
     @Test
-    void applyPatch_SuccessfulPatch_ReturnsUpdatedPatient() throws Exception {
+    public void applyPatch_SuccessfulPatch_ReturnsUpdatedPatient() throws Exception {
         String patientId = UUID.randomUUID().toString();
         String patchString = TestApplicationConstants.PATCH_CONTENT;
         JsonPatch patch = JsonPatch.fromJson(JsonLoader.fromString(patchString));
@@ -104,7 +104,7 @@ public class PatientModificationServiceTest {
 
 
     @Test
-    void applyPatch_ValidationFails_ThrowsInvalidJsonOperationException() throws Exception {
+    public void applyPatch_ValidationFails_ThrowsInvalidJsonOperationException() throws Exception {
         String patientId = UUID.randomUUID().toString();
         String patchContent = TestApplicationConstants.PATCH_INVALID_CONTENT;
         JsonPatch patch = JsonPatch.fromJson(JsonLoader.fromString(patchContent));
