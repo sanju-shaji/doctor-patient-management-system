@@ -30,13 +30,11 @@ public class ApplicationConstants {
     public static final String DOCTORS_COLLECTION = "tp_doctors";
     public static final String DOCTORS_NOT_FOUND = "No Doctors found";
     public static final String EMPTY_NAME_QUERY_PARAM = "Query parameter 'name' cannot be empty. Please provide either a first name or a last name to filter";
-    public static final String FAILED_TO_APPLY = "Failed to apply";
     public static final String FIRST_NAME = "firstName";
     public static final String ID = "_id";
     public static final String INVALID_URL = "Invalid URL";
     public static final String LAST_NAME = "lastName";
     public static final String NO_PATIENTS_FOUND = "No patients found";
-    public static final String ON = "on";
     public static final String PARAM_DOCTOR_NAME = "name";
     public static final String PATIENT_COLLECTION = "tp_patients";
     public static final String PATIENT_ID = "patientId";
@@ -48,7 +46,6 @@ public class ApplicationConstants {
     public static final String PATCH_PATH_LAST_NAME = "/lastName";
     public static final String PATCH_REMOVE_OPERATION = "remove";
     public static final String PATCH_REPLACE_OPERATION = "replace";
-    public static final String PATCH_VALUE_KEY = "value";
     public static final String PATIENTS = "patients";
     public static final String QUERY_PARAMS_CANNOT_NULL = "Query params cannot be null.";
     public static final String REGEX_ALPHABET_PATTERN = "^[a-zA-Z\\s]+$";
