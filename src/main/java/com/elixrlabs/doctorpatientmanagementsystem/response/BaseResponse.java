@@ -18,4 +18,5 @@ public class BaseResponse {
     private boolean success;
     private List<String> messages;
     private List<String> errors;
+    private Object data;
 }

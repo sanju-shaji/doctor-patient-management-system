@@ -6,7 +6,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorPatchResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
