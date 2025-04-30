@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-
 /**
  * Unit tests for DoctorRetrievalService class to validate doctor retrieval functionality.
  */
@@ -108,7 +107,7 @@ class DoctorRetrievalServiceTest {
         Mockito.when(doctorRepository.findById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
         try {
             doctorRetrievalService.getDoctorsById(UUID.randomUUID().toString());
-            Assertions.fail(TestApplicationConstants.EXPECTED_DATA_NOT_FOUND_EXCEPTION);
+            Assertions.fail(TestApplicationConstants.DATA_NOT_FOUND_EXCEPTION_NOT_THROWN_MESSAGE);
         } catch (DataNotFoundException dataNotFoundException) {
             ResponseEntity<DoctorResponse> doctorData = ResponseEntity.status(HttpStatus.NOT_FOUND).body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
             assertEquals(HttpStatus.NOT_FOUND.value(), doctorData.getStatusCode().value());
@@ -150,6 +149,7 @@ class DoctorRetrievalServiceTest {
         assertEquals(TestApplicationConstants.DOCTORS_NOT_FOUND, doctorListResponse.getBody().getErrors().get(0));
         Mockito.verify(doctorRepository, Mockito.times(1)).findByName(Mockito.anyString());
     }
+
     /**
      * Tests invalid (blank) doctor name input and expects a 400 Bad Request response with an error message.
      */
