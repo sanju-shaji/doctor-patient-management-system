@@ -12,6 +12,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorRespons
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.TestDataBuilder;
 import com.elixrlabs.doctorpatientmanagementsystem.validation.doctor.DoctorValidation;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,13 +32,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-
 /**
  * Unit tests for DoctorRetrievalService class to validate doctor retrieval functionality.
  */
 @ExtendWith(MockitoExtension.class)
 class DoctorRetrievalServiceTest {
-
     @Mock
     DoctorRepository doctorRepository;
     @Mock
@@ -58,10 +57,9 @@ class DoctorRetrievalServiceTest {
      * HTTP Status code-200
      *
      * @throws InvalidUserInputException - if invalid user inputs are provided by the user
-     *                                   Tests valid doctor name input and checks if the service returns correct doctor data with HTTP 200.
      */
     @Test
-    void getDoctorsById_validInputs() throws Exception {
+    void testGetDoctorsById_withValidInputs_returns200StatusAndValidDoctorResponse() throws Exception {
         DoctorEntity doctorEntity = testDataBuilder.doctorEntityBuilder();
         DoctorResponse expectedResponse = testDataBuilder.doctorResponseBuilder();
         assert doctorEntity != null;
@@ -71,6 +69,52 @@ class DoctorRetrievalServiceTest {
         assertEquals(expectedResponse, doctorData.getBody());
         Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
         Mockito.verify(doctorRepository, Mockito.times(1)).findById(Mockito.any(UUID.class));
+        Mockito.verify(messageUtil, Mockito.never()).getMessage(Mockito.anyString());
+    }
+
+    /**
+     * Method to test invalidUUID user input for getDoctorByID method of DoctorRetrieval service class
+     * HTTP Status Code-400
+     *
+     * @throws Exception if invalid user provide invalid uuid
+     */
+    @Test
+    void testGetDoctorsById_withInvalidUUID_returns400StatusAndInvalidDoctorResponse() throws Exception {
+        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+        Mockito.when(doctorValidation.isInValidUUID(Mockito.anyString())).thenReturn(true);
+        try {
+            doctorRetrievalService.getDoctorsById(TestApplicationConstants.INVALID_UUID);
+            Assertions.fail(TestApplicationConstants.EXPECTED_INVALID_UUID_EXCEPTION);
+        } catch (InvalidUuidException invalidUuidException) {
+            ResponseEntity<DoctorResponse> doctorData = ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
+            assertEquals(HttpStatus.BAD_REQUEST.value(), doctorData.getStatusCode().value());
+            assertEquals(expectedResponse, doctorData.getBody());
+            Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
+            Mockito.verify(doctorRepository, Mockito.never()).findById(Mockito.any(UUID.class));
+        }
+    }
+
+    /**
+     * Method to test if no user exist for the give doctor id
+     * HTTP Status Code-404
+     *
+     * @throws Exception if no user is present in db
+     */
+    @Test
+    void testGetDoctorsById_forUserNotFoundError_returns404StatusAndInvalidDoctorResponse() throws Exception {
+        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
+        Mockito.when(doctorValidation.isInValidUUID(Mockito.anyString())).thenReturn(false);
+        Mockito.when(doctorRepository.findById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
+        try {
+            doctorRetrievalService.getDoctorsById(UUID.randomUUID().toString());
+            Assertions.fail(TestApplicationConstants.DATA_NOT_FOUND_EXCEPTION_NOT_THROWN_MESSAGE);
+        } catch (DataNotFoundException dataNotFoundException) {
+            ResponseEntity<DoctorResponse> doctorData = ResponseEntity.status(HttpStatus.NOT_FOUND).body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
+            assertEquals(HttpStatus.NOT_FOUND.value(), doctorData.getStatusCode().value());
+            assertEquals(expectedResponse, doctorData.getBody());
+            Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
+            Mockito.verify(doctorRepository, Mockito.times(1)).findById(Mockito.any(UUID.class));
+        }
     }
 
     /**
@@ -91,26 +135,19 @@ class DoctorRetrievalServiceTest {
     }
 
     /**
-     * Method to test invalidUUID user input for getDoctorByID method of DoctorRetrieval service class
-     * HTTP Status Code-400
-     *
-     * @throws Exception if invalid user provide invalid uuid
-     *                   Tests invalid (blank) doctor name input, expecting HTTP 400 response with appropriate error message.
+     * Tests case where no doctor matches the given name and expects a 404 Not Found response with an error message.
      */
     @Test
-    void getDoctorsById_invalidUUID() throws Exception {
-        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
-        Mockito.when(doctorValidation.isInValidUUID(Mockito.anyString())).thenReturn(true);
-        try {
-            ResponseEntity<DoctorResponse> doctorData = doctorRetrievalService.getDoctorsById(TestApplicationConstants.INVALID_UUID);
-            assertEquals(HttpStatus.BAD_REQUEST.value(), doctorData.getStatusCode().value());
-            assertEquals(expectedResponse, doctorData.getBody());
-            Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
-            Mockito.verify(doctorRepository, Mockito.never()).findById(Mockito.any(UUID.class));
-            Mockito.verify(messageUtil , Mockito.times(1)).getMessage(Mockito.anyString());
-        } catch (InvalidUuidException invalidUuidException) {
-            ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
-        }
+    void testRetrieveDoctorByName_withNotMatchingDoctorName_returnsNotFoundErrorResponse() {
+        DoctorEntity doctorEntityResponse = testDataBuilder.doctorEntityBuilder();
+        Mockito.when(doctorRepository.findByName(doctorEntityResponse.getFirstName())).thenReturn(List.of());
+        ResponseEntity<DoctorListResponse> doctorListResponse = doctorRetrievalService.retrieveDoctorByName(doctorEntityResponse.getFirstName());
+        assertNotNull(doctorListResponse.getBody());
+        assertFalse(doctorListResponse.getBody().isSuccess());
+        assertEquals(HttpStatus.NOT_FOUND, doctorListResponse.getStatusCode());
+        assertEquals(1, doctorListResponse.getBody().getErrors().size());
+        assertEquals(TestApplicationConstants.DOCTORS_NOT_FOUND, doctorListResponse.getBody().getErrors().get(0));
+        Mockito.verify(doctorRepository, Mockito.times(1)).findByName(Mockito.anyString());
     }
 
     /**
@@ -126,44 +163,5 @@ class DoctorRetrievalServiceTest {
         assertFalse(doctorListResponse.getBody().isSuccess());
         assertEquals(TestApplicationConstants.EMPTY_NAME_QUERY_PARAM, doctorListResponse.getBody().getErrors().get(0));
         Mockito.verify(doctorValidation, Mockito.times(1)).validateDoctorName(Mockito.anyString());
-    }
-
-    /**
-     * Method to test if no user exist for the give doctor id
-     * HTTP Status Code-404
-     *
-     * @throws Exception if no user is present in db
-     *                   Tests scenario when no doctors are found, expecting HTTP 404 with a "doctors not found" error message.
-     */
-    @Test
-    void getDoctorsById_userNotFound() throws Exception {
-        DoctorResponse expectedResponse = testDataBuilder.invalidDoctorResponseBuilder();
-        Mockito.when(doctorValidation.isInValidUUID(Mockito.anyString())).thenReturn(false);
-        Mockito.when(doctorRepository.findById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
-        try {
-            ResponseEntity<DoctorResponse> doctorData = doctorRetrievalService.getDoctorsById(UUID.randomUUID().toString());
-            assertEquals(HttpStatus.NOT_FOUND.value(), doctorData.getStatusCode().value());
-            assertEquals(expectedResponse, doctorData.getBody());
-            Mockito.verify(doctorValidation, Mockito.times(1)).isInValidUUID(Mockito.anyString());
-            Mockito.verify(doctorRepository, Mockito.never()).findById(Mockito.any(UUID.class));
-        } catch (DataNotFoundException dataNotFoundException) {
-            ResponseEntity.badRequest().body(DoctorResponse.builder().success(false).errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE)).build());
-        }
-    }
-
-    /**
-     * Tests case where no doctor matches the given name and expects a 404 Not Found response with an error message.
-     */
-    @Test
-    void testRetrieveDoctorByName_withNotMatchingDoctorName_returnsNotFoundErrorResponse() {
-        DoctorEntity doctorEntityResponse = testDataBuilder.doctorEntityBuilder();
-        Mockito.when(doctorRepository.findByName(doctorEntityResponse.getFirstName())).thenReturn(List.of());
-        ResponseEntity<DoctorListResponse> doctorListResponse = doctorRetrievalService.retrieveDoctorByName(doctorEntityResponse.getFirstName());
-        assertNotNull(doctorListResponse.getBody());
-        assertFalse(doctorListResponse.getBody().isSuccess());
-        assertEquals(HttpStatus.NOT_FOUND, doctorListResponse.getStatusCode());
-        assertEquals(1, doctorListResponse.getBody().getErrors().size());
-        assertEquals(TestApplicationConstants.DOCTORS_NOT_FOUND, doctorListResponse.getBody().getErrors().get(0));
-        Mockito.verify(doctorRepository, Mockito.times(1)).findByName(Mockito.anyString());
     }
 }

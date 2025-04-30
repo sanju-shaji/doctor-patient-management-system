@@ -30,7 +30,7 @@ public class PatientCreationService {
      * returns 200 response with patient details if the input is valid
      */
     public ResponseEntity<PatientResponse> createPatient(PatientDto patient) throws Exception {
-            // Perform validation
+        // Perform validation
         patientValidation.validatePatient(patient);
         UUID patientId = UUID.randomUUID();
         PatientModel patientModel = PatientModel.builder()
@@ -44,12 +44,13 @@ public class PatientCreationService {
                 .data(buildPatientDto(patientModel))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(successResponse);
-        } private PatientDto buildPatientDto(PatientModel patientModel) {
+    }
+
+    private PatientDto buildPatientDto(PatientModel patientModel) {
         return PatientDto.builder()
                 .id(patientModel.getId())
                 .firstName(patientModel.getFirstName())
                 .lastName(patientModel.getLastName())
                 .build();
     }
-    }
-
+}
