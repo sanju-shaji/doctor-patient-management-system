@@ -171,7 +171,7 @@ public class TestDataBuilder {
      * @return doctor entity
      */
     public PatientModel patientModelBuilder() {
-        PatientDto patient=patientDtoBuilder();
+        PatientDto patient = patientDtoBuilder();
         return PatientModel.builder()
                 .id(UUID.fromString(TestApplicationConstants.UUID))
                 .firstName(patient.getFirstName())
@@ -185,20 +185,23 @@ public class TestDataBuilder {
      * @return patient response object
      */
     public PatientResponse patientResponseBuilder() {
+        PatientDto patient = patientDtoBuilder();
         return PatientResponse.builder()
                 .success(true)
-                .data(patientDtoBuilder())
+                .data(patient)
                 .build();
     }
+
     /**
      * This method initializes a patient response object to get patient details by patientId
      *
      * @return patient response object
      */
     public PatientResponse getPatientByIdResponseBuilder() {
+        PatientModel patientModel = patientModelBuilder();
         return PatientResponse.builder()
                 .success(true)
-                .data(patientModelBuilder())
+                .data(patientModel)
                 .build();
     }
 
