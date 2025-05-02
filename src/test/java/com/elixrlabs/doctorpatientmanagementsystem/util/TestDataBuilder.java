@@ -9,6 +9,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListRes
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -179,6 +180,17 @@ public class TestDataBuilder {
     }
 
     /**
+     * This method initializes a patient response object so that it can be reused for patient module testing
+     *
+     * @return patient response object
+     */
+    public PatientResponse patientResponseBuilder() {
+        return PatientResponse.builder()
+                .success(true)
+                .data(patientDtoBuilder())
+                .build();
+    }
+    /**
      * This method initializes a patient response object to get patient details by patientId
      *
      * @return patient response object
@@ -199,6 +211,37 @@ public class TestDataBuilder {
         return PatientResponse.builder()
                 .success(false)
                 .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
+                .build();
+    }
+
+    public PatchPatientResponse patchPatientResponseBuilder() {
+        return PatchPatientResponse.builder()
+                .success(true)
+                .patient(patientDtoBuilder())
+                .build();
+    }
+
+    public PatientDto patchedDtoBuilder() {
+        return PatientDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.EXPECTED_FIRST_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
+
+    public PatientModel savedPatientBuilder() {
+        return PatientModel.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.EXPECTED_FIRST_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
+
+    public PatientDto invalidPatchedDtoBuilder() {
+        return PatientDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.INVALID_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
                 .build();
     }
 }
