@@ -16,7 +16,7 @@ public class TestApplicationConstants {
     public static final String EXPECTED_FIRST_NAME = "expectedName";
     public static final String EXPECTED_INVALID_USER_INPUT_EXCEPTION = "Expected InvalidUserInputException,but not thrown";
     public static final String EXPECTED_INVALID_UUID_EXCEPTION = "Expected InvalidUuidException,but not thrown";
-    public static final String EXCEPTION_NOT_THROWN_MESSAGE = "Expected InvalidAssignmentDataException due to invalid doctor ID was not thrown";
+    public static final String EXCEPTION_NOT_THROWN_MESSAGE = "Expected Invalid assignment data exception due to invalid doctor ID was not thrown";
     public static final String EXPECTED_PATIENT_ALREADY_ASSIGNED_EXCEPTION = "Expected an error because the patient is already assigned to a doctor";
     public static final String FIRST_NAME = "firstName";
     public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
