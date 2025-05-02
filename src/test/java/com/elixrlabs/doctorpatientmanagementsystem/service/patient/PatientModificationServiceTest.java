@@ -98,7 +98,6 @@ public class PatientModificationServiceTest {
         Assertions.assertEquals(TestApplicationConstants.EXPECTED_FIRST_NAME, response.getBody().getPatient().getFirstName());
     }
 
-
     @Test
     public void applyPatch_ValidationFails_ThrowsInvalidJsonOperationException() throws Exception {
         String patientId = UUID.randomUUID().toString();
