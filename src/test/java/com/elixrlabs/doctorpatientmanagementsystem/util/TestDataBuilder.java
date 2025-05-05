@@ -10,6 +10,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListRes
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment.DoctorPatientAssignmentModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
@@ -246,6 +247,37 @@ public class TestDataBuilder {
                 .lastName(doctorEntityBuilder().getLastName())
                 .doctors(List.of(assignedDoctorDataResponseBuilder()))
                 .success(true)
+                .build();
+    }
+
+    public PatchPatientResponse patchPatientResponseBuilder() {
+        return PatchPatientResponse.builder()
+                .success(true)
+                .patient(patientDtoBuilder())
+                .build();
+    }
+
+    public PatientDto patchedDtoBuilder() {
+        return PatientDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.EXPECTED_FIRST_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
+
+    public PatientModel savedPatientBuilder() {
+        return PatientModel.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.EXPECTED_FIRST_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
+                .build();
+    }
+
+    public PatientDto invalidPatchedDtoBuilder() {
+        return PatientDto.builder()
+                .id(UUID.fromString(TestApplicationConstants.UUID))
+                .firstName(TestApplicationConstants.INVALID_NAME)
+                .lastName(TestApplicationConstants.LAST_NAME)
                 .build();
     }
 }

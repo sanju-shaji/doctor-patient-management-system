@@ -212,4 +212,13 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DoctorAlreadyUnassignedException.class)
+    public ResponseEntity<BaseResponse> handleDoctorAlreadyUnassigned(DoctorAlreadyUnassignedException doctorAlreadyUnassignedException){
+        BaseResponse baseResponse=BaseResponse.builder()
+                .success(false)
+                .errors(List.of(doctorAlreadyUnassignedException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
+    }
 }
