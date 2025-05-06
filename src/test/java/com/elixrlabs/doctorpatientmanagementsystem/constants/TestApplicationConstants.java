@@ -19,11 +19,13 @@ public class TestApplicationConstants {
     public static final String EXPECTED_INVALID_USER_INPUT_EXCEPTION = "Expected InvalidUserInputException,but not thrown";
     public static final String EXPECTED_INVALID_UUID_EXCEPTION = "Expected InvalidUuidException,but not thrown";
     public static final String EXPECTED_PATIENT_ALREADY_ASSIGNED_EXCEPTION = "Expected an error because the patient is already assigned to a doctor";
+    public static final String EXPECTED_EMPTY_UUID_EXCEPTION = "Expected EmptyUuidException,but not thrown";
     public static final String FIRST_NAME = "firstName";
     public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
     public static final String GET_PATIENT_BY_ID_END_POINT = "/patient/{id}";
     public static final String INVALID_FIRST_NAME = "First name invalid";
     public static final String INVALID_NAME = "InvalidName";
+    public static final String GET_DOCTOR_BY_PATIENT_ID = "/assignedDoctorsByPatientId";
     public static final String INVALID_UUID = "12345";
     public static final String JSON_KEY_ERRORS = "$.errors";
     public static final String JSON_KEY_SUCCESS = "$.success";
@@ -41,5 +43,6 @@ public class TestApplicationConstants {
     public static final String PATIENT_NOT_FOUND = "Patient not found";
     public static final String POST_PATIENTS_END_POINT = "/patients";
     public static final String QUERY_PARAM_NAME = "name";
+    public static final String PATIENT_ID = "patientId";
     public static final String UUID = "e562f728-1911-4ac5-91f0-de67772b2384";
 }
