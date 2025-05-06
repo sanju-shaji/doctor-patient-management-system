@@ -24,9 +24,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
 import static com.mongodb.assertions.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit test class for PatientCreationController
@@ -64,10 +68,10 @@ public class PatientCreationControllerTest {
      * Checks if the response body matches expected data
      */
     @Test
-    public void testPatientCreationController_Success() throws Exception {
+    void testPatientCreationController_Success() throws Exception {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
         PatientResponse expectedPatientResponse = testDataBuilder.patientResponseBuilder();
-        Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenReturn(ResponseEntity.ok(expectedPatientResponse));
+        when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenReturn(ResponseEntity.ok(expectedPatientResponse));
         ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.POST_PATIENTS_END_POINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(patient)));
@@ -83,10 +87,10 @@ public class PatientCreationControllerTest {
      * verifies error message from GlobalExceptionHandler
      */
     @Test
-    public void testPatientCreationController_Invalid() throws Exception {
+    void testPatientCreationController_Invalid() throws Exception {
         PatientDto patient = testDataBuilder.patientDtoBuilder();
         PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
-        Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenThrow(new InvalidUserInputException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.POST_PATIENTS_END_POINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(patient)));
@@ -94,5 +98,19 @@ public class PatientCreationControllerTest {
         assertNotNull(actualPatientResponse);
         assertEquals(HttpStatus.BAD_REQUEST.value(), resultActions.andReturn().getResponse().getStatus());
         assertEquals(objectMapper.writeValueAsString(expectedPatientResponse), actualPatientResponse);
+    }
+
+    @Test
+    void testPatientCreationController_internalServerError() throws Exception {
+        PatientResponse expectedResponse = testDataBuilder.invalidPatientResponseBuilder();
+        PatientDto patient = testDataBuilder.patientDtoBuilder();
+        expectedResponse.setErrors(List.of(null + TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        Mockito.when(patientCreationService.createPatient(Mockito.any(PatientDto.class))).thenThrow(new Exception(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
+        ResultActions resultActions = mockMvc.perform(post(TestApplicationConstants.POST_PATIENTS_END_POINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(patient)))
+                .andExpect(status().isInternalServerError());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponse), actualResponse);
     }
 }
