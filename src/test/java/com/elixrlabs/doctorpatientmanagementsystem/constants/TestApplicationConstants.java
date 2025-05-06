@@ -5,6 +5,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
  */
 public class TestApplicationConstants {
     public static final String APPLICATION_JSON = "application/json";
+    public static final String BLANK_FIRST_NAME = " ";
     public static final String DATA_NOT_FOUND_EXCEPTION_NOT_THROWN_MESSAGE = "Expected DataNotFoundException,but not thrown";
     public static final String DEPARTMENT_NAME = "departmentName";
     public static final String DOCTOR_DELETE_ENDPOINT = "/doctor/{doctorId}";
@@ -34,10 +35,11 @@ public class TestApplicationConstants {
     public static final String PATCH_CONTENT = "[{\"op\": \"replace\", \"path\": \"/firstName\", \"value\": \"expectedName\"}]";
     public static final String PATCH_CONTENT_TYPE = "application/json-patch+json";
     public static final String PATCH_INVALID_CONTENT = "[{\"op\": \"replace\", \"path\": \"/firstName\", \"value\": \"InvalidName\"}]";
+    public static final String PATCH_PATIENT_ENDPOINT = "/patient/{patientId}";
     public static final String PATIENT_DELETED_SUCCESSFULLY = "Patient deleted successfully";
     public static final String PATIENT_ENDPOINT = "/patient/{patientId}";
     public static final String PATIENT_NOT_FOUND = "Patient not found";
-    public static final String PATCH_PATIENT_ENDPOINT = "/patient/{patientId}";
+    public static final String POST_PATIENTS_END_POINT = "/patients";
     public static final String QUERY_PARAM_NAME = "name";
     public static final String UUID = "e562f728-1911-4ac5-91f0-de67772b2384";
 }
