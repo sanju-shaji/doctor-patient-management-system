@@ -10,9 +10,9 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +152,6 @@ public class TestDataBuilder {
         return new ResponseEntity<>(baseResponse, statusCode);
     }
 
-
     /**
      * This method initializes a patient dto object so that it can be reused for doctor module testing
      *
@@ -172,10 +171,11 @@ public class TestDataBuilder {
      * @return doctor entity
      */
     public PatientModel patientModelBuilder() {
+        PatientDto patient = patientDtoBuilder();
         return PatientModel.builder()
                 .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(patientDtoBuilder().getFirstName())
-                .lastName(patientDtoBuilder().getLastName())
+                .firstName(patient.getFirstName())
+                .lastName(patient.getLastName())
                 .build();
     }
 
@@ -185,9 +185,23 @@ public class TestDataBuilder {
      * @return patient response object
      */
     public PatientResponse patientResponseBuilder() {
+        PatientDto patient = patientDtoBuilder();
         return PatientResponse.builder()
                 .success(true)
-                .data(patientDtoBuilder())
+                .data(patient)
+                .build();
+    }
+
+    /**
+     * This method initializes a patient response object to get patient details by patientId
+     *
+     * @return patient response object
+     */
+    public PatientResponse getPatientByIdResponseBuilder() {
+        PatientModel patientModel = patientModelBuilder();
+        return PatientResponse.builder()
+                .success(true)
+                .data(patientModel)
                 .build();
     }
 

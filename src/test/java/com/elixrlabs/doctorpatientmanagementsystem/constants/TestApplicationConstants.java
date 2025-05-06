@@ -21,6 +21,7 @@ public class TestApplicationConstants {
     public static final String EXPECTED_PATIENT_ALREADY_ASSIGNED_EXCEPTION = "Expected an error because the patient is already assigned to a doctor";
     public static final String FIRST_NAME = "firstName";
     public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
+    public static final String GET_PATIENT_BY_ID_END_POINT = "/patient/{id}";
     public static final String INVALID_FIRST_NAME = "First name invalid";
     public static final String INVALID_NAME = "InvalidName";
     public static final String INVALID_UUID = "12345";
