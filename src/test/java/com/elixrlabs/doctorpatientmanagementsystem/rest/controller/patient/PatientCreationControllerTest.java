@@ -100,6 +100,11 @@ public class PatientCreationControllerTest {
         assertEquals(objectMapper.writeValueAsString(expectedPatientResponse), actualPatientResponse);
     }
 
+    /**
+     * Test case for Internal Server Error
+     * expects 500 internal server error.
+     */
+
     @Test
     void testPatientCreationController_internalServerError() throws Exception {
         PatientResponse expectedResponse = testDataBuilder.invalidPatientResponseBuilder();
