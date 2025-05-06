@@ -19,12 +19,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -60,10 +61,11 @@ class PatientRetrievalControllerTest {
     void getPatientById_Success() throws Exception {
         PatientResponse expectedPatientResponse = testDataBuilder.getPatientByIdResponseBuilder();
         Mockito.when(patientRetrievalService.getPatientById(Mockito.anyString())).thenReturn(ResponseEntity.ok().body(expectedPatientResponse));
-        mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
+                .andExpect(status().isOk());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedPatientResponse), actualResponse);
     }
 
     /**
@@ -74,10 +76,11 @@ class PatientRetrievalControllerTest {
     void getPatientByID_invalidUUID() throws Exception {
         PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
         Mockito.when(patientRetrievalService.getPatientById(Mockito.anyString())).thenThrow(new InvalidUuidException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
+                .andExpect(status().isBadRequest());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedPatientResponse), actualResponse);
     }
 
     /**
@@ -88,10 +91,11 @@ class PatientRetrievalControllerTest {
     void getPatientById_patientNotFound() throws Exception {
         PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
         Mockito.when(patientRetrievalService.getPatientById(Mockito.anyString())).thenThrow(new DataNotFoundException(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
+                .andExpect(status().isNotFound());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedPatientResponse), actualResponse);
     }
 
     /**
@@ -104,9 +108,10 @@ class PatientRetrievalControllerTest {
         PatientResponse expectedPatientResponse = testDataBuilder.invalidPatientResponseBuilder();
         expectedPatientResponse.setErrors(List.of(null + TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
         Mockito.when(patientRetrievalService.getPatientById(Mockito.anyString())).thenThrow(new Exception(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE));
-        mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
+        ResultActions resultActions = mockMvc.perform(get(TestApplicationConstants.GET_PATIENT_BY_ID_END_POINT, TestApplicationConstants.UUID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedPatientResponse)));
+                .andExpect(status().isInternalServerError());
+        String actualResponse = resultActions.andReturn().getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedPatientResponse), actualResponse);
     }
 }
