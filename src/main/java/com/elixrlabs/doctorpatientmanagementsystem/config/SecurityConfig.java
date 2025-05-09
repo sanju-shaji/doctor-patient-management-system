@@ -11,9 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-
 /**
- * Security configuration class to configure the security filter chain
+ * Security configuration class to configure the security filter chain to implement OAuth2.0
  */
 @Configuration
 @EnableWebSecurity
@@ -28,11 +27,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.
                 authorizeHttpRequests(auth -> auth.anyRequest().authenticated()).
-                oauth2Login(withDefaults()).
-                oauth2Client(withDefaults()).
                 oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()).
                         authenticationEntryPoint(new AuthEntryPointUtil(messageUtil))).
-                logout(withDefaults()).csrf(AbstractHttpConfigurer::disable).
+                csrf(AbstractHttpConfigurer::disable).
                 build();
     }
 }

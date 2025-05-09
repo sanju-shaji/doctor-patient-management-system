@@ -2,7 +2,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.util;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
-import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.BaseResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +15,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Class to define custom response to the exceptions thrown by the resource server
+ */
 public class AuthEntryPointUtil implements AuthenticationEntryPoint {
     private final MessageUtil messageUtil;
 
@@ -24,18 +27,17 @@ public class AuthEntryPointUtil implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setContentType(ApplicationConstants.APPLICATION_JSON);
-        response.setStatus(401);
-        DoctorResponse doctorResponse = new DoctorResponse();
+        BaseResponse errorResponse = new BaseResponse();
         ObjectMapper objectMapper = new ObjectMapper();
-        doctorResponse.setSuccess(false);
+        errorResponse.setSuccess(false);
         if (authException.getClass() == InvalidBearerTokenException.class) {
-            doctorResponse.setErrors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_ACCESS_TOKEN.getKey())));
-            response.getWriter().print(objectMapper.writeValueAsString(doctorResponse));
+            errorResponse.setErrors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_ACCESS_TOKEN.getKey())));
         }
         if (authException.getClass() == InsufficientAuthenticationException.class) {
-            doctorResponse.setErrors(List.of(messageUtil.getMessage(MessageKeyEnum.MISSING_ACCESS_TOKEN.getKey())));
-            response.getWriter().print(objectMapper.writeValueAsString(doctorResponse));
+            errorResponse.setErrors(List.of(messageUtil.getMessage(MessageKeyEnum.MISSING_ACCESS_TOKEN.getKey())));
         }
+        response.setContentType(ApplicationConstants.APPLICATION_JSON);
+        response.setStatus(401);
+        response.getWriter().print(objectMapper.writeValueAsString(errorResponse));
     }
 }
