@@ -3,6 +3,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.util;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.TestApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.doctor.DoctorDto;
 import com.elixrlabs.doctorpatientmanagementsystem.dto.patient.PatientDto;
+import com.elixrlabs.doctorpatientmanagementsystem.dto.doctorpatientassignment.AssignedDoctorsToPatientDto;
 import com.elixrlabs.doctorpatientmanagementsystem.model.doctor.DoctorEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.model.patient.PatientModel;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorListResponse;
@@ -10,14 +11,17 @@ import com.elixrlabs.doctorpatientmanagementsystem.model.doctorpatientassignment
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.doctor.DoctorResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatchPatientResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.elixrlabs.doctorpatientmanagementsystem.response.patient.PatientResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.AssignedDoctorData;
+import com.elixrlabs.doctorpatientmanagementsystem.response.doctorpatientassignment.DoctorPatientAssignmentResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -152,7 +156,6 @@ public class TestDataBuilder {
         return new ResponseEntity<>(baseResponse, statusCode);
     }
 
-
     /**
      * This method initializes a patient dto object so that it can be reused for doctor module testing
      *
@@ -172,10 +175,11 @@ public class TestDataBuilder {
      * @return doctor entity
      */
     public PatientModel patientModelBuilder() {
+        PatientDto patient = patientDtoBuilder();
         return PatientModel.builder()
                 .id(UUID.fromString(TestApplicationConstants.UUID))
-                .firstName(patientDtoBuilder().getFirstName())
-                .lastName(patientDtoBuilder().getLastName())
+                .firstName(patient.getFirstName())
+                .lastName(patient.getLastName())
                 .build();
     }
 
@@ -185,9 +189,23 @@ public class TestDataBuilder {
      * @return patient response object
      */
     public PatientResponse patientResponseBuilder() {
+        PatientDto patient = patientDtoBuilder();
         return PatientResponse.builder()
                 .success(true)
-                .data(patientDtoBuilder())
+                .data(patient)
+                .build();
+    }
+
+    /**
+     * This method initializes a patient response object to get patient details by patientId
+     *
+     * @return patient response object
+     */
+    public PatientResponse getPatientByIdResponseBuilder() {
+        PatientModel patientModel = patientModelBuilder();
+        return PatientResponse.builder()
+                .success(true)
+                .data(patientModel)
                 .build();
     }
 
@@ -200,6 +218,50 @@ public class TestDataBuilder {
         return PatientResponse.builder()
                 .success(false)
                 .errors(List.of(TestApplicationConstants.MOCK_EXCEPTION_MESSAGE))
+                .build();
+    }
+
+    /**
+     * This method initializes a AssignedDoctorData which is used in AssignedDoctorsToPatientDto object which is used in AssignedDoctorsToPatientDto so that it can be reused for doctor module testing
+     *
+     * @return doctor entity
+     */
+    public AssignedDoctorData assignedDoctorDataResponseBuilder() {
+        return AssignedDoctorData.builder()
+                .id(doctorEntityBuilder().getId())
+                .firstName(doctorEntityBuilder().getFirstName())
+                .lastName(doctorEntityBuilder().getLastName())
+                .department(doctorEntityBuilder().getDepartment())
+                .dateOfAdmission(Date.from(Instant.now()))
+                .build();
+    }
+
+    /**
+     * This method initializes a AssignedDoctorsToPatientDto object so that it can be reused for doctor module testing
+     *
+     * @return doctor entity
+     */
+    public AssignedDoctorsToPatientDto assignmentsToPatientDtoBuilder() {
+        return AssignedDoctorsToPatientDto.builder()
+                .id(doctorEntityBuilder().getId().toString())
+                .firstName(doctorEntityBuilder().getFirstName())
+                .lastName(doctorEntityBuilder().getLastName())
+                .doctors(List.of(assignedDoctorDataResponseBuilder()))
+                .build();
+    }
+
+    /**
+     * This method initializes a valid DoctorPatientAssignmentResponse object so that it can be reused for doctor module testing
+     *
+     * @return DoctorPatientAssignmentResponse
+     */
+    public DoctorPatientAssignmentResponse assignmentResponseBuilder() {
+        return DoctorPatientAssignmentResponse.builder()
+                .id(doctorEntityBuilder().getId())
+                .firstName(doctorEntityBuilder().getFirstName())
+                .lastName(doctorEntityBuilder().getLastName())
+                .doctors(List.of(assignedDoctorDataResponseBuilder()))
+                .success(true)
                 .build();
     }
 
