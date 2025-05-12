@@ -33,6 +33,7 @@ public enum MessageKeyEnum {
     INVALID_UUID_FORMAT_DETAILS("invalid.uuid.format.details"),
     JSON_PATCH_OPERATION_INVALID("json.patch.operation.invalid"),
     LASTNAME_PATTERN_ERROR("last.name.pattern.error"),
+    MISSING_ACCESS_TOKEN("access.token.missing"),
     MODIFICATION_OF_PATIENT_ID_IS_NOT_ALLOWED("modification.of.patientId.is.not.allowed"),
     NO_DOCTOR_FOUND("no.doctor.found"),
     NO_PATIENT_FOUND("no.patient.found"),

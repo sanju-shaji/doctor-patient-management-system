@@ -6,6 +6,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
  * across the application.
  */
 public class ApplicationConstants {
+    public static final String APPLICATION_JSON = "application/json";
     public static final String ASSIGNMENT_COLLECTION = "tp_doctor_patient_assignment";
     public static final String ASSIGNMENTS = "assignments";
     public static final String ASSIGNMENTS_DATE_OF_ADMISSION_VALUE = "$assignments.dateOfAdmission";
