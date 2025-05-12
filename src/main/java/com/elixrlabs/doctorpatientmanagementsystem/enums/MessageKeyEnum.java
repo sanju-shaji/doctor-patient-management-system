@@ -27,7 +27,6 @@ public enum MessageKeyEnum {
     EMPTY_VALUE("empty.value"),
     FIRSTNAME_AND_LASTNAME_PATHS_ARE_ALLOWED("firstname.and.lastname.paths.are.allowed"),
     FIRSTNAME_PATTERN_ERROR("firstname.pattern.error"),
-    INVALID_ACCESS_TOKEN("invalid.access.token"),
     INVALID_REQUEST_BODY_ERROR("invalid.request.body.error"),
     INVALID_UUID_ERROR("invalid.uuid.error"),
     INVALID_UUID_FORMAT("invalid.uuid.format"),

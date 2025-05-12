@@ -1,5 +1,6 @@
 package com.elixrlabs.doctorpatientmanagementsystem.config;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.util.AuthEntryPointUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,9 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.
-                authorizeHttpRequests(auth -> auth.anyRequest().authenticated()).
+                authorizeHttpRequests(auth ->
+                        auth.requestMatchers(ApiConstants.LOGIN_END_POINT, ApiConstants.REGISTER_END_POINT).permitAll().
+                                anyRequest().authenticated()).
                 oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()).
                         authenticationEntryPoint(new AuthEntryPointUtil(messageUtil))).
                 csrf(AbstractHttpConfigurer::disable).
