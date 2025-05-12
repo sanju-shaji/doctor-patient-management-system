@@ -1,6 +1,7 @@
 package com.elixrlabs.doctorpatientmanagementsystem.config;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.util.AuthEntryPointUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.filter.JwtAuthFilter;
@@ -24,14 +25,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
 import java.util.List;
 
 /**
- * Security configuration class for setting up JWT-based authentication.
+ * Security configuration class to configure the security filter chain to implement OAuth2.0
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private final MessageUtil messageUtil;
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -39,6 +42,8 @@ public class SecurityConfig {
     @Autowired
     private MessageUtil messageUtil;
 
+    public SecurityConfig(MessageUtil messageUtil) {
+        this.messageUtil = messageUtil;
     /**
      * Configures the security filter chain with JWT filter and authorization rules.
      */
@@ -66,10 +71,16 @@ public class SecurityConfig {
                 .build();
     }
 
-    /**
-     * Provides a password encoder bean using BCrypt hashing algorithm.
-     */
     @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.
+                authorizeHttpRequests(auth ->
+                        auth.requestMatchers(ApiConstants.LOGIN_END_POINT, ApiConstants.REGISTER_END_POINT).permitAll().
+                                anyRequest().authenticated()).
+                oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()).
+                        authenticationEntryPoint(new AuthEntryPointUtil(messageUtil))).
+                csrf(AbstractHttpConfigurer::disable).
+                build();
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
