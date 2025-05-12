@@ -27,7 +27,9 @@ public enum MessageKeyEnum {
     EMPTY_VALUE("empty.value"),
     FIRSTNAME_AND_LASTNAME_PATHS_ARE_ALLOWED("firstname.and.lastname.paths.are.allowed"),
     FIRSTNAME_PATTERN_ERROR("firstname.pattern.error"),
+    INVALID_JWT_TOKEN("invalid.jwt.token"),
     INVALID_REQUEST_BODY_ERROR("invalid.request.body.error"),
+    INVALID_USERNAME_OR_PASSWORD("invalid.userName.or.password"),
     INVALID_UUID_ERROR("invalid.uuid.error"),
     INVALID_UUID_FORMAT("invalid.uuid.format"),
     INVALID_UUID_FORMAT_DETAILS("invalid.uuid.format.details"),
@@ -50,6 +52,8 @@ public enum MessageKeyEnum {
     REMOVE_OPERATION_NOT_ALLOWED("remove.operation.not.allowed"),
     REPLACE_NON_EXISTENT_FIELD_NOT_ALLOWED("replace.non.existent.field.not.allowed"),
     SERVER_ERROR("server.error"),
+    USER_ALREADY_EXIT("user.already.exits"),
+    USER_NAME_NOT_FOUND_ERROR("user.name.not.found.error"),
     USER_NOT_FOUND_ERROR("user.not.found.error");
     private final String key;
 

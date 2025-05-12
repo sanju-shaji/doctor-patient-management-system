@@ -221,4 +221,28 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
     }
+    @ExceptionHandler(UserAlreadyExitException.class)
+    public ResponseEntity<BaseResponse> handleUserAlreadyExit(UserAlreadyExitException userAlreadyExitException){
+        BaseResponse baseResponse=BaseResponse.builder()
+                .success(false)
+                .errors(List.of(userAlreadyExitException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
+    }
+    @ExceptionHandler(InvalidUserNameOrPasswordException.class)
+    public ResponseEntity<BaseResponse> handleInvalidUserNameOrPassword(InvalidUserNameOrPasswordException invalidUserNameOrPasswordException){
+        BaseResponse baseResponse=BaseResponse.builder()
+                .success(false)
+                .errors(List.of(invalidUserNameOrPasswordException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(baseResponse);
+    }
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    public ResponseEntity<BaseResponse> handleUsernameNotFound(InvalidJwtTokenException invalidJwtTokenException){
+        BaseResponse baseResponse=BaseResponse.builder()
+                .success(false)
+                .errors(List.of(invalidJwtTokenException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(baseResponse);
+    }
 }

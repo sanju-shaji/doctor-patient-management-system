@@ -5,6 +5,7 @@ package com.elixrlabs.doctorpatientmanagementsystem.constants;
  */
 public class ApiConstants {
     public static final String ASSIGN_DOCTOR_PATIENT = "/assignDoctorToPatient";
+    public static final String AUTHENTICATE_API = "/authenticate";
     public static final String DOCTORS_END_POINT = "/doctors";
     public static final String GET_DOCTOR_BY_ID = "/doctors/{id}";
     public static final String GET_DOCTOR_BY_PATIENT_ID = "/assignedDoctorsByPatientId";
@@ -16,5 +17,6 @@ public class ApiConstants {
     public static final String PATIENT_BY_ID = "patient/{id}";
     public static final String PATIENT_ID = "/{patientId}";
     public static final String PATIENTS_API = "/patients";
+    public static final String REGISTER_API = "/register";
     public static final String UN_ASSIGN_DOCTOR_FROM_PATIENT = "/unAssignDoctorFromPatient";
 }

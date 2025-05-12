@@ -9,4 +9,5 @@ public class DataBaseConstants {
     public static final String DOCTOR_PATIENT_ASSIGNMENT_COLLECTION_NAME = "tp_doctor_patient_assignment";
     public static final String FETCH_DOCTOR_BY_FIRSTNAME_OR_LASTNAME_QUERY = "{ $or: [ { 'firstName': { $regex: ?0, $options: 'i' } }, { 'lastName': { $regex: ?0, $options: 'i' } } ] }";
     public static final String PATIENT_COLLECTION_NAME = "tp_patients";
+    public static final String USERS_COLLECTION_NAME = "users";
 }
