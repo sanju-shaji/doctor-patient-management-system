@@ -17,10 +17,10 @@ import java.util.List;
 /**
  * Class to define custom response to the exceptions thrown by the resource server
  */
-public class AuthEntryPointUtil implements AuthenticationEntryPoint {
+public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
     private final MessageUtil messageUtil;
 
-    public AuthEntryPointUtil(MessageUtil messageUtil) {
+    public CustomAuthEntryPoint(MessageUtil messageUtil) {
         this.messageUtil = messageUtil;
     }
 

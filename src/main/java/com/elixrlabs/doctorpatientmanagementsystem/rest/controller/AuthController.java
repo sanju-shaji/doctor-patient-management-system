@@ -24,7 +24,7 @@ public class AuthController {
     @Autowired
     MessageUtil messageUtil;
 
-    @PostMapping(ApiConstants.AUTHENTICATE_API)
+    @PostMapping(ApiConstants.AUTH_END_POINT)
     public BaseResponse generateToken(@RequestBody AuthRequest authRequest) {
         try {
             authenticationManager.authenticate(

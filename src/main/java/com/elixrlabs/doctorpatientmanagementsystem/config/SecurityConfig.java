@@ -5,21 +5,18 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstant
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.filter.JwtAuthFilter;
 import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
-import com.elixrlabs.doctorpatientmanagementsystem.util.AuthEntryPointUtil;
-import com.elixrlabs.doctorpatientmanagementsystem.util.JwtUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.util.CustomAuthEntryPoint;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,9 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import java.util.List;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * Security configuration class to configure the security filter chain to implement OAuth2.0
@@ -37,68 +34,33 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final MessageUtil messageUtil;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    public SecurityConfig(MessageUtil messageUtil) {
+    @Value("${isOAuth2Enabled}")
+    private Boolean isOAuth2Enabled;
+    private final MessageUtil messageUtil;
+    private final UserDetailsService userDetailsService;
+    private final JwtAuthFilter jwtAuthFilter;
+
+    public SecurityConfig(MessageUtil messageUtil, UserDetailsService userDetailsService, JwtAuthFilter jwtAuthFilter) {
         this.messageUtil = messageUtil;
+        this.userDetailsService = userDetailsService;
+        this.jwtAuthFilter = jwtAuthFilter;
     }
 
-    /**
-     * Configures the security filter chain with JWT filter and authorization rules.
-     */
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(ApiConstants.LOGIN_END_POINT, ApiConstants.REGISTER_END_POINT, ApiConstants.AUTHENTICATE_API)
-//                        .permitAll()
-//                        .anyRequest()
-//                        .authenticated()
-//                )
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                //.oauth2Login(Customizer.withDefaults()) // For OpenID Connect Login
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .oauth2ResourceServer(oauth2 -> oauth2
-//                        .jwt(withDefaults())
-//                        .authenticationEntryPoint(new AuthEntryPointUtil(messageUtil))
-//                )
-//
-//                .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
-//                    response.setContentType(ApplicationConstants.CONTENT_TYPE);
-//                    response.setStatus(401);
-//                    BaseResponse errorResponse = new BaseResponse();
-//                    ObjectMapper objectMapper = new ObjectMapper();
-//                    errorResponse.setSuccess(false);
-//                    errorResponse.setErrors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_JWT_TOKEN.getKey())));
-//                    response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-//                }));
-//
-//        return http.build();
-//    }
-
     @Bean
-    @Order(1)
-    public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher(request -> {
-                    String authHeader = request.getHeader("Authorization");
-                    return authHeader != null && authHeader.startsWith("Bearer ");
-                })
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers(ApiConstants.REGISTER_END_POINT, ApiConstants.AUTHENTICATE_API).permitAll()
-                                .anyRequest().authenticated())
+    public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth ->
+                        auth.requestMatchers(ApiConstants.REGISTER_END_POINT, ApiConstants.AUTH_END_POINT).permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling(ex -> {
+                .csrf(AbstractHttpConfigurer::disable);
+
+        if (isOAuth2Enabled) {
+            http.oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()).
+                    authenticationEntryPoint(new CustomAuthEntryPoint(messageUtil)));
+        } else {
+            http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling(ex ->
                     ex.authenticationEntryPoint((request, response, authException) -> {
                         response.setContentType(ApplicationConstants.CONTENT_TYPE);
                         response.setStatus(401);
@@ -107,21 +69,9 @@ public class SecurityConfig {
                         errorResponse.setSuccess(false);
                         errorResponse.setErrors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_JWT_TOKEN.getKey())));
                         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-                    });
-                })
-                .build();
-    }
-    @Bean
-   @Order(2)
-    SecurityFilterChain openIdFilterChain(HttpSecurity http) throws Exception {
-        return http.
-                authorizeHttpRequests(auth ->
-                        auth.requestMatchers(ApiConstants.REGISTER_END_POINT, ApiConstants.AUTHENTICATE_API).permitAll().
-                                anyRequest().authenticated()).
-                oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()).
-                        authenticationEntryPoint(new AuthEntryPointUtil(messageUtil))).
-                csrf(AbstractHttpConfigurer::disable).
-                build();
+                    }));
+        }
+        return http.build();
     }
 
     @Bean

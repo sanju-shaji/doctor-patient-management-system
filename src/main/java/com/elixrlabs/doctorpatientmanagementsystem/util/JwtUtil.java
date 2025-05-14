@@ -1,10 +1,11 @@
 package com.elixrlabs.doctorpatientmanagementsystem.util;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.apache.commons.lang3.ObjectUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +20,13 @@ public class JwtUtil {
     @Value("${secret}")
     private String secretKeyString;
 
+    private static final String ISSUER_NAME = "elixr";
+
     public String generateToken(String userName) {
         long EXPIRATION_TIME = 1000 * 60 * 60;
         return Jwts.builder()
                 .setSubject(userName)
-                .setIssuer("elixr")
+                .setIssuer(ISSUER_NAME)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSecretKeyString(), SignatureAlgorithm.HS256)
@@ -52,6 +55,21 @@ public class JwtUtil {
                 .getBody();
     }
 
+    public boolean isInternalJwt(String token) {
+        try {
+            String issuer = extractIssuerFromToken(token);
+            return issuer.contains(ISSUER_NAME);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String extractToken(HttpServletRequest request) {
+        String authHeader = request.getHeader(ApplicationConstants.AUTH_HEADER);
+        return (authHeader != null && authHeader.startsWith(ApplicationConstants.BEARER_PREFIX)) ?
+             authHeader.substring(7) : null;
+    }
+
     public Boolean validateToken(String userName, UserDetails userDetails, String token) {
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
@@ -64,7 +82,7 @@ public class JwtUtil {
         if (StringUtils.isEmpty(secretKeyString)) {
             return null;
         }
-           return Keys.hmacShaKeyFor(secretKeyString.getBytes());
+        return Keys.hmacShaKeyFor(secretKeyString.getBytes());
 
     }
 }
