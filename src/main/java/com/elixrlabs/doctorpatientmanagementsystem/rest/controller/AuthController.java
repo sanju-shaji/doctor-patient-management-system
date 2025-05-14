@@ -4,19 +4,15 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidUserNameOrPasswordException;
 import com.elixrlabs.doctorpatientmanagementsystem.model.AuthRequest;
-import com.elixrlabs.doctorpatientmanagementsystem.model.UsersModel;
-import com.elixrlabs.doctorpatientmanagementsystem.service.UserService;
-import com.elixrlabs.doctorpatientmanagementsystem.util.JWTUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.util.JwtUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 public class AuthController {
@@ -24,21 +20,19 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private JWTUtil jwtUtil;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    UserService userService;
+    private JwtUtil jwtUtil;
     @Autowired
     MessageUtil messageUtil;
 
     @PostMapping(ApiConstants.AUTHENTICATE_API)
-    public String generateToken(@RequestBody AuthRequest authRequest) {
+    public BaseResponse generateToken(@RequestBody AuthRequest authRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
             );
-            return jwtUtil.generateToken(authRequest.getUserName());
+            String token =jwtUtil.generateToken(authRequest.getUserName());
+            return new BaseResponse(token,true);
+
         } catch (Exception exception) {
            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_USERNAME_OR_PASSWORD.getKey());
             throw new InvalidUserNameOrPasswordException(message);

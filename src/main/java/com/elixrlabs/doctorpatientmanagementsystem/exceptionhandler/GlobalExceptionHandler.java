@@ -245,4 +245,12 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(baseResponse);
     }
+    @ExceptionHandler(UserInputValidationException.class)
+    public ResponseEntity<BaseResponse> handleUserInputValidation(UserInputValidationException userInputValidationException){
+        BaseResponse baseResponse=BaseResponse.builder()
+                .success(false)
+                .errors(userInputValidationException.getErrors())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
+    }
 }

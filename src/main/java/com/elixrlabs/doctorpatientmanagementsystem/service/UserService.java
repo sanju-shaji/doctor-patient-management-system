@@ -8,7 +8,6 @@ import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,14 +19,13 @@ public class UserService {
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, MessageUtil messageUtil) {
         this.userRepository = userRepository;
-
         this.passwordEncoder = passwordEncoder;
         this.messageUtil = messageUtil;
     }
 
     public UsersModel registerUser(UsersModel usersModel) {
         if (userRepository.findByUserName(usersModel.getUsername()).isPresent()) {
-            String message = messageUtil.getMessage(MessageKeyEnum.USER_ALREADY_EXIT.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.USER_NAME_ALREADY_EXIT.getKey());
             throw new UserAlreadyExitException(message);
         }
         usersModel.setUuid(UUID.randomUUID());

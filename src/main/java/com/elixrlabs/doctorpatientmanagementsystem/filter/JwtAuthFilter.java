@@ -1,10 +1,8 @@
 package com.elixrlabs.doctorpatientmanagementsystem.filter;
 
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
-import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
-import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidJwtTokenException;
 import com.elixrlabs.doctorpatientmanagementsystem.service.CustomUserDetailsService;
-import com.elixrlabs.doctorpatientmanagementsystem.util.JWTUtil;
+import com.elixrlabs.doctorpatientmanagementsystem.util.JwtUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,8 +17,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 /**
  * Filter to authenticate requests using JWT tokens.
  */
@@ -29,7 +25,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
-    private JWTUtil jwtUtil;
+    private JwtUtil jwtUtil;
     @Autowired
     private MessageUtil messageUtil;
 
@@ -38,25 +34,58 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      */
     @SneakyThrows
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain){
         String authHeader = request.getHeader(ApplicationConstants.AUTH_HEADER);
         String token = null;
         String userName = null;
         if (authHeader != null && authHeader.startsWith(ApplicationConstants.BEARER_PREFIX)) {
             token = authHeader.substring(7);
-            userName = jwtUtil.extractUserNameFromToken(token);
-        }
-        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
-            if (jwtUtil.validateToken(userName, userDetails, token)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            } else {
-                throw new InvalidJwtTokenException(messageUtil.getMessage(MessageKeyEnum.INVALID_JWT_TOKEN.getKey()));
+            try {
+                String issuer = jwtUtil.extractIssuerFromToken(token);
+                if (issuer.contains("elixr")) {
+                    userName = jwtUtil.extractUserNameFromToken(token);
+                    if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
+                        if (jwtUtil.validateToken(userName, userDetails, token)) {
+                            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                        }
+                    }
+
+                }
+
+                else {
+                    // This is your internal JWT
+                }
             }
+            catch (Exception exception){
+            }
+
+
         }
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String authHeader = request.getHeader(ApplicationConstants.AUTH_HEADER);
+        String token = null;
+        String userName = null;
+        if (authHeader != null && authHeader.startsWith(ApplicationConstants.BEARER_PREFIX)) {
+            token = authHeader.substring(7);
+            try {
+                String issuer = jwtUtil.extractIssuerFromToken(token);
+                if (issuer.contains("elixr")) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } catch (Exception exception) {
+                return true;
+            }
+        }
+        return true;
     }
 }
