@@ -35,11 +35,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${isOAuth2Enabled}")
-    private Boolean isOAuth2Enabled;
     private final MessageUtil messageUtil;
     private final UserDetailsService userDetailsService;
     private final JwtAuthFilter jwtAuthFilter;
+    @Value("${isOAuth2Enabled}")
+    private Boolean isOAuth2Enabled;
 
     public SecurityConfig(MessageUtil messageUtil, UserDetailsService userDetailsService, JwtAuthFilter jwtAuthFilter) {
         this.messageUtil = messageUtil;
@@ -47,11 +47,14 @@ public class SecurityConfig {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
+    /**
+     * Configures the security filter chain including JWT, OAuth2, and exception handling.
+     */
     @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth ->
                         auth.requestMatchers(ApiConstants.REGISTER_END_POINT, ApiConstants.AUTH_END_POINT).permitAll()
-                        .anyRequest().authenticated())
+                                .anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable);
@@ -74,6 +77,9 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Provides the password encoder bean using BCrypt algorithm.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

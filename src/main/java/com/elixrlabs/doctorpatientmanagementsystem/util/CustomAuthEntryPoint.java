@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Class to define custom response to the exceptions thrown by the resource server
+ * Custom authentication entry point for handling unauthorized access and JWT-related errors.
  */
 public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
     private final MessageUtil messageUtil;
@@ -24,6 +24,9 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
         this.messageUtil = messageUtil;
     }
 
+    /**
+     * Handles authentication exceptions and sends a structured error response.
+     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         BaseResponse errorResponse = new BaseResponse();

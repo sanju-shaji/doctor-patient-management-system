@@ -57,6 +57,5 @@ public class ApplicationConstants {
     public static final String REGEX_PATIENT_NAME_PATTERN = "^[a-zA-Z\\s]{1,50}$";
     public static final String REGEX_UUID_PATTERN = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$";
     public static final String ROLE_USER = "USER";
-    public static final String SECRET_KEY = "mySuperSecretKey1234567890!@#Extra123";
     public static final String SINGLE_QUOTE = "'";
 }

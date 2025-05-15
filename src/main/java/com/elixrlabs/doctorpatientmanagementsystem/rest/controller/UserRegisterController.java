@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * Controller for handling user registration requests.
+ */
 @RestController
 public class UserRegisterController {
     private final UserService userService;
@@ -25,10 +27,13 @@ public class UserRegisterController {
         this.userNameAndPasswordValidator = userNameAndPasswordValidator;
     }
 
+    /**
+     * Validates and registers a new user.
+     */
     @PostMapping(ApiConstants.REGISTER_END_POINT)
     public BaseResponse saveUser(@RequestBody UsersModel usersModel) {
         userNameAndPasswordValidator.validateUserNameAndPassword(new UsersDto(usersModel));
-         userService.registerUser(usersModel);
-        return new BaseResponse(messageUtil.getMessage(MessageKeyEnum.USER_REGISTRATION_SUCCESS.getKey()),true);
+        userService.registerUser(usersModel);
+        return new BaseResponse(messageUtil.getMessage(MessageKeyEnum.USER_REGISTRATION_SUCCESS.getKey()), true);
     }
 }

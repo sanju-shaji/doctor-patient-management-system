@@ -14,14 +14,19 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+/**
+ * Utility class for generating, validating, and extracting information from JWT tokens.
+ */
 @Component
 public class JwtUtil {
 
+    private static final String ISSUER_NAME = "elixr";
     @Value("${secret}")
     private String secretKeyString;
 
-    private static final String ISSUER_NAME = "elixr";
-
+    /**
+     * Generates a JWT token for the given username.
+     */
     public String generateToken(String userName) {
         long EXPIRATION_TIME = 1000 * 60 * 60;
         return Jwts.builder()
@@ -33,10 +38,17 @@ public class JwtUtil {
                 .compact();
     }
 
+    /**
+     * Extracts the username (subject) from the token.
+     */
     public String extractUserNameFromToken(String token) {
+
         return extractClaims(token).getSubject();
     }
 
+    /**
+     * Extracts the issuer from the token.
+     */
     public String extractIssuerFromToken(String token) {
         Claims claims = Jwts
                 .parserBuilder()
@@ -47,6 +59,9 @@ public class JwtUtil {
         return claims.getIssuer(); // this is the 'iss' claim
     }
 
+    /**
+     * Extracts claims from the token.
+     */
     private Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSecretKeyString())
@@ -55,6 +70,9 @@ public class JwtUtil {
                 .getBody();
     }
 
+    /**
+     * Checks whether the token is internally issued by the application.
+     */
     public boolean isInternalJwt(String token) {
         try {
             String issuer = extractIssuerFromToken(token);
@@ -64,25 +82,37 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * Extracts the JWT token from the request's Authorization header.
+     */
     public String extractToken(HttpServletRequest request) {
         String authHeader = request.getHeader(ApplicationConstants.AUTH_HEADER);
         return (authHeader != null && authHeader.startsWith(ApplicationConstants.BEARER_PREFIX)) ?
-             authHeader.substring(7) : null;
+                authHeader.substring(7) : null;
     }
 
+    /**
+     * Validates the token by checking username match and expiration.
+     */
     public Boolean validateToken(String userName, UserDetails userDetails, String token) {
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
+    /**
+     * Checks if the token is expired.
+     */
     private boolean isTokenExpired(String token) {
+
         return extractClaims(token).getExpiration().before(new Date());
     }
 
+    /**
+     * Converts the secret string into a SecretKey object.
+     */
     private SecretKey getSecretKeyString() {
         if (StringUtils.isEmpty(secretKeyString)) {
             return null;
         }
         return Keys.hmacShaKeyFor(secretKeyString.getBytes());
-
     }
 }

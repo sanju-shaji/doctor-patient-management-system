@@ -14,27 +14,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for handling authentication requests and generating JWT tokens.
+ */
 @RestController
 public class AuthController {
 
     @Autowired
+    MessageUtil messageUtil;
+    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtUtil jwtUtil;
-    @Autowired
-    MessageUtil messageUtil;
 
+    /**
+     * Authenticates user credentials and returns a JWT token if valid.
+     */
     @PostMapping(ApiConstants.AUTH_END_POINT)
     public BaseResponse generateToken(@RequestBody AuthRequest authRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
             );
-            String token =jwtUtil.generateToken(authRequest.getUserName());
-            return new BaseResponse(token,true);
+            String token = jwtUtil.generateToken(authRequest.getUserName());
+            return new BaseResponse(token, true);
 
         } catch (Exception exception) {
-           String message = messageUtil.getMessage(MessageKeyEnum.INVALID_USERNAME_OR_PASSWORD.getKey());
+            String message = messageUtil.getMessage(MessageKeyEnum.INVALID_USERNAME_OR_PASSWORD.getKey());
             throw new InvalidUserNameOrPasswordException(message);
         }
     }

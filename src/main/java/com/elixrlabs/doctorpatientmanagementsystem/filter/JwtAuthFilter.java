@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Filter to authenticate requests using JWT tokens.
+ * JWT authentication filter that validates tokens and sets security context for authenticated users.
  */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Extracts and validates JWT from request header and sets authentication in context.
+     * Filters incoming requests, validates JWT, and sets authentication if token is valid.
      */
     @SneakyThrows
     @Override
