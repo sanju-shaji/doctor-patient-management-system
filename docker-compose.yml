@@ -11,5 +11,6 @@ services:
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/trainingPoc
       JWT_SECRET_KEY: "mysupersecretkeythatisatleast32chars!!"
+      IS_OAUTH2_ENABLED: "false"
     depends_on:
       - mongo
