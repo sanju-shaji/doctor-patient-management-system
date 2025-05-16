@@ -204,6 +204,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles UUID validation errors and returns a 400 BAD_REQUEST response.
+     */
     @ExceptionHandler(UuidValidationException.class)
     public ResponseEntity<BaseResponse> handleUuidValidationException(UuidValidationException uuidValidationException) {
         BaseResponse baseResponse = BaseResponse.builder()
@@ -213,11 +216,62 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles doctor unassignment errors and returns a 400 BAD_REQUEST response.
+     */
     @ExceptionHandler(DoctorAlreadyUnassignedException.class)
-    public ResponseEntity<BaseResponse> handleDoctorAlreadyUnassigned(DoctorAlreadyUnassignedException doctorAlreadyUnassignedException){
-        BaseResponse baseResponse=BaseResponse.builder()
+    public ResponseEntity<BaseResponse> handleDoctorAlreadyUnassigned(DoctorAlreadyUnassignedException doctorAlreadyUnassignedException) {
+        BaseResponse baseResponse = BaseResponse.builder()
                 .success(false)
                 .errors(List.of(doctorAlreadyUnassignedException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
+    }
+
+    /**
+     * Handles duplicate user registration attempts and returns a 400 BAD_REQUEST response.
+     */
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<BaseResponse> handleUserAlreadyExit(UserAlreadyExistsException userAlreadyExistsException) {
+        BaseResponse baseResponse = BaseResponse.builder()
+                .success(false)
+                .errors(List.of(userAlreadyExistsException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
+    }
+
+    /**
+     * Handles invalid login credentials and returns a 401 UNAUTHORIZED response.
+     */
+    @ExceptionHandler(InvalidUserNameOrPasswordException.class)
+    public ResponseEntity<BaseResponse> handleInvalidUserNameOrPassword(InvalidUserNameOrPasswordException invalidUserNameOrPasswordException) {
+        BaseResponse baseResponse = BaseResponse.builder()
+                .success(false)
+                .errors(List.of(invalidUserNameOrPasswordException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(baseResponse);
+    }
+
+    /**
+     * Handles invalid or tampered JWT tokens and returns a 401 UNAUTHORIZED response.
+     */
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    public ResponseEntity<BaseResponse> handleUsernameNotFound(InvalidJwtTokenException invalidJwtTokenException) {
+        BaseResponse baseResponse = BaseResponse.builder()
+                .success(false)
+                .errors(List.of(invalidJwtTokenException.getMessage()))
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(baseResponse);
+    }
+
+    /**
+     * Handles input validation errors and returns a 400 BAD_REQUEST response.
+     */
+    @ExceptionHandler(UserInputValidationException.class)
+    public ResponseEntity<BaseResponse> handleUserInputValidation(UserInputValidationException userInputValidationException) {
+        BaseResponse baseResponse = BaseResponse.builder()
+                .success(false)
+                .errors(userInputValidationException.getErrors())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(baseResponse);
     }

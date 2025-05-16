@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,4 +20,9 @@ public class BaseResponse {
     private List<String> messages;
     private List<String> errors;
     private Object data;
+
+    public BaseResponse(String message,Boolean success) {
+        this.setSuccess(success);
+        this.setMessages(Collections.singletonList(message));
+    }
 }
