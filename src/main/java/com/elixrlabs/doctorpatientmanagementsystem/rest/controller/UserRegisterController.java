@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class UserRegisterController {
+
     private final UserService userService;
     private final MessageUtil messageUtil;
     private final UserNameAndPasswordValidator userNameAndPasswordValidator;

@@ -20,7 +20,9 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final String ISSUER_NAME = "elixr";
+    @Value("${issuer.name}")
+    private String ISSUER_NAME;
+
     @Value("${secret}")
     private String secretKeyString;
 

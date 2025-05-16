@@ -1,15 +1,20 @@
 package com.elixrlabs.doctorpatientmanagementsystem.filter;
 
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
+import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.exceptionhandler.InvalidJwtTokenException;
+import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.service.CustomUserDetailsService;
 import com.elixrlabs.doctorpatientmanagementsystem.util.JwtUtil;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +22,15 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
  * JWT authentication filter that validates tokens and sets security context for authenticated users.
  */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
+
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
     private final MessageUtil messageUtil;
@@ -38,6 +47,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @SneakyThrows
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) {
+        String requestPath = request.getServletPath();
+        if (requestPath.equals(ApiConstants.REGISTER_END_POINT) || requestPath.equals(ApiConstants.AUTH_END_POINT)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        String authorizationHeader = request.getHeader(ApplicationConstants.AUTH_HEADER);
+        if (authorizationHeader == null) {
+            sendErrorResponse(response, messageUtil.getMessage(MessageKeyEnum.MISSING_ACCESS_TOKEN.getKey()));
+            return;
+        }
         String token = jwtUtil.extractToken(request);
         if (jwtUtil.isInternalJwt(token)) {
             String userName = jwtUtil.extractUserNameFromToken(token);
@@ -54,5 +73,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    /**
+     * Sends a custom error response in JSON format when authentication fails
+     */
+    private void sendErrorResponse(HttpServletResponse response, String errorMessage) throws IOException {
+        response.setContentType(ApplicationConstants.APPLICATION_JSON);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        BaseResponse errorResponse = new BaseResponse();
+        errorResponse.setSuccess(false);
+        errorResponse.setErrors(List.of(errorMessage));
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(errorResponse));
     }
 }

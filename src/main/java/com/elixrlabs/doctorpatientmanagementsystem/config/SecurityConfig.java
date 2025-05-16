@@ -4,7 +4,7 @@ import com.elixrlabs.doctorpatientmanagementsystem.constants.ApiConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.constants.ApplicationConstants;
 import com.elixrlabs.doctorpatientmanagementsystem.enums.MessageKeyEnum;
 import com.elixrlabs.doctorpatientmanagementsystem.filter.JwtAuthFilter;
-import com.elixrlabs.doctorpatientmanagementsystem.response.BaseResponse;
+import com.elixrlabs.doctorpatientmanagementsystem.response.AuthResponse;
 import com.elixrlabs.doctorpatientmanagementsystem.util.CustomAuthEntryPoint;
 import com.elixrlabs.doctorpatientmanagementsystem.util.MessageUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -38,6 +37,7 @@ public class SecurityConfig {
     private final MessageUtil messageUtil;
     private final UserDetailsService userDetailsService;
     private final JwtAuthFilter jwtAuthFilter;
+
     @Value("${isOAuth2Enabled}")
     private Boolean isOAuth2Enabled;
 
@@ -67,10 +67,10 @@ public class SecurityConfig {
                     ex.authenticationEntryPoint((request, response, authException) -> {
                         response.setContentType(ApplicationConstants.CONTENT_TYPE);
                         response.setStatus(401);
-                        BaseResponse errorResponse = new BaseResponse();
+                        AuthResponse errorResponse = new AuthResponse();
                         ObjectMapper objectMapper = new ObjectMapper();
                         errorResponse.setSuccess(false);
-                        errorResponse.setErrors(List.of(messageUtil.getMessage(MessageKeyEnum.INVALID_JWT_TOKEN.getKey())));
+                        errorResponse.setErrors(messageUtil.getMessage(MessageKeyEnum.INVALID_JWT_TOKEN.getKey()));
                         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
                     }));
         }

@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   mongo:
     image: mongo:latest
@@ -6,10 +5,11 @@ services:
     ports:
       - "27018:27017"
   app:
-    build:  .
+    build: .
     ports:
       - "8080:8080"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/trainingPoc
+      JWT_SECRET_KEY: "mysupersecretkeythatisatleast32chars!!"
     depends_on:
       - mongo
