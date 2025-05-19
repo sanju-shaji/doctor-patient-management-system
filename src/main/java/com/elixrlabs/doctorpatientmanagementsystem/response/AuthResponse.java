@@ -23,7 +23,7 @@ public class AuthResponse {
     /**
      * Constructs an AuthResponse with success status and JWT token.
      */
-    public AuthResponse(Boolean success,String token) {
+    public AuthResponse(Boolean success, String token) {
         this.setSuccess(success);
         this.setToken(token);
     }
