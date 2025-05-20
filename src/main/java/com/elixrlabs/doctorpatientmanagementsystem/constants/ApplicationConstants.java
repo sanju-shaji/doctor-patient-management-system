@@ -23,7 +23,10 @@ public class ApplicationConstants {
     public static final String ASSIGNMENTS_PATIENT_ID = "assignments.patientId";
     public static final String ASSIGNMENTS_PATIENT_ID_VALUE = "$assignments.patientId";
     public static final String ASSIGNMENTS_PATIENT_LASTNAME_VALUE = "$assignments.patient.lastName";
+    public static final String AUTH_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer ";
     public static final String COLON = " :";
+    public static final String CONTENT_TYPE = "application/json";
     public static final String DATE_OF_ADMISSION = "dateOfAdmission";
     public static final String DEPARTMENT = "department";
     public static final String DOCTOR_ID = "doctorId";
@@ -53,5 +56,6 @@ public class ApplicationConstants {
     public static final String REGEX_DEPARTMENT_NAME_PATTERN = "^[a-zA-Z\\s\\-'.,]+$";
     public static final String REGEX_PATIENT_NAME_PATTERN = "^[a-zA-Z\\s]{1,50}$";
     public static final String REGEX_UUID_PATTERN = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$";
+    public static final String ROLE_USER = "USER";
     public static final String SINGLE_QUOTE = "'";
 }
